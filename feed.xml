@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+  xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pilgrim on the Path</title>
+    <link>https://podcast.pilgrimapp.org</link>
+    <description>A podcast of walks. One walker per episode. Unscripted thoughts from the path. Narrated by Dhyama voice guides.</description>
+    <language>en</language>
+    <copyright>Walk Talk Meditate</copyright>
+    <atom:link href="https://podcast.pilgrimapp.org/feed.xml" rel="self" type="application/rss+xml"/>
+    <itunes:author>Walk Talk Meditate</itunes:author>
+    <itunes:summary>A podcast of walks. One walker per episode. Unscripted thoughts from the path.</itunes:summary>
+    <itunes:category text="Religion &amp; Spirituality">
+      <itunes:category text="Spirituality"/>
+    </itunes:category>
+    <itunes:explicit>false</itunes:explicit>
+    <itunes:image href="https://podcast.pilgrimapp.org/artwork.png"/>
+    <itunes:owner>
+      <itunes:name>Walk Talk Meditate</itunes:name>
+      <itunes:email>hello@walktalkmeditate.org</itunes:email>
+    </itunes:owner>
+  </channel>
+</rss>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pilgrim on the Path</title>
+  <meta name="description" content="A podcast of walks. One walker per episode. Unscripted thoughts from the path.">
+  <meta property="og:title" content="Pilgrim on the Path">
+  <meta property="og:description" content="A podcast of walks. One walker per episode. Unscripted thoughts from the path.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://podcast.pilgrimapp.org">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="alternate" type="application/rss+xml" title="Pilgrim on the Path" href="feed.xml">
+</head>
+<body>
+
+  <!-- Theme Toggle -->
+  <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+
+  <!-- Hero -->
+  <header class="hero">
+    <img src="assets/pilgrim-logo.png" alt="" class="hero-logo" width="64" height="64" aria-hidden="true">
+    <h1>Pilgrim on the Path</h1>
+    <p class="hero-tagline">A podcast of walks. One walker per episode. Unscripted thoughts from the path.</p>
+    <a href="#episodes" class="hero-cta">Press play. Go outside.</a>
+  </header>
+
+  <!-- Subscribe -->
+  <nav class="subscribe-bar" aria-label="Subscribe">
+    <a href="feed.xml" target="_blank" rel="noopener">RSS</a>
+    <a href="https://pilgrimapp.org" target="_blank" rel="noopener">pilgrimapp.org</a>
+  </nav>
+
+  <!-- Episodes -->
+  <section class="episodes" id="episodes">
+    <div class="episodes-inner">
+      <div class="episodes-header">
+        <span id="episode-count">Episodes</span>
+      </div>
+      <div id="episodes-list"></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <img src="assets/pilgrim-logo.png" alt="" class="footer-logo" width="32" height="32" aria-hidden="true">
+    <nav class="footer-links">
+      <a href="https://pilgrimapp.org">Pilgrim</a>
+      <a href="https://apps.apple.com/app/pilgrim-mindful-walking/id6760921056">App Store</a>
+      <a href="https://github.com/walktalkmeditate" target="_blank" rel="noopener">GitHub</a>
+      <a href="feed.xml">RSS</a>
+    </nav>
+    <p class="footer-craft">crafted with intention</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
