@@ -7,6 +7,7 @@
 
   var currentAudio = null;
   var currentBtn = null;
+  var currentBellAudio = null;
 
   // --- Theme ---
 
@@ -64,218 +65,7 @@
     toggle.appendChild(svg);
   }
 
-  // --- Episodes ---
-
-  function loadEpisodes() {
-    fetch('episodes/episodes.json')
-      .then(function (res) { return res.json(); })
-      .then(function (episodes) {
-        renderEpisodes(episodes);
-        updateCount(episodes.length);
-      })
-      .catch(function () {
-        renderEmpty();
-      });
-  }
-
-  function renderEpisodes(episodes) {
-    var container = document.getElementById('episodes-list');
-    if (!container) return;
-
-    if (episodes.length === 0) {
-      renderEmpty();
-      return;
-    }
-
-    container.textContent = '';
-    episodes.forEach(function (ep, i) {
-      container.appendChild(buildEpisodeCard(ep, i));
-    });
-
-    initReveal();
-  }
-
-  function buildEpisodeCard(ep, index) {
-    var duration = formatDuration(ep.duration);
-    var date = formatDate(ep.date);
-    var guideName = ep.guide.charAt(0).toUpperCase() + ep.guide.slice(1);
-
-    var card = document.createElement('article');
-    card.className = 'episode-card reveal';
-    card.setAttribute('data-index', index);
-
-    var seal = document.createElement('div');
-    seal.className = 'episode-seal';
-    seal.id = 'seal-' + index;
-    card.appendChild(seal);
-
-    var body = document.createElement('div');
-    body.className = 'episode-body';
-
-    var num = document.createElement('div');
-    num.className = 'episode-number';
-    num.textContent = 'Episode ' + ep.number;
-    body.appendChild(num);
-
-    var title = document.createElement('h2');
-    title.className = 'episode-title';
-    title.textContent = ep.title;
-    body.appendChild(title);
-
-    var meta = document.createElement('div');
-    meta.className = 'episode-meta';
-    appendMeta(meta, 'location', ep.location);
-    appendSep(meta);
-    appendMeta(meta, '', duration);
-    appendSep(meta);
-    appendMeta(meta, 'guide', 'guided by ' + guideName);
-    appendSep(meta);
-    appendMeta(meta, '', date);
-    body.appendChild(meta);
-
-    var summary = document.createElement('p');
-    summary.className = 'episode-summary';
-    summary.textContent = ep.summary;
-    body.appendChild(summary);
-
-    if (ep.walkPage) {
-      var walkLink = document.createElement('a');
-      walkLink.className = 'episode-walk-link';
-      walkLink.href = ep.walkPage;
-      walkLink.target = '_blank';
-      walkLink.rel = 'noopener';
-      walkLink.textContent = 'View the walk';
-      body.appendChild(walkLink);
-    }
-
-    var player = buildPlayer(ep.audioUrl, index, duration);
-    body.appendChild(player);
-
-    if (ep.transcript) {
-      var transcriptToggle = document.createElement('button');
-      transcriptToggle.className = 'transcript-toggle';
-      transcriptToggle.textContent = 'Read transcript';
-      transcriptToggle.addEventListener('click', function () {
-        var content = this.nextElementSibling;
-        var isOpen = content.classList.toggle('open');
-        this.textContent = isOpen ? 'Hide transcript' : 'Read transcript';
-      });
-      body.appendChild(transcriptToggle);
-
-      var transcriptContent = document.createElement('div');
-      transcriptContent.className = 'transcript-content';
-      var transcriptText = document.createElement('p');
-      transcriptText.textContent = ep.transcript;
-      transcriptContent.appendChild(transcriptText);
-      body.appendChild(transcriptContent);
-    }
-
-    card.appendChild(body);
-    return card;
-  }
-
-  function appendMeta(parent, cls, text) {
-    var span = document.createElement('span');
-    if (cls) span.className = cls;
-    span.textContent = text;
-    parent.appendChild(span);
-  }
-
-  function appendSep(parent) {
-    var span = document.createElement('span');
-    span.className = 'separator';
-    span.textContent = '\u00B7';
-    parent.appendChild(span);
-  }
-
-  function buildPlayer(audioUrl, index, duration) {
-    var wrapper = document.createElement('div');
-    wrapper.className = 'episode-player';
-
-    var btn = document.createElement('button');
-    btn.className = 'play-btn';
-    btn.setAttribute('data-src', audioUrl);
-    btn.setAttribute('aria-label', 'Play episode');
-
-    var ns = 'http://www.w3.org/2000/svg';
-
-    var playSvg = document.createElementNS(ns, 'svg');
-    playSvg.setAttribute('class', 'icon-play');
-    playSvg.setAttribute('viewBox', '0 0 24 24');
-    var playPoly = document.createElementNS(ns, 'polygon');
-    playPoly.setAttribute('points', '6,3 20,12 6,21');
-    playSvg.appendChild(playPoly);
-    btn.appendChild(playSvg);
-
-    var pauseSvg = document.createElementNS(ns, 'svg');
-    pauseSvg.setAttribute('class', 'icon-pause');
-    pauseSvg.setAttribute('viewBox', '0 0 24 24');
-    var r1 = document.createElementNS(ns, 'rect');
-    r1.setAttribute('x', '5'); r1.setAttribute('y', '3');
-    r1.setAttribute('width', '4'); r1.setAttribute('height', '18');
-    pauseSvg.appendChild(r1);
-    var r2 = document.createElementNS(ns, 'rect');
-    r2.setAttribute('x', '15'); r2.setAttribute('y', '3');
-    r2.setAttribute('width', '4'); r2.setAttribute('height', '18');
-    pauseSvg.appendChild(r2);
-    btn.appendChild(pauseSvg);
-
-    wrapper.appendChild(btn);
-
-    var bar = document.createElement('div');
-    bar.className = 'progress-bar';
-    bar.setAttribute('data-index', index);
-    var fill = document.createElement('div');
-    fill.className = 'progress-fill';
-    bar.appendChild(fill);
-    wrapper.appendChild(bar);
-
-    var time = document.createElement('span');
-    time.className = 'player-time';
-    time.textContent = duration;
-    wrapper.appendChild(time);
-
-    return wrapper;
-  }
-
-  function renderEmpty() {
-    var container = document.getElementById('episodes-list');
-    if (!container) return;
-    container.textContent = '';
-    var div = document.createElement('div');
-    div.className = 'episodes-empty reveal';
-    var p = document.createElement('p');
-    p.textContent = 'The first episode is being recorded. Stay tuned.';
-    div.appendChild(p);
-    container.appendChild(div);
-    initReveal();
-  }
-
-  function updateCount(count) {
-    var el = document.getElementById('episode-count');
-    if (el && count > 0) {
-      el.textContent = count + (count === 1 ? ' episode' : ' episodes');
-    }
-  }
-
   // --- Audio Player ---
-
-  function initPlayer() {
-    document.addEventListener('click', function (e) {
-      var btn = e.target.closest('.play-btn');
-      if (btn) {
-        handlePlay(btn);
-        return;
-      }
-
-      var bar = e.target.closest('.progress-bar');
-      if (bar && currentAudio) {
-        var rect = bar.getBoundingClientRect();
-        var ratio = (e.clientX - rect.left) / rect.width;
-        currentAudio.currentTime = ratio * currentAudio.duration;
-      }
-    });
-  }
 
   function handlePlay(btn) {
     var src = btn.getAttribute('data-src');
@@ -303,19 +93,19 @@
 
     currentAudio.addEventListener('timeupdate', function () {
       if (!currentAudio.duration) return;
-      var card = btn.closest('.episode-card');
-      if (!card) return;
-      var fillEl = card.querySelector('.progress-fill');
-      var timeEl = card.querySelector('.player-time');
+      var stop = btn.closest('.episode-stop');
+      if (!stop) return;
+      var fillEl = stop.querySelector('.progress-fill');
+      var timeEl = stop.querySelector('.player-time');
       if (fillEl) fillEl.style.width = (currentAudio.currentTime / currentAudio.duration * 100) + '%';
       if (timeEl) timeEl.textContent = formatDuration(Math.floor(currentAudio.duration - currentAudio.currentTime));
     });
 
     currentAudio.addEventListener('ended', function () {
       btn.classList.remove('playing');
-      var card = btn.closest('.episode-card');
-      if (card) {
-        var fillEl = card.querySelector('.progress-fill');
+      var stop = btn.closest('.episode-stop');
+      if (stop) {
+        var fillEl = stop.querySelector('.progress-fill');
         if (fillEl) fillEl.style.width = '0%';
       }
       currentAudio = null;
@@ -325,46 +115,6 @@
     currentAudio.play().catch(function () {
       btn.classList.remove('playing');
     });
-  }
-
-  // --- Scroll Reveal ---
-
-  function initReveal() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      document.querySelectorAll('.reveal').forEach(function (el) {
-        el.classList.add('visible');
-      });
-      return;
-    }
-
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.reveal:not(.visible)').forEach(function (el) {
-      observer.observe(el);
-    });
-  }
-
-  // --- Arrival Bell ---
-
-  function playArrivalBell() {
-    if (sessionStorage.getItem('pilgrim-bell-played')) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    sessionStorage.setItem('pilgrim-bell-played', '1');
-
-    document.addEventListener('click', function bellOnInteraction() {
-      var bell = new Audio('assets/bell.mp3');
-      bell.volume = 0.3;
-      bell.play().catch(function () {});
-      document.removeEventListener('click', bellOnInteraction);
-    }, { once: true });
   }
 
   // --- Helpers ---
@@ -388,17 +138,362 @@
     return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
   }
 
+  // --- Time of Day ---
+
+  function applyTimeOfDay() {
+    var hour = new Date().getHours();
+    var time;
+    if (hour >= 5 && hour <= 7) {
+      time = 'dawn';
+    } else if (hour >= 17 && hour <= 19) {
+      time = 'dusk';
+    } else if (hour >= 20 || hour < 5) {
+      time = 'night';
+    }
+    if (time) {
+      document.documentElement.setAttribute('data-time', time);
+    }
+  }
+
+  // --- Caption Helpers ---
+
+  function capitalize(str) {
+    if (!str) return str;
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  function getSeason(month) {
+    if (month >= 2 && month <= 4) return 'spring';
+    if (month >= 5 && month <= 7) return 'summer';
+    if (month >= 8 && month <= 10) return 'autumn';
+    return 'winter';
+  }
+
+  function generateCaption(date1, date2) {
+    var d1 = new Date(date1 + 'T00:00:00');
+    var d2 = new Date(date2 + 'T00:00:00');
+    var diffMs = d2 - d1;
+    var days = Math.round(diffMs / (1000 * 60 * 60 * 24));
+
+    var caption;
+    if (days === 0) {
+      caption = 'the same day';
+    } else if (days === 1) {
+      caption = 'a day passed';
+    } else if (days <= 6) {
+      caption = days + ' days passed';
+    } else if (days <= 13) {
+      caption = 'a week passed';
+    } else if (days <= 29) {
+      caption = Math.floor(days / 7) + ' weeks passed';
+    } else if (days <= 59) {
+      caption = 'a month passed';
+    } else {
+      caption = Math.floor(days / 30) + ' months passed';
+    }
+
+    var season1 = getSeason(d1.getMonth());
+    var season2 = getSeason(d2.getMonth());
+    if (season1 !== season2) {
+      caption += '...and ' + season2 + ' arrived';
+    }
+
+    return caption;
+  }
+
+  // --- Journey Renderer ---
+
+  function renderJourney(episodes) {
+    var container = document.getElementById('journey-stops');
+    if (!container) return;
+    container.textContent = '';
+
+    if (!episodes || episodes.length === 0) {
+      var empty = document.createElement('div');
+      empty.className = 'journey-empty';
+      var p = document.createElement('p');
+      p.textContent = 'The first walk is being recorded.';
+      empty.appendChild(p);
+      container.appendChild(empty);
+      return;
+    }
+
+    var sorted = episodes.slice().sort(function (a, b) { return a.number - b.number; });
+
+    sorted.forEach(function (ep, i) {
+      if (i > 0) {
+        var captionEl = document.createElement('div');
+        captionEl.className = 'journey-caption reveal';
+        captionEl.textContent = generateCaption(sorted[i - 1].date, ep.date);
+        container.appendChild(captionEl);
+      }
+
+      var stop = document.createElement('div');
+      stop.className = 'episode-stop reveal';
+      stop.setAttribute('data-episode', ep.number);
+
+      var sealWrap = document.createElement('div');
+      sealWrap.className = 'seal-container';
+      // PilgrimSeal.generate returns our own generated SVG string — not user content
+      sealWrap.innerHTML = PilgrimSeal.generate(ep); // safe: own generated SVG
+      stop.appendChild(sealWrap);
+
+      var label = document.createElement('div');
+      label.className = 'episode-label';
+
+      var labelTitle = document.createElement('div');
+      labelTitle.className = 'episode-label-title';
+      labelTitle.textContent = ep.title;
+      label.appendChild(labelTitle);
+
+      var labelMeta = document.createElement('div');
+      labelMeta.className = 'episode-label-meta';
+      labelMeta.textContent = formatDuration(ep.duration) + ' \u00B7 ' + capitalize(ep.guide) + ' \u00B7 ' + formatDate(ep.date);
+      label.appendChild(labelMeta);
+
+      stop.appendChild(label);
+
+      var card = buildExpandedCard(ep);
+      stop.appendChild(card);
+
+      sealWrap.addEventListener('click', function () {
+        toggleExpand(stop, card, ep);
+      });
+
+      container.appendChild(stop);
+    });
+
+    initScrollReveal();
+  }
+
+  function buildExpandedCard(ep) {
+    var ns = 'http://www.w3.org/2000/svg';
+
+    var wrapper = document.createElement('div');
+    wrapper.className = 'episode-expanded';
+
+    var badge = document.createElement('div');
+    badge.className = 'episode-number-badge';
+    badge.textContent = 'Episode ' + ep.number;
+    wrapper.appendChild(badge);
+
+    var title = document.createElement('div');
+    title.className = 'episode-expanded-title';
+    title.textContent = ep.title;
+    wrapper.appendChild(title);
+
+    var meta = document.createElement('div');
+    meta.className = 'episode-expanded-meta';
+
+    var locSpan = document.createElement('span');
+    locSpan.className = 'location';
+    locSpan.textContent = ep.location;
+    meta.appendChild(locSpan);
+
+    var sep1 = document.createElement('span');
+    sep1.className = 'sep';
+    sep1.textContent = '\u00B7';
+    meta.appendChild(sep1);
+
+    var durSpan = document.createElement('span');
+    durSpan.textContent = formatDuration(ep.duration);
+    meta.appendChild(durSpan);
+
+    var sep2 = document.createElement('span');
+    sep2.className = 'sep';
+    sep2.textContent = '\u00B7';
+    meta.appendChild(sep2);
+
+    var guideSpan = document.createElement('span');
+    guideSpan.className = 'guide';
+    guideSpan.textContent = 'guided by ' + capitalize(ep.guide);
+    meta.appendChild(guideSpan);
+
+    var sep3 = document.createElement('span');
+    sep3.className = 'sep';
+    sep3.textContent = '\u00B7';
+    meta.appendChild(sep3);
+
+    var dateSpan = document.createElement('span');
+    dateSpan.textContent = formatDate(ep.date);
+    meta.appendChild(dateSpan);
+
+    wrapper.appendChild(meta);
+
+    var summary = document.createElement('p');
+    summary.className = 'episode-summary';
+    summary.textContent = ep.summary;
+    wrapper.appendChild(summary);
+
+    var player = document.createElement('div');
+    player.className = 'episode-player';
+
+    var btn = document.createElement('button');
+    btn.className = 'play-btn';
+    btn.setAttribute('data-src', ep.audioUrl);
+    btn.setAttribute('aria-label', 'Play episode');
+
+    var playSvg = document.createElementNS(ns, 'svg');
+    playSvg.setAttribute('class', 'icon-play');
+    playSvg.setAttribute('viewBox', '0 0 24 24');
+    var playPoly = document.createElementNS(ns, 'polygon');
+    playPoly.setAttribute('points', '6,3 20,12 6,21');
+    playSvg.appendChild(playPoly);
+    btn.appendChild(playSvg);
+
+    var pauseSvg = document.createElementNS(ns, 'svg');
+    pauseSvg.setAttribute('class', 'icon-pause');
+    pauseSvg.setAttribute('viewBox', '0 0 24 24');
+    var r1 = document.createElementNS(ns, 'rect');
+    r1.setAttribute('x', '5'); r1.setAttribute('y', '3');
+    r1.setAttribute('width', '4'); r1.setAttribute('height', '18');
+    pauseSvg.appendChild(r1);
+    var r2 = document.createElementNS(ns, 'rect');
+    r2.setAttribute('x', '15'); r2.setAttribute('y', '3');
+    r2.setAttribute('width', '4'); r2.setAttribute('height', '18');
+    pauseSvg.appendChild(r2);
+    btn.appendChild(pauseSvg);
+
+    player.appendChild(btn);
+
+    var bar = document.createElement('div');
+    bar.className = 'progress-bar';
+    var fill = document.createElement('div');
+    fill.className = 'progress-fill';
+    bar.appendChild(fill);
+    player.appendChild(bar);
+
+    var time = document.createElement('span');
+    time.className = 'player-time';
+    time.textContent = formatDuration(ep.duration);
+    player.appendChild(time);
+
+    wrapper.appendChild(player);
+
+    if (ep.walkPage) {
+      var walkLink = document.createElement('a');
+      walkLink.className = 'episode-walk-link';
+      walkLink.href = ep.walkPage;
+      walkLink.target = '_blank';
+      walkLink.rel = 'noopener';
+      walkLink.textContent = 'View the walk';
+      wrapper.appendChild(walkLink);
+    }
+
+    if (ep.transcript) {
+      var transcriptToggle = document.createElement('button');
+      transcriptToggle.className = 'transcript-toggle';
+      transcriptToggle.textContent = 'Read transcript';
+      transcriptToggle.addEventListener('click', function () {
+        var content = this.nextElementSibling;
+        var isOpen = content.classList.toggle('open');
+        this.textContent = isOpen ? 'Hide transcript' : 'Read transcript';
+      });
+      wrapper.appendChild(transcriptToggle);
+
+      var transcriptContent = document.createElement('div');
+      transcriptContent.className = 'transcript-content';
+      var transcriptText = document.createElement('p');
+      transcriptText.textContent = ep.transcript;
+      transcriptContent.appendChild(transcriptText);
+      wrapper.appendChild(transcriptContent);
+    }
+
+    return wrapper;
+  }
+
+  // --- Expand / Bell ---
+
+  function toggleExpand(stop, card, ep) {
+    var alreadyOpen = card.classList.contains('open');
+
+    document.querySelectorAll('.episode-expanded.open').forEach(function (openCard) {
+      openCard.classList.remove('open');
+    });
+
+    if (!alreadyOpen) {
+      card.classList.add('open');
+      playBell(ep.guide);
+    }
+  }
+
+  function playBell(guideId) {
+    if (currentBellAudio) {
+      currentBellAudio.pause();
+      currentBellAudio = null;
+    }
+    var bell = new Audio(PilgrimSeal.bellUrl(guideId));
+    bell.volume = 0.3;
+    bell.play().catch(function () {});
+    currentBellAudio = bell;
+  }
+
+  // --- Scroll Reveal ---
+
+  function initScrollReveal() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('.reveal').forEach(function (el) {
+        el.classList.add('visible');
+        var svg = el.querySelector('.seal-svg');
+        if (svg) {
+          var reveal = PilgrimSeal.animate(svg);
+          if (reveal) reveal();
+        }
+      });
+      return;
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          var svg = entry.target.querySelector('.seal-svg');
+          if (svg) {
+            var reveal = PilgrimSeal.animate(svg);
+            if (reveal) reveal();
+          }
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.reveal:not(.visible)').forEach(function (el) {
+      observer.observe(el);
+    });
+  }
+
   // --- Init ---
 
   function init() {
+    applyTimeOfDay();
     initTheme();
-    loadEpisodes();
-    initPlayer();
-    initReveal();
-    playArrivalBell();
+
+    fetch('episodes/episodes.json')
+      .then(function (res) { return res.json(); })
+      .then(function (episodes) {
+        renderJourney(episodes);
+      })
+      .catch(function () {
+        renderJourney([]);
+      });
 
     var toggle = document.querySelector('.theme-toggle');
     if (toggle) toggle.addEventListener('click', toggleTheme);
+
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('.play-btn');
+      if (btn) {
+        handlePlay(btn);
+        return;
+      }
+
+      var bar = e.target.closest('.progress-bar');
+      if (bar && currentAudio) {
+        var rect = bar.getBoundingClientRect();
+        var ratio = (e.clientX - rect.left) / rect.width;
+        currentAudio.currentTime = ratio * currentAudio.duration;
+      }
+    });
   }
 
   if (document.readyState === 'loading') {
