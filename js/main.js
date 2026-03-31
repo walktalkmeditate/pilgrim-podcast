@@ -459,6 +459,9 @@
         if (scrollBottom > markerY) {
           if (season === 'summer') {
             marker.style.animationDelay = (Math.random() * 2).toFixed(1) + 's';
+          } else if (season === 'autumn') {
+            marker.style.animationDelay = (Math.random() * 1.5).toFixed(1) + 's';
+            if (i % 2 === 0) marker.classList.add('drift-left');
           } else {
             marker.style.animationDelay = (i * 0.08).toFixed(2) + 's';
           }
@@ -767,12 +770,22 @@
         document.documentElement.setAttribute('data-season', next);
         cycleBtn.textContent = icons[next];
 
-        document.querySelectorAll('.trail-marker.alive').forEach(function (m) {
-          m.classList.remove('alive');
+        document.querySelectorAll('.trail-marker').forEach(function (m) {
+          m.classList.remove('alive', 'drift-left');
+          m.style.animation = 'none';
+          m.offsetHeight;
+          m.style.animation = '';
         });
         setTimeout(function () {
           document.querySelectorAll('.trail-marker').forEach(function (m, i) {
-            m.style.animationDelay = (next === 'summer' ? (Math.random() * 2).toFixed(1) : (i * 0.08).toFixed(2)) + 's';
+            if (next === 'summer') {
+              m.style.animationDelay = (Math.random() * 2).toFixed(1) + 's';
+            } else if (next === 'autumn') {
+              m.style.animationDelay = (Math.random() * 1.5).toFixed(1) + 's';
+              if (i % 2 === 0) m.classList.add('drift-left');
+            } else {
+              m.style.animationDelay = (i * 0.08).toFixed(2) + 's';
+            }
             m.classList.add('alive');
           });
         }, 50);
