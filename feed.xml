@@ -23,13 +23,13 @@
     </itunes:owner>
     <item>
       <title>Episode 1: Austin, Texas</title>
-      <description>A pilgrim in Austin, Texas. Eighty degrees, clear sky. Three kilometers on a Monday evening. They had something to say. Quite a lot, actually. About building things, breaking things, and the price of biscuits at McDonald&apos;s. No one asked them to record it. They just did. That is already more than most people managed today.</description>
-      <enclosure url="https://cdn.pilgrimapp.org/podcast/ep1.m4a" length="30328251" type="audio/mp4"/>
+      <description>A pilgrim in Austin, Texas. Overcast sky, thirty degrees, four kilometers along a lake. They had a story to tell. About an idea that started as three words at a brainstorming event, became an app, and then became this. No one asked them to build it. They just did. That is already more than most people managed today.</description>
+      <enclosure url="https://cdn.pilgrimapp.org/podcast/ep1.m4a" length="64136011" type="audio/mp4"/>
       <guid isPermaLink="false">pilgrim-ep1</guid>
-      <pubDate>Mon, 30 Mar 2026 00:00:00 +0000</pubDate>
-      <itunes:duration>24:39</itunes:duration>
+      <pubDate>Tue, 31 Mar 2026 00:00:00 +0000</pubDate>
+      <itunes:duration>49:56</itunes:duration>
       <itunes:episode>1</itunes:episode>
-      <itunes:summary>A pilgrim in Austin, Texas. Eighty degrees, clear sky. Three kilometers on a Monday evening. They had something to say. Quite a lot, actually. About building things, breaking things, and the price of biscuits at McDonald&apos;s. No one asked them to record it. They just did. That is already more than most people managed today.</itunes:summary>
+      <itunes:summary>A pilgrim in Austin, Texas. Overcast sky, thirty degrees, four kilometers along a lake. They had a story to tell. About an idea that started as three words at a brainstorming event, became an app, and then became this. No one asked them to build it. They just did. That is already more than most people managed today.</itunes:summary>
     </item>
   </channel>
 </rss>
