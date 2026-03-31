@@ -323,7 +323,7 @@ a:hover {
 }
 
 .episode-expanded.open {
-  max-height: 100000px;
+  max-height: 3000px;
   opacity: 1;
   padding: 1.5rem;
   margin-top: 1.25rem;
@@ -691,7 +691,7 @@ a:hover {
 }
 
 .transcript-content.open {
-  max-height: 100000px;
+  max-height: 3000px;
   opacity: 1;
   margin-top: var(--padding-md);
 }
@@ -719,7 +719,7 @@ a:hover {
 }
 
 .episode-walk-link:hover {
-  color: var(--dawn);
+  color: var(--ink);
 }
 
 .episode-walk-link::before {

@@ -255,7 +255,9 @@
       if (i > 0) {
         var captionEl = document.createElement('div');
         captionEl.className = 'journey-caption reveal';
-        captionEl.textContent = generateCaption(sorted[i - 1].date, ep.date);
+        var captionP = document.createElement('p');
+        captionP.textContent = generateCaption(sorted[i - 1].date, ep.date);
+        captionEl.appendChild(captionP);
         container.appendChild(captionEl);
       }
 
@@ -472,6 +474,8 @@
 
   var previewAudio = null;
   var previewTimer = null;
+  var previewFadeTimer = null;
+  var previewFadeInterval = null;
   var userHasInteracted = false;
 
   document.addEventListener('click', function () { userHasInteracted = true; }, { once: true });
@@ -492,15 +496,20 @@
         }
         previewAudio = new Audio(ep.audioUrl);
         previewAudio.volume = 0.15;
-        previewAudio.currentTime = Math.floor(ep.duration / 3);
+        previewAudio.addEventListener('loadedmetadata', function () {
+          if (previewAudio === this) {
+            previewAudio.currentTime = Math.floor(ep.duration / 3);
+          }
+        });
         previewAudio.play().catch(function () {});
-        setTimeout(function () {
+        previewFadeTimer = setTimeout(function () {
           if (previewAudio) {
-            var fadeOut = setInterval(function () {
+            previewFadeInterval = setInterval(function () {
               if (previewAudio && previewAudio.volume > 0.02) {
                 previewAudio.volume = Math.max(0, previewAudio.volume - 0.02);
               } else {
-                clearInterval(fadeOut);
+                clearInterval(previewFadeInterval);
+                previewFadeInterval = null;
                 if (previewAudio) {
                   previewAudio.pause();
                   previewAudio = null;
@@ -514,6 +523,8 @@
 
     sealWrap.addEventListener('mouseleave', function () {
       clearTimeout(previewTimer);
+      clearTimeout(previewFadeTimer);
+      if (previewFadeInterval) { clearInterval(previewFadeInterval); previewFadeInterval = null; }
       if (previewAudio) {
         previewAudio.pause();
         previewAudio = null;
@@ -750,7 +761,7 @@
       }
 
       var bar = e.target.closest('.progress-bar');
-      if (bar && currentAudio) {
+      if (bar && currentAudio && isFinite(currentAudio.duration)) {
         var rect = bar.getBoundingClientRect();
         var ratio = (e.clientX - rect.left) / rect.width;
         currentAudio.currentTime = ratio * currentAudio.duration;
