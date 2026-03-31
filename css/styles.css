@@ -199,8 +199,8 @@ a:hover {
   position: relative;
   max-width: 720px;
   margin: 0 auto;
-  padding: 2rem 1.5rem 4rem;
-  min-height: 60vh;
+  padding: 4rem 1.5rem 8rem;
+  min-height: 100vh;
 }
 
 .journey-path {
