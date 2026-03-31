@@ -497,7 +497,6 @@
 
     if (!alreadyOpen) {
       card.classList.add('open');
-      playBell(ep.guide);
     }
   }
 
