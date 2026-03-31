@@ -157,6 +157,28 @@
 
   // --- Caption Helpers ---
 
+  function splitTranscript(text) {
+    var sections = text.split(/\n\n+/);
+    var result = [];
+    sections.forEach(function (section) {
+      var trimmed = section.trim();
+      if (!trimmed) return;
+      var sentences = trimmed.match(/[^.!?]*[.!?]+[\s]*/g) || [trimmed];
+      var chunk = [];
+      for (var i = 0; i < sentences.length; i++) {
+        chunk.push(sentences[i].trim());
+        if (chunk.length >= 4) {
+          result.push(chunk.join(' '));
+          chunk = [];
+        }
+      }
+      if (chunk.length > 0) {
+        result.push(chunk.join(' '));
+      }
+    });
+    return result;
+  }
+
   function capitalize(str) {
     if (!str) return str;
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -342,16 +364,6 @@
     var meta = document.createElement('div');
     meta.className = 'episode-expanded-meta';
 
-    var locSpan = document.createElement('span');
-    locSpan.className = 'location';
-    locSpan.textContent = ep.location;
-    meta.appendChild(locSpan);
-
-    var sep1 = document.createElement('span');
-    sep1.className = 'sep';
-    sep1.textContent = '\u00B7';
-    meta.appendChild(sep1);
-
     var durSpan = document.createElement('span');
     durSpan.textContent = formatDuration(ep.duration);
     meta.appendChild(durSpan);
@@ -463,14 +475,10 @@
 
       var transcriptContent = document.createElement('div');
       transcriptContent.className = 'transcript-content';
-      var paragraphs = ep.transcript.split(/\n\n+/);
-      paragraphs.forEach(function (para) {
-        var trimmed = para.trim();
-        if (trimmed) {
-          var p = document.createElement('p');
-          p.textContent = trimmed;
-          transcriptContent.appendChild(p);
-        }
+      splitTranscript(ep.transcript).forEach(function (para) {
+        var p = document.createElement('p');
+        p.textContent = para;
+        transcriptContent.appendChild(p);
       });
       wrapper.appendChild(transcriptContent);
     }
