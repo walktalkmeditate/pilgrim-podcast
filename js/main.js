@@ -309,7 +309,8 @@
         }
       });
 
-      // Audio preview on hover
+      // Seal hover animation + audio preview
+      setupSealHover(sealWrap);
       setupAudioPreview(sealWrap, ep);
 
       container.appendChild(stop);
@@ -329,7 +330,10 @@
     container.appendChild(cumulative);
 
     initScrollReveal();
-    requestAnimationFrame(function () { drawWindingPath(); });
+    requestAnimationFrame(function () {
+      drawWindingPath();
+      requestAnimationFrame(initMarkerPulse);
+    });
   }
 
   function drawWindingPath() {
@@ -393,6 +397,58 @@
 
     svg += '</svg>';
     pathContainer.innerHTML = svg;
+  }
+
+  // --- Seal Hover Animation ---
+
+  function setupSealHover(sealWrap) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var svg = sealWrap.querySelector('.seal-svg');
+    if (!svg) return;
+
+    var rings = svg.querySelectorAll('circle[stroke]');
+    rings.forEach(function (ring, i) {
+      var cx = ring.getAttribute('cx');
+      var cy = ring.getAttribute('cy');
+      ring.style.transformOrigin = cx + 'px ' + cy + 'px';
+      ring.style.transition = 'transform 0.6s ease';
+    });
+
+    sealWrap.addEventListener('mouseenter', function () {
+      rings.forEach(function (ring, i) {
+        var dir = i % 2 === 0 ? 1 : -1;
+        var speed = 12 + i * 4;
+        ring.style.animation = 'ring-rotate-' + (dir > 0 ? 'cw' : 'ccw') + ' ' + speed + 's linear infinite';
+      });
+    });
+
+    sealWrap.addEventListener('mouseleave', function () {
+      rings.forEach(function (ring) {
+        ring.style.animation = 'none';
+      });
+    });
+  }
+
+  // --- Trail Marker Pulse ---
+
+  function initMarkerPulse() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var markers = document.querySelectorAll('.trail-marker');
+    if (markers.length === 0) return;
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var marker = entry.target;
+          marker.style.animation = 'marker-pulse 2s ease forwards';
+          observer.unobserve(marker);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    markers.forEach(function (m) { observer.observe(m); });
   }
 
   // --- Audio Preview on Hover ---

@@ -262,7 +262,21 @@ a:hover {
 }
 
 .seal-container:hover {
-  transform: scale(1.08);
+  transform: scale(1.05);
+  filter: brightness(1.15);
+}
+
+.seal-container .seal-svg {
+  transition: filter 0.4s ease;
+}
+
+.seal-container:hover .seal-svg {
+  filter: drop-shadow(0 0 8px var(--stone));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seal-container:hover { filter: none; }
+  .seal-container:hover .seal-svg { filter: none; }
 }
 
 .seal-container svg {
@@ -418,7 +432,24 @@ a:hover {
 
 .journey-path .trail-marker {
   fill: var(--fog);
-  opacity: 0.6;
+  opacity: 0.15;
+  r: 1.5;
+}
+
+@keyframes marker-pulse {
+  0% { opacity: 0.15; r: 1.5; }
+  40% { opacity: 0.7; r: 3; }
+  100% { opacity: 0.4; r: 2; }
+}
+
+@keyframes ring-rotate-cw {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes ring-rotate-ccw {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
 }
 
 /* --- Journey Empty State --- */
