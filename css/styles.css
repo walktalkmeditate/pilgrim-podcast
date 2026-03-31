@@ -926,6 +926,67 @@ a:hover {
   background: rgba(20, 18, 40, 0.8);
 }
 
+.constellation .episode-walk-link {
+  color: rgba(200, 192, 255, 0.6) !important;
+}
+
+.constellation .episode-walk-link:hover {
+  color: rgba(220, 215, 255, 0.9) !important;
+}
+
+.constellation .play-btn {
+  border-color: rgba(200, 192, 255, 0.4);
+}
+
+.constellation .play-btn svg {
+  fill: rgba(200, 192, 255, 0.5);
+}
+
+.constellation .play-btn:hover {
+  background-color: rgba(200, 192, 255, 0.15);
+  border-color: rgba(200, 192, 255, 0.6);
+}
+
+.constellation .play-btn:hover svg {
+  fill: rgba(220, 215, 255, 0.8);
+}
+
+.constellation .progress-bar {
+  background: rgba(200, 192, 255, 0.1);
+}
+
+.constellation .progress-fill {
+  background: rgba(200, 192, 255, 0.4);
+}
+
+.constellation .player-time {
+  color: rgba(200, 192, 255, 0.4);
+}
+
+.constellation .speed-btn {
+  border-color: rgba(200, 192, 255, 0.3);
+  color: rgba(200, 192, 255, 0.4);
+}
+
+.constellation .speed-btn:hover {
+  border-color: rgba(200, 192, 255, 0.5);
+  color: rgba(200, 192, 255, 0.7);
+}
+
+.constellation .transcript-toggle {
+  border-color: rgba(200, 192, 255, 0.3);
+  color: rgba(200, 192, 255, 0.4);
+}
+
+.constellation .transcript-toggle:hover {
+  border-color: rgba(200, 192, 255, 0.5);
+  color: rgba(200, 192, 255, 0.7);
+}
+
+.constellation .transcript-content p {
+  color: rgba(200, 192, 255, 0.4);
+}
+
 .constellation .journey-fade {
   background: linear-gradient(to bottom, rgba(180, 180, 255, 0.1), transparent);
 }
