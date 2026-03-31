@@ -430,7 +430,7 @@
     });
   }
 
-  // --- Trail Marker Pulse ---
+  // --- Trail Marker Animation ---
 
   function initMarkerPulse() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -438,17 +438,33 @@
     var markers = document.querySelectorAll('.trail-marker');
     if (markers.length === 0) return;
 
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          var marker = entry.target;
-          marker.style.animation = 'marker-pulse 2s ease forwards';
-          observer.unobserve(marker);
+    var season = document.documentElement.getAttribute('data-season') || 'spring';
+
+    function checkMarkers() {
+      var scrollBottom = window.scrollY + window.innerHeight;
+
+      markers.forEach(function (marker, i) {
+        if (marker.classList.contains('alive')) return;
+
+        var cy = parseFloat(marker.getAttribute('cy'));
+        var journey = document.querySelector('.journey');
+        if (!journey) return;
+        var journeyTop = journey.getBoundingClientRect().top + window.scrollY;
+        var markerY = journeyTop + cy;
+
+        if (scrollBottom > markerY) {
+          if (season === 'summer') {
+            marker.style.animationDelay = (Math.random() * 2).toFixed(1) + 's';
+          } else {
+            marker.style.animationDelay = (i * 0.08).toFixed(2) + 's';
+          }
+          marker.classList.add('alive');
         }
       });
-    }, { threshold: 0.5 });
+    }
 
-    markers.forEach(function (m) { observer.observe(m); });
+    window.addEventListener('scroll', checkMarkers, { passive: true });
+    checkMarkers();
   }
 
   // --- Audio Preview on Hover ---

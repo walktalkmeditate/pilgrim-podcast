@@ -432,14 +432,62 @@ a:hover {
 
 .journey-path .trail-marker {
   fill: var(--fog);
-  opacity: 0.15;
-  r: 1.5;
+  opacity: 0.1;
+  transform-box: fill-box;
+  transform-origin: center;
 }
 
-@keyframes marker-pulse {
-  0% { opacity: 0.15; r: 1.5; }
-  40% { opacity: 0.7; r: 3; }
-  100% { opacity: 0.4; r: 2; }
+/* Spring — bloom */
+[data-season="spring"] .journey-path .trail-marker.alive {
+  animation: marker-bloom 2s ease forwards;
+}
+
+@keyframes marker-bloom {
+  0% { opacity: 0.1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(2.5); }
+  100% { opacity: 0.35; transform: scale(1.8); }
+}
+
+/* Summer — firefly */
+[data-season="summer"] .journey-path .trail-marker.alive {
+  animation: marker-firefly 3s ease-in-out infinite;
+}
+
+@keyframes marker-firefly {
+  0%, 100% { opacity: 0.1; transform: scale(1); }
+  15% { opacity: 0.8; transform: scale(2.2); filter: blur(1px); }
+  30% { opacity: 0.15; transform: scale(1); }
+  60% { opacity: 0.6; transform: scale(1.8); filter: blur(0.5px); }
+  75% { opacity: 0.1; transform: scale(1); }
+}
+
+/* Autumn — drift down */
+[data-season="autumn"] .journey-path .trail-marker.alive {
+  animation: marker-leaf 2.5s ease forwards;
+}
+
+@keyframes marker-leaf {
+  0% { opacity: 0.1; transform: scale(1) translateY(0); }
+  40% { opacity: 0.5; transform: scale(2) translateY(0); }
+  100% { opacity: 0.25; transform: scale(1.5) translateY(8px); }
+}
+
+/* Winter — sparkle */
+[data-season="winter"] .journey-path .trail-marker.alive {
+  animation: marker-sparkle 1.5s ease forwards;
+}
+
+@keyframes marker-sparkle {
+  0% { opacity: 0.1; transform: scale(1); }
+  20% { opacity: 0.9; transform: scale(2.5); }
+  40% { opacity: 0.2; transform: scale(1); }
+  60% { opacity: 0.7; transform: scale(2); }
+  100% { opacity: 0.35; transform: scale(1.5); }
+}
+
+/* Default (no season set) — simple pulse */
+.journey-path .trail-marker.alive {
+  animation: marker-bloom 2s ease forwards;
 }
 
 @keyframes ring-rotate-cw {
