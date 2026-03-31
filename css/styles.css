@@ -219,11 +219,11 @@ a:hover {
 
 .journey-path .winding-path {
   fill: none;
-  stroke: var(--parchment-tertiary);
+  stroke: var(--fog);
   stroke-width: 1.5;
   stroke-dasharray: 6 8;
   stroke-linecap: round;
-  opacity: 0.5;
+  opacity: 0.35;
 }
 
 .journey-fade {
@@ -417,8 +417,8 @@ a:hover {
 /* --- Trail Markers --- */
 
 .journey-path .trail-marker {
-  fill: var(--parchment-tertiary);
-  opacity: 0.4;
+  fill: var(--fog);
+  opacity: 0.6;
 }
 
 /* --- Journey Empty State --- */
