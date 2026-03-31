@@ -516,13 +516,13 @@ a:hover {
   letter-spacing: 0.04em;
   color: var(--stone);
   text-decoration: none;
+  border-bottom: none !important;
   margin-top: var(--padding-md);
-  transition: var(--transition-colors);
+  transition: color 0.2s ease;
 }
 
 .episode-walk-link:hover {
   color: var(--dawn);
-  border-bottom: none;
 }
 
 .episode-walk-link::before {
