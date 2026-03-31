@@ -723,11 +723,93 @@
     });
   }
 
+  // --- Scroll Sound ---
+
+  var scrollAudio = null;
+  var scrollSoundEnabled = false;
+  var lastScrollY = 0;
+  var scrollVelocity = 0;
+  var scrollDecay = null;
+  var maxScrollVolume = 0.08;
+
+  var SCROLL_SOUNDS = {
+    spring: 'https://cdn.pilgrimapp.org/audio/scroll/spring.aac',
+    summer: 'https://cdn.pilgrimapp.org/audio/scroll/summer.aac',
+    autumn: 'https://cdn.pilgrimapp.org/audio/scroll/autumn.aac',
+    winter: 'https://cdn.pilgrimapp.org/audio/scroll/winter.aac'
+  };
+
+  function initScrollSound() {
+    var invite = document.getElementById('scroll-sound-invite');
+    if (!invite) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    if (localStorage.getItem('scroll-sound') === 'on') {
+      enableScrollSound();
+      invite.classList.add('hidden');
+      return;
+    }
+
+    invite.addEventListener('click', function () {
+      enableScrollSound();
+      invite.classList.add('hidden');
+      localStorage.setItem('scroll-sound', 'on');
+    });
+  }
+
+  function enableScrollSound() {
+    var season = document.documentElement.getAttribute('data-season') || 'spring';
+    loadScrollAudio(season);
+    scrollSoundEnabled = true;
+
+    var mute = document.createElement('button');
+    mute.className = 'scroll-sound-mute';
+    mute.textContent = '\uD83D\uDD0A';
+    mute.setAttribute('aria-label', 'Mute scroll sound');
+    mute.addEventListener('click', function () {
+      scrollSoundEnabled = !scrollSoundEnabled;
+      mute.textContent = scrollSoundEnabled ? '\uD83D\uDD0A' : '\uD83D\uDD07';
+      if (!scrollSoundEnabled && scrollAudio) {
+        scrollAudio.volume = 0;
+      }
+      localStorage.setItem('scroll-sound', scrollSoundEnabled ? 'on' : 'off');
+    });
+    document.body.appendChild(mute);
+
+    lastScrollY = window.scrollY;
+    window.addEventListener('scroll', handleScrollSound, { passive: true });
+
+    scrollDecay = setInterval(function () {
+      scrollVelocity *= 0.85;
+      if (scrollAudio && scrollSoundEnabled) {
+        scrollAudio.volume = Math.min(scrollVelocity, maxScrollVolume);
+      }
+    }, 50);
+  }
+
+  function loadScrollAudio(season) {
+    var url = SCROLL_SOUNDS[season];
+    if (!url) return;
+    if (scrollAudio) { scrollAudio.pause(); }
+    scrollAudio = new Audio(url);
+    scrollAudio.loop = true;
+    scrollAudio.volume = 0;
+    scrollAudio.play().catch(function () {});
+  }
+
+  function handleScrollSound() {
+    var currentY = window.scrollY;
+    var delta = Math.abs(currentY - lastScrollY);
+    lastScrollY = currentY;
+    scrollVelocity = Math.min(scrollVelocity + delta * 0.003, maxScrollVolume);
+  }
+
   // --- Init ---
 
   function init() {
     applyTimeOfDay();
     initTheme();
+    initScrollSound();
 
     fetch('episodes/episodes.json')
       .then(function (res) { return res.json(); })
@@ -777,6 +859,7 @@
 
         document.documentElement.setAttribute('data-season', next);
         cycleBtn.textContent = icons[next];
+        if (scrollSoundEnabled) loadScrollAudio(next);
 
         document.querySelectorAll('.trail-marker').forEach(function (m) {
           m.classList.remove('alive', 'drift-left');

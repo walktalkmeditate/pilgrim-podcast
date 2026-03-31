@@ -742,6 +742,67 @@ a:hover {
   content: '\2192\00A0';
 }
 
+/* --- Scroll Sound Invite --- */
+
+.scroll-sound-invite {
+  position: fixed;
+  bottom: var(--padding-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  background: var(--parchment-secondary);
+  border: 1px solid var(--parchment-tertiary);
+  border-radius: 999px;
+  padding: 0.4rem 1.2rem;
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.8125rem;
+  color: var(--fog);
+  cursor: pointer;
+  opacity: 0;
+  animation: invite-fade-in 2s ease 3s forwards;
+  transition: opacity 0.4s ease, transform 0.3s ease;
+}
+
+.scroll-sound-invite:hover {
+  color: var(--stone);
+  border-color: var(--stone);
+}
+
+.scroll-sound-invite.hidden {
+  opacity: 0 !important;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(10px);
+}
+
+@keyframes invite-fade-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to { opacity: 0.7; transform: translateX(-50%) translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-sound-invite { display: none; }
+}
+
+.scroll-sound-mute {
+  position: fixed;
+  bottom: var(--padding-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  background: none;
+  border: none;
+  font-size: 0.875rem;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+  padding: 0.5rem;
+}
+
+.scroll-sound-mute:hover {
+  opacity: 0.8;
+}
+
 /* --- Season Cycle --- */
 
 .season-cycle {
