@@ -30,39 +30,12 @@
   }
 
   function updateThemeIcon() {
-    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     var toggle = document.querySelector('.theme-toggle');
     if (!toggle) return;
-    toggle.textContent = '';
-    var ns = 'http://www.w3.org/2000/svg';
-    var svg = document.createElementNS(ns, 'svg');
-    svg.setAttribute('viewBox', '0 0 24 24');
-    if (isDark) {
-      var circle = document.createElementNS(ns, 'circle');
-      circle.setAttribute('cx', '12');
-      circle.setAttribute('cy', '12');
-      circle.setAttribute('r', '5');
-      circle.setAttribute('fill', 'none');
-      circle.setAttribute('stroke', 'currentColor');
-      circle.setAttribute('stroke-width', '1.5');
-      svg.appendChild(circle);
-      var path = document.createElementNS(ns, 'path');
-      path.setAttribute('d', 'M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42');
-      path.setAttribute('stroke', 'currentColor');
-      path.setAttribute('stroke-width', '1.5');
-      path.setAttribute('stroke-linecap', 'round');
-      svg.appendChild(path);
-    } else {
-      var moonPath = document.createElementNS(ns, 'path');
-      moonPath.setAttribute('d', 'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z');
-      moonPath.setAttribute('fill', 'none');
-      moonPath.setAttribute('stroke', 'currentColor');
-      moonPath.setAttribute('stroke-width', '1.5');
-      moonPath.setAttribute('stroke-linecap', 'round');
-      moonPath.setAttribute('stroke-linejoin', 'round');
-      svg.appendChild(moonPath);
+    while (toggle.firstChild) toggle.removeChild(toggle.firstChild);
+    if (window.Moon) {
+      window.Moon.renderMoon(toggle);
     }
-    toggle.appendChild(svg);
   }
 
   // --- Audio Player ---
@@ -73,12 +46,18 @@
     if (currentBtn === btn && currentAudio && !currentAudio.paused) {
       currentAudio.pause();
       btn.classList.remove('playing');
+      var stopEl = btn.closest('.episode-stop');
+      if (stopEl) stopEl.classList.remove('seal-playing');
       return;
     }
 
     if (currentAudio) {
       currentAudio.pause();
-      if (currentBtn) currentBtn.classList.remove('playing');
+      if (currentBtn) {
+        currentBtn.classList.remove('playing');
+        var prevStop = currentBtn.closest('.episode-stop');
+        if (prevStop) prevStop.classList.remove('seal-playing');
+      }
     }
 
     if (currentBtn === btn && currentAudio) {
@@ -90,6 +69,8 @@
     currentAudio = new Audio(src);
     currentBtn = btn;
     btn.classList.add('playing');
+    var playingStop = btn.closest('.episode-stop');
+    if (playingStop) playingStop.classList.add('seal-playing');
 
     currentAudio.addEventListener('timeupdate', function () {
       if (!currentAudio.duration) return;
@@ -105,6 +86,9 @@
       btn.classList.remove('playing');
       var stop = btn.closest('.episode-stop');
       if (stop) {
+        stop.classList.remove('seal-playing');
+        stop.classList.add('seal-visited');
+        localStorage.setItem('visited-ep-' + stop.getAttribute('data-episode'), '1');
         var fillEl = stop.querySelector('.progress-fill');
         if (fillEl) fillEl.style.width = '0%';
       }
@@ -275,6 +259,9 @@
       var stop = document.createElement('div');
       stop.className = 'episode-stop reveal';
       stop.setAttribute('data-episode', ep.number);
+      if (localStorage.getItem('visited-ep-' + ep.number)) {
+        stop.classList.add('seal-visited');
+      }
 
       var sealWrap = document.createElement('div');
       sealWrap.className = 'seal-container';
@@ -366,13 +353,15 @@
 
     points.push({ x: centerX, y: totalHeight });
 
-    var amplitude = 40;
+    var episodeCount = stops.length;
+    var baseAmplitude = 15 + Math.min(episodeCount * 5, 65);
     var d = 'M ' + points[0].x + ' ' + points[0].y;
 
     for (var i = 1; i < points.length; i++) {
       var prev = points[i - 1];
       var curr = points[i];
-      var midY = (prev.y + curr.y) / 2;
+      var segProgress = i / points.length;
+      var amplitude = baseAmplitude * (0.6 + segProgress * 0.6);
       var direction = (i % 2 === 0) ? 1 : -1;
       var cp1x = centerX + amplitude * direction;
       var cp1y = prev.y + (curr.y - prev.y) * 0.3;
@@ -679,6 +668,8 @@
 
     if (!alreadyOpen) {
       card.classList.add('open');
+      stop.classList.add('seal-visited');
+      localStorage.setItem('visited-ep-' + ep.number, '1');
     }
   }
 
@@ -744,6 +735,18 @@
 
     var toggle = document.querySelector('.theme-toggle');
     if (toggle) toggle.addEventListener('click', toggleTheme);
+
+    var clickCount = 0;
+    var clickTimer = null;
+    if (toggle) toggle.addEventListener('click', function () {
+      clickCount++;
+      clearTimeout(clickTimer);
+      clickTimer = setTimeout(function () { clickCount = 0; }, 600);
+      if (clickCount >= 3) {
+        clickCount = 0;
+        document.body.classList.toggle('constellation');
+      }
+    });
 
     document.addEventListener('click', function (e) {
       var btn = e.target.closest('.play-btn');

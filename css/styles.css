@@ -817,6 +817,136 @@ a:hover {
   }
 }
 
+/* --- Seal Playing (vinyl spin) --- */
+
+.seal-playing .seal-container .seal-svg {
+  animation: seal-vinyl 20s linear infinite;
+}
+
+@keyframes seal-vinyl {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* --- Seal Visited (collected stamp) --- */
+
+.seal-visited .seal-container .seal-svg circle[stroke],
+.seal-visited .seal-container .seal-svg line {
+  opacity: 0.8 !important;
+  stroke-width: 2 !important;
+}
+
+.seal-visited .seal-container::after {
+  content: '';
+  position: absolute;
+  inset: 10%;
+  border-radius: 50%;
+  background: var(--stone);
+  opacity: 0.04;
+  pointer-events: none;
+}
+
+/* --- Constellation Easter Egg --- */
+
+.constellation {
+  background: #0a0a12 !important;
+  animation: none !important;
+}
+
+.constellation .journey-path .winding-path {
+  stroke: rgba(180, 180, 255, 0.15);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+}
+
+.constellation .journey-path .trail-marker {
+  fill: #E8E0FF;
+  opacity: 0.6 !important;
+  animation: star-twinkle 3s ease-in-out infinite !important;
+}
+
+.constellation .trail-marker:nth-child(odd) {
+  animation-delay: 0.5s !important;
+}
+
+.constellation .trail-marker:nth-child(3n) {
+  animation-delay: 1.2s !important;
+}
+
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.8); }
+}
+
+.constellation .seal-container .seal-svg {
+  filter: drop-shadow(0 0 12px rgba(180, 180, 255, 0.3));
+}
+
+.constellation .seal-container .seal-svg circle[stroke],
+.constellation .seal-container .seal-svg line {
+  stroke: #C8C0FF !important;
+}
+
+.constellation .seal-container .seal-svg circle[fill] {
+  fill: #C8C0FF !important;
+}
+
+.constellation .seal-container .seal-svg text {
+  fill: #D8D0FF !important;
+}
+
+.constellation .episode-label-title,
+.constellation .episode-expanded-title {
+  color: #E8E0FF;
+}
+
+.constellation .episode-label-meta,
+.constellation .episode-expanded-meta,
+.constellation .episode-summary,
+.constellation .journey-caption p,
+.constellation .journey-koan p,
+.constellation .journey-cumulative p,
+.constellation .footer-craft,
+.constellation .footer-links a {
+  color: rgba(200, 192, 255, 0.5);
+}
+
+.constellation .episode-expanded {
+  background: rgba(20, 18, 40, 0.8);
+}
+
+.constellation .journey-fade {
+  background: linear-gradient(to bottom, rgba(180, 180, 255, 0.1), transparent);
+}
+
+/* Stars background */
+.constellation::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 25% 45%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 40% 15%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 55% 60%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 70% 30%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 85% 55%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 15% 75%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 50% 85%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 35% 90%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(2px 2px at 60% 40%, rgba(255,255,255,0.7), transparent),
+    radial-gradient(2px 2px at 20% 60%, rgba(255,255,255,0.5), transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.constellation .journey,
+.constellation .footer {
+  position: relative;
+  z-index: 1;
+}
+
 /* --- Responsive --- */
 
 @media (max-width: 600px) {
