@@ -165,12 +165,12 @@
       }
     }
     if (weather === 'snow') {
-      for (var i = 0; i < 12; i++) {
-        var angle = (bytes[i] / 255) * Math.PI * 2;
-        var dist = outerR * (0.15 + (bytes[i + 3] / 255) * 0.9);
-        var sx = cx + Math.cos(angle) * dist;
-        var sy = cy + Math.sin(angle) * dist;
-        var sr = 0.8 + (bytes[i + 6] % 3) * 0.4;
+      for (var si = 0; si < 12; si++) {
+        var sAngle = (bytes[si] / 255) * Math.PI * 2;
+        var sDist = outerR * (0.15 + (bytes[si + 3] / 255) * 0.9);
+        var sx = cx + Math.cos(sAngle) * sDist;
+        var sy = cy + Math.sin(sAngle) * sDist;
+        var sr = 0.8 + (bytes[si + 6] % 3) * 0.4;
         elements.push(
           '<circle cx="' + sx.toFixed(1) + '" cy="' + sy.toFixed(1) +
           '" r="' + sr.toFixed(1) + '" fill="none" stroke="' + colorUsed +

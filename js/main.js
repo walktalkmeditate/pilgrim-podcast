@@ -7,7 +7,6 @@
 
   var currentAudio = null;
   var currentBtn = null;
-  var currentBellAudio = null;
 
   // --- Theme ---
 
@@ -63,6 +62,8 @@
     if (currentBtn === btn && currentAudio) {
       currentAudio.play();
       btn.classList.add('playing');
+      var resumeStop = btn.closest('.episode-stop');
+      if (resumeStop) resumeStop.classList.add('seal-playing');
       return;
     }
 
@@ -98,6 +99,8 @@
 
     currentAudio.play().catch(function () {
       btn.classList.remove('playing');
+      var failStop = btn.closest('.episode-stop');
+      if (failStop) failStop.classList.remove('seal-playing');
     });
   }
 
@@ -308,7 +311,7 @@
     });
 
     // Cumulative stats
-    var totalKm = 0, totalTalk = 0, totalMeditate = 0;
+    var totalKm = 0, totalTalk = 0;
     sorted.forEach(function (ep) {
       totalKm += ep.distance_km || 0;
       totalTalk += ep.duration || 0;
@@ -381,10 +384,12 @@
       var segT = (t * (points.length - 1)) - segIdx;
       var p0 = points[segIdx];
       var p1 = points[segIdx + 1];
+      var segProgress = (segIdx + 1) / points.length;
+      var segAmp = baseAmplitude * (0.6 + segProgress * 0.6);
       var dir = ((segIdx + 1) % 2 === 0) ? 1 : -1;
-      var cp1x = centerX + amplitude * dir;
-      var cp2x = centerX - amplitude * dir;
-      var bx = Math.pow(1 - segT, 3) * p0.x + 3 * Math.pow(1 - segT, 2) * segT * cp1x + 3 * (1 - segT) * segT * segT * cp2x + Math.pow(segT, 3) * p1.x;
+      var mcp1x = centerX + segAmp * dir;
+      var mcp2x = centerX - segAmp * dir;
+      var bx = Math.pow(1 - segT, 3) * p0.x + 3 * Math.pow(1 - segT, 2) * segT * mcp1x + 3 * (1 - segT) * segT * segT * mcp2x + Math.pow(segT, 3) * p1.x;
       svg += '<circle class="trail-marker" cx="' + bx.toFixed(1) + '" cy="' + y + '" r="1.5"/>';
     }
 
@@ -671,17 +676,6 @@
       stop.classList.add('seal-visited');
       localStorage.setItem('visited-ep-' + ep.number, '1');
     }
-  }
-
-  function playBell(guideId) {
-    if (currentBellAudio) {
-      currentBellAudio.pause();
-      currentBellAudio = null;
-    }
-    var bell = new Audio(PilgrimSeal.bellUrl(guideId));
-    bell.volume = 0.3;
-    bell.play().catch(function () {});
-    currentBellAudio = bell;
   }
 
   // --- Scroll Reveal ---
