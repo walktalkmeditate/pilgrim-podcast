@@ -138,8 +138,37 @@
     summary.textContent = ep.summary;
     body.appendChild(summary);
 
+    if (ep.walkPage) {
+      var walkLink = document.createElement('a');
+      walkLink.className = 'episode-walk-link';
+      walkLink.href = ep.walkPage;
+      walkLink.target = '_blank';
+      walkLink.rel = 'noopener';
+      walkLink.textContent = 'View the walk';
+      body.appendChild(walkLink);
+    }
+
     var player = buildPlayer(ep.audioUrl, index, duration);
     body.appendChild(player);
+
+    if (ep.transcript) {
+      var transcriptToggle = document.createElement('button');
+      transcriptToggle.className = 'transcript-toggle';
+      transcriptToggle.textContent = 'Read transcript';
+      transcriptToggle.addEventListener('click', function () {
+        var content = this.nextElementSibling;
+        var isOpen = content.classList.toggle('open');
+        this.textContent = isOpen ? 'Hide transcript' : 'Read transcript';
+      });
+      body.appendChild(transcriptToggle);
+
+      var transcriptContent = document.createElement('div');
+      transcriptContent.className = 'transcript-content';
+      var transcriptText = document.createElement('p');
+      transcriptText.textContent = ep.transcript;
+      transcriptContent.appendChild(transcriptText);
+      body.appendChild(transcriptContent);
+    }
 
     card.appendChild(body);
     return card;
