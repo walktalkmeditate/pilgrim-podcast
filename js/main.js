@@ -413,7 +413,7 @@
         }
         previewAudio = new Audio(ep.audioUrl);
         previewAudio.volume = 0.15;
-        previewAudio.currentTime = 30;
+        previewAudio.currentTime = Math.floor(ep.duration / 3);
         previewAudio.play().catch(function () {});
         setTimeout(function () {
           if (previewAudio) {
