@@ -54,6 +54,16 @@
     return 'clear';
   }
 
+  function shiftCool(hex) {
+    var r = parseInt(hex.slice(1, 3), 16);
+    var g = parseInt(hex.slice(3, 5), 16);
+    var b = parseInt(hex.slice(5, 7), 16);
+    r = Math.max(0, r - 30);
+    g = Math.max(0, g - 10);
+    b = Math.min(255, b + 40);
+    return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+  }
+
   function clamp(min, max, val) {
     return Math.max(min, Math.min(max, val));
   }
@@ -69,8 +79,18 @@
     var rotation = (bytes[0] / 255) * 360;
     var weather = parseWeather(ep.weather);
 
-    var filterScale = weather === 'rain' ? 2.5 : weather === 'cloudy' ? 1.8 : 1.2;
-    var baseOpacity = weather === 'rain' ? 0.5 : weather === 'cloudy' ? 0.55 : weather === 'snow' ? 0.6 : 0.7;
+    var filterScale, baseOpacity, strokeMult, colorUsed;
+    colorUsed = color;
+    if (weather === 'rain') {
+      filterScale = 5; baseOpacity = 0.4; strokeMult = 1.2;
+    } else if (weather === 'cloudy') {
+      filterScale = 3; baseOpacity = 0.3; strokeMult = 0.6;
+    } else if (weather === 'snow') {
+      filterScale = 1.5; baseOpacity = 0.55; strokeMult = 0.7;
+      colorUsed = shiftCool(color);
+    } else {
+      filterScale = 1.2; baseOpacity = 0.7; strokeMult = 1.0;
+    }
 
     var elements = [];
 
@@ -84,11 +104,11 @@
       var dl = 2 + (db % 8);
       var gl = 1 + ((db >> 4) % 6);
       var da = i === 0 ? '' : ' stroke-dasharray="' + dl + ' ' + gl + '"';
-      var sw = i === 0 ? 1.5 : 0.8 + (bytes[i] % 3) * 0.3;
+      var sw = (i === 0 ? 1.5 : 0.8 + (bytes[i] % 3) * 0.3) * strokeMult;
       var op = baseOpacity - i * 0.06;
       elements.push(
         '<circle cx="' + cx + '" cy="' + cy + '" r="' + r.toFixed(1) +
-        '" fill="none" stroke="' + color + '" stroke-width="' + sw.toFixed(1) +
+        '" fill="none" stroke="' + colorUsed + '" stroke-width="' + sw.toFixed(1) +
         '" opacity="' + op.toFixed(2) + '"' + da + '/>'
       );
     }
@@ -105,12 +125,12 @@
       var y1 = cy + Math.sin(rad) * outerR * inner;
       var x2 = cx + Math.cos(rad) * outerR * outer;
       var y2 = cy + Math.sin(rad) * outerR * outer;
-      var sw = 0.5 + (bytes[i] % 3) * 0.3;
+      var sw = (0.5 + (bytes[i] % 3) * 0.3) * strokeMult;
       var op = (baseOpacity - 0.3) + (bytes[i + 12] / 255) * 0.2;
       elements.push(
         '<line x1="' + x1.toFixed(1) + '" y1="' + y1.toFixed(1) +
         '" x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) +
-        '" stroke="' + color + '" stroke-width="' + sw.toFixed(1) +
+        '" stroke="' + colorUsed + '" stroke-width="' + sw.toFixed(1) +
         '" opacity="' + op.toFixed(2) + '" stroke-linecap="round"/>'
       );
     }
@@ -126,17 +146,45 @@
       var dr = 1 + (bytes[i] % 2);
       elements.push(
         '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) +
-        '" r="' + dr + '" fill="' + color +
+        '" r="' + dr + '" fill="' + colorUsed +
         '" opacity="' + (baseOpacity - 0.35).toFixed(2) + '"/>'
       );
+    }
+
+    // Weather-specific extra elements
+    if (weather === 'rain') {
+      for (var i = 0; i < 8; i++) {
+        var dx = (bytes[i] / 255 - 0.5) * outerR * 1.6;
+        var dy1 = outerR * 0.3 + (bytes[i + 4] / 255) * outerR * 0.4;
+        var dy2 = dy1 + outerR * 0.15 + (bytes[i + 8] / 255) * outerR * 0.2;
+        elements.push(
+          '<line x1="' + (cx + dx).toFixed(1) + '" y1="' + (cy + dy1).toFixed(1) +
+          '" x2="' + (cx + dx + (bytes[i] % 5 - 2)).toFixed(1) + '" y2="' + (cy + dy2).toFixed(1) +
+          '" stroke="' + colorUsed + '" stroke-width="0.4" opacity="0.2" stroke-linecap="round"/>'
+        );
+      }
+    }
+    if (weather === 'snow') {
+      for (var i = 0; i < 12; i++) {
+        var angle = (bytes[i] / 255) * Math.PI * 2;
+        var dist = outerR * (0.15 + (bytes[i + 3] / 255) * 0.9);
+        var sx = cx + Math.cos(angle) * dist;
+        var sy = cy + Math.sin(angle) * dist;
+        var sr = 0.8 + (bytes[i + 6] % 3) * 0.4;
+        elements.push(
+          '<circle cx="' + sx.toFixed(1) + '" cy="' + sy.toFixed(1) +
+          '" r="' + sr.toFixed(1) + '" fill="none" stroke="' + colorUsed +
+          '" stroke-width="0.4" opacity="0.2"/>'
+        );
+      }
     }
 
     // Assemble SVG
     var filterId = 'seal-rough-' + ep.number;
     var svg = '<svg class="seal-svg" viewBox="0 0 ' + size + ' ' + size + '" width="' + size + '" height="' + size + '">';
     svg += '<defs><filter id="' + filterId + '">';
-    svg += '<feTurbulence type="turbulence" baseFrequency="0.04" numOctaves="3" seed="' + bytes[31] + '"/>';
-    svg += '<feDisplacementMap in="SourceGraphic" scale="' + filterScale.toFixed(1) + '"/>';
+    svg += '<feTurbulence type="turbulence" baseFrequency="0.04" numOctaves="3" seed="' + bytes[31] + '" result="noise"/>';
+    svg += '<feDisplacementMap in="SourceGraphic" in2="noise" scale="' + filterScale.toFixed(1) + '"' + (weather === 'rain' ? ' result="displaced"/><feGaussianBlur in="displaced" stdDeviation="0.8"' : '') + '/>';
     svg += '</filter></defs>';
     svg += '<g transform="rotate(' + rotation.toFixed(1) + ' ' + cx + ' ' + cy + ')" filter="url(#' + filterId + ')">';
     svg += elements.join('\n');
@@ -145,12 +193,12 @@
     // Center text — episode number
     svg += '<text x="' + cx + '" y="' + (cy - size * 0.02) + '" text-anchor="middle"';
     svg += ' font-family="Lato, sans-serif" font-size="' + (size * 0.2) + '"';
-    svg += ' font-weight="300" fill="' + color + '" opacity="0.8">' + ep.number + '</text>';
+    svg += ' font-weight="300" fill="' + colorUsed + '" opacity="0.8">' + ep.number + '</text>';
 
     // "EPISODE" label
     svg += '<text x="' + cx + '" y="' + (cy + size * 0.12) + '" text-anchor="middle"';
     svg += ' font-family="Lato, sans-serif" font-size="' + (size * 0.055) + '"';
-    svg += ' fill="' + color + '" letter-spacing="2" opacity="0.5" style="text-transform:uppercase">episode</text>';
+    svg += ' fill="' + colorUsed + '" letter-spacing="2" opacity="0.5" style="text-transform:uppercase">episode</text>';
 
     svg += '</svg>';
     return svg;

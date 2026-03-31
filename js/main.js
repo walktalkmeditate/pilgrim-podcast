@@ -153,6 +153,13 @@
     if (time) {
       document.documentElement.setAttribute('data-time', time);
     }
+
+    var month = new Date().getMonth();
+    var season = (month >= 2 && month <= 4) ? 'spring'
+      : (month >= 5 && month <= 7) ? 'summer'
+      : (month >= 8 && month <= 10) ? 'autumn'
+      : 'winter';
+    document.documentElement.setAttribute('data-season', season);
   }
 
   // --- Caption Helpers ---
@@ -242,6 +249,17 @@
 
     var sorted = episodes.slice().sort(function (a, b) { return a.number - b.number; });
 
+    // Koan — random reflection from an episode
+    var reflections = sorted.filter(function (ep) { return ep.reflection; });
+    if (reflections.length > 0) {
+      var koan = document.createElement('div');
+      koan.className = 'journey-koan reveal';
+      var koanP = document.createElement('p');
+      koanP.textContent = reflections[Math.floor(Math.random() * reflections.length)].reflection;
+      koan.appendChild(koanP);
+      container.appendChild(koan);
+    }
+
     sorted.forEach(function (ep, i) {
       if (i > 0) {
         var captionEl = document.createElement('div');
@@ -291,8 +309,24 @@
         }
       });
 
+      // Audio preview on hover
+      setupAudioPreview(sealWrap, ep);
+
       container.appendChild(stop);
     });
+
+    // Cumulative stats
+    var totalKm = 0, totalTalk = 0, totalMeditate = 0;
+    sorted.forEach(function (ep) {
+      totalKm += ep.distance_km || 0;
+      totalTalk += ep.duration || 0;
+    });
+    var cumulative = document.createElement('div');
+    cumulative.className = 'journey-cumulative reveal';
+    var cumulP = document.createElement('p');
+    cumulP.textContent = 'Together, pilgrims have walked ' + totalKm.toFixed(1) + ' km and talked for ' + formatDuration(totalTalk);
+    cumulative.appendChild(cumulP);
+    container.appendChild(cumulative);
 
     initScrollReveal();
     requestAnimationFrame(function () { drawWindingPath(); });
@@ -341,8 +375,71 @@
 
     var svg = '<svg viewBox="0 0 ' + journeyRect.width + ' ' + totalHeight + '" preserveAspectRatio="none">';
     svg += '<path class="winding-path" d="' + d + '"/>';
+
+    // Trail markers — small dots along the path
+    var markerSpacing = 60;
+    for (var y = markerSpacing; y < totalHeight - 20; y += markerSpacing) {
+      var t = y / totalHeight;
+      var segIdx = Math.min(Math.floor(t * (points.length - 1)), points.length - 2);
+      var segT = (t * (points.length - 1)) - segIdx;
+      var p0 = points[segIdx];
+      var p1 = points[segIdx + 1];
+      var dir = ((segIdx + 1) % 2 === 0) ? 1 : -1;
+      var cp1x = centerX + amplitude * dir;
+      var cp2x = centerX - amplitude * dir;
+      var bx = Math.pow(1 - segT, 3) * p0.x + 3 * Math.pow(1 - segT, 2) * segT * cp1x + 3 * (1 - segT) * segT * segT * cp2x + Math.pow(segT, 3) * p1.x;
+      svg += '<circle class="trail-marker" cx="' + bx.toFixed(1) + '" cy="' + y + '" r="1.5"/>';
+    }
+
     svg += '</svg>';
     pathContainer.innerHTML = svg;
+  }
+
+  // --- Audio Preview on Hover ---
+
+  var previewAudio = null;
+  var previewTimer = null;
+
+  function setupAudioPreview(sealWrap, ep) {
+    var indicator = document.createElement('div');
+    indicator.className = 'preview-indicator';
+    sealWrap.appendChild(indicator);
+
+    sealWrap.addEventListener('mouseenter', function () {
+      previewTimer = setTimeout(function () {
+        if (previewAudio) {
+          previewAudio.pause();
+          previewAudio = null;
+        }
+        previewAudio = new Audio(ep.audioUrl);
+        previewAudio.volume = 0.15;
+        previewAudio.currentTime = 30;
+        previewAudio.play().catch(function () {});
+        setTimeout(function () {
+          if (previewAudio) {
+            var fadeOut = setInterval(function () {
+              if (previewAudio && previewAudio.volume > 0.02) {
+                previewAudio.volume = Math.max(0, previewAudio.volume - 0.02);
+              } else {
+                clearInterval(fadeOut);
+                if (previewAudio) {
+                  previewAudio.pause();
+                  previewAudio = null;
+                }
+              }
+            }, 100);
+          }
+        }, 5000);
+      }, 2000);
+    });
+
+    sealWrap.addEventListener('mouseleave', function () {
+      clearTimeout(previewTimer);
+      if (previewAudio) {
+        previewAudio.pause();
+        previewAudio = null;
+      }
+    });
   }
 
   function buildExpandedCard(ep) {

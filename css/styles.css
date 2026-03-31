@@ -59,6 +59,16 @@
 [data-theme="dark"][data-time="dusk"] { --parchment: #201A14; --stone: #C4A070; }
 [data-theme="dark"][data-time="night"] { --parchment: #161310; --fog: #585048; }
 
+/* Seasonal tint */
+[data-season="spring"] { --stone: #7A8B6F; }
+[data-season="summer"] { --stone: #9A7E48; }
+[data-season="autumn"] { --stone: #A0634B; }
+[data-season="winter"] { --fog: #9AA8B8; }
+[data-theme="dark"][data-season="spring"] { --stone: #8AAA80; }
+[data-theme="dark"][data-season="summer"] { --stone: #C4A060; }
+[data-theme="dark"][data-season="autumn"] { --stone: #C47E63; }
+[data-theme="dark"][data-season="winter"] { --fog: #6878A0; }
+
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
@@ -73,6 +83,16 @@ body {
   transition: var(--transition-colors);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  animation: breathe 12s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { background-color: var(--parchment); }
+  50% { background-color: var(--parchment-secondary); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body { animation: none; }
 }
 
 /* --- Typography --- */
@@ -356,6 +376,51 @@ a:hover {
   opacity: 0.6;
 }
 
+/* --- Koan --- */
+
+.journey-koan {
+  text-align: center;
+  padding: 2rem 1rem 3rem;
+  position: relative;
+  z-index: 2;
+}
+
+.journey-koan p {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1.0625rem;
+  color: var(--fog);
+  opacity: 0.7;
+  max-width: 420px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* --- Cumulative Stats --- */
+
+.journey-cumulative {
+  text-align: center;
+  padding: 2rem 1rem 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.journey-cumulative p {
+  font-family: var(--font-ui);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  color: var(--fog);
+  opacity: 0.5;
+}
+
+/* --- Trail Markers --- */
+
+.journey-path .trail-marker {
+  fill: var(--parchment-tertiary);
+  opacity: 0.4;
+}
+
 /* --- Journey Empty State --- */
 
 .journey-empty {
@@ -368,6 +433,25 @@ a:hover {
   font-style: italic;
   font-size: 1.125rem;
   color: var(--fog);
+}
+
+/* --- Audio Preview --- */
+
+.seal-container .preview-indicator {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 2px;
+  background: var(--stone);
+  border-radius: 1px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.seal-container:hover .preview-indicator {
+  opacity: 0.4;
 }
 
 /* --- Audio Player --- */
