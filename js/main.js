@@ -160,6 +160,10 @@
       : (month >= 8 && month <= 10) ? 'autumn'
       : 'winter';
     document.documentElement.setAttribute('data-season', season);
+
+    var seasonIcons = { spring: '\uD83C\uDF31', summer: '\uD83D\uDD25', autumn: '\uD83C\uDF42', winter: '\u2744\uFE0F' };
+    var cycleBtn = document.querySelector('.season-cycle');
+    if (cycleBtn) cycleBtn.textContent = seasonIcons[season] || '\uD83C\uDF31';
   }
 
   // --- Caption Helpers ---
@@ -752,34 +756,28 @@
         currentAudio.currentTime = ratio * currentAudio.duration;
       }
 
-      var seasonBtn = e.target.closest('.season-btn');
-      if (seasonBtn) {
-        var season = seasonBtn.getAttribute('data-season');
-        document.querySelectorAll('.season-btn').forEach(function (b) { b.classList.remove('active'); });
-        seasonBtn.classList.add('active');
+      var cycleBtn = e.target.closest('.season-cycle');
+      if (cycleBtn) {
+        var seasons = ['spring', 'summer', 'autumn', 'winter'];
+        var icons = { spring: '\uD83C\uDF31', summer: '\uD83D\uDD25', autumn: '\uD83C\uDF42', winter: '\u2744\uFE0F' };
+        var current = document.documentElement.getAttribute('data-season');
+        var idx = seasons.indexOf(current);
+        var next = seasons[(idx + 1) % seasons.length];
 
-        if (!season) {
-          var month = new Date().getMonth();
-          season = (month >= 2 && month <= 4) ? 'spring'
-            : (month >= 5 && month <= 7) ? 'summer'
-            : (month >= 8 && month <= 10) ? 'autumn'
-            : 'winter';
-        }
-        document.documentElement.setAttribute('data-season', season);
+        document.documentElement.setAttribute('data-season', next);
+        cycleBtn.textContent = icons[next];
 
         document.querySelectorAll('.trail-marker.alive').forEach(function (m) {
           m.classList.remove('alive');
         });
         setTimeout(function () {
           document.querySelectorAll('.trail-marker').forEach(function (m, i) {
-            m.style.animationDelay = (season === 'summer' ? (Math.random() * 2).toFixed(1) : (i * 0.08).toFixed(2)) + 's';
+            m.style.animationDelay = (next === 'summer' ? (Math.random() * 2).toFixed(1) : (i * 0.08).toFixed(2)) + 's';
             m.classList.add('alive');
           });
         }, 50);
       }
     });
-
-    document.querySelector('.season-btn[data-season=""]').classList.add('active');
   }
 
   if (document.readyState === 'loading') {

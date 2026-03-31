@@ -60,14 +60,14 @@
 [data-theme="dark"][data-time="night"] { --parchment: #161310; --fog: #585048; }
 
 /* Seasonal tint */
-[data-season="spring"] { --stone: #7A8B6F; }
-[data-season="summer"] { --stone: #9A7E48; }
-[data-season="autumn"] { --stone: #A0634B; }
-[data-season="winter"] { --fog: #9AA8B8; }
-[data-theme="dark"][data-season="spring"] { --stone: #8AAA80; }
-[data-theme="dark"][data-season="summer"] { --stone: #C4A060; }
-[data-theme="dark"][data-season="autumn"] { --stone: #C47E63; }
-[data-theme="dark"][data-season="winter"] { --fog: #6878A0; }
+[data-season="spring"] { --stone: #6B8B5E; --fog: #8FA888; --parchment-secondary: #ECF0E8; }
+[data-season="summer"] { --stone: #A07830; --fog: #C4A870; --parchment-secondary: #F5EEE0; }
+[data-season="autumn"] { --stone: #A0634B; --fog: #B8886A; --parchment-secondary: #F2EAE0; }
+[data-season="winter"] { --stone: #7088A0; --fog: #9AA8B8; --parchment-secondary: #EAF0F2; }
+[data-theme="dark"][data-season="spring"] { --stone: #80AA70; --fog: #607850; --parchment-secondary: #1E2818; }
+[data-theme="dark"][data-season="summer"] { --stone: #C4A050; --fog: #887040; --parchment-secondary: #282010; }
+[data-theme="dark"][data-season="autumn"] { --stone: #C47E63; --fog: #886050; --parchment-secondary: #281810; }
+[data-theme="dark"][data-season="winter"] { --stone: #7098C0; --fog: #506878; --parchment-secondary: #141C22; }
 
 html {
   scroll-behavior: smooth;
@@ -692,37 +692,24 @@ a:hover {
   content: '\2192\00A0';
 }
 
-/* --- Season Toggle --- */
+/* --- Season Cycle --- */
 
-.season-toggle-bar {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 1rem;
-  max-width: 720px;
-  margin: 0 auto;
-}
-
-.season-btn {
+.season-cycle {
+  display: block;
+  margin: 1rem auto 0;
   background: none;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  padding: 0.3rem 0.5rem;
-  font-size: 0.75rem;
+  border: none;
+  font-size: 1.125rem;
   cursor: pointer;
-  opacity: 0.4;
-  transition: opacity 0.2s ease, border-color 0.2s ease;
-  font-family: var(--font-ui);
-  color: var(--fog);
+  opacity: 0.5;
+  transition: opacity 0.2s ease, transform 0.3s ease;
+  padding: 0.5rem;
+  line-height: 1;
 }
 
-.season-btn:hover {
-  opacity: 0.8;
-}
-
-.season-btn.active {
+.season-cycle:hover {
   opacity: 1;
-  border-color: var(--fog);
+  transform: scale(1.2);
 }
 
 /* --- Footer --- */
