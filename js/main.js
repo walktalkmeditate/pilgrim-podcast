@@ -751,7 +751,35 @@
         var ratio = (e.clientX - rect.left) / rect.width;
         currentAudio.currentTime = ratio * currentAudio.duration;
       }
+
+      var seasonBtn = e.target.closest('.season-btn');
+      if (seasonBtn) {
+        var season = seasonBtn.getAttribute('data-season');
+        document.querySelectorAll('.season-btn').forEach(function (b) { b.classList.remove('active'); });
+        seasonBtn.classList.add('active');
+
+        if (!season) {
+          var month = new Date().getMonth();
+          season = (month >= 2 && month <= 4) ? 'spring'
+            : (month >= 5 && month <= 7) ? 'summer'
+            : (month >= 8 && month <= 10) ? 'autumn'
+            : 'winter';
+        }
+        document.documentElement.setAttribute('data-season', season);
+
+        document.querySelectorAll('.trail-marker.alive').forEach(function (m) {
+          m.classList.remove('alive');
+        });
+        setTimeout(function () {
+          document.querySelectorAll('.trail-marker').forEach(function (m, i) {
+            m.style.animationDelay = (season === 'summer' ? (Math.random() * 2).toFixed(1) : (i * 0.08).toFixed(2)) + 's';
+            m.classList.add('alive');
+          });
+        }, 50);
+      }
     });
+
+    document.querySelector('.season-btn[data-season=""]').classList.add('active');
   }
 
   if (document.readyState === 'loading') {

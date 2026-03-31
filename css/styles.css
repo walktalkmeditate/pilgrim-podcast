@@ -692,6 +692,39 @@ a:hover {
   content: '\2192\00A0';
 }
 
+/* --- Season Toggle --- */
+
+.season-toggle-bar {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.season-btn {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+  font-family: var(--font-ui);
+  color: var(--fog);
+}
+
+.season-btn:hover {
+  opacity: 0.8;
+}
+
+.season-btn.active {
+  opacity: 1;
+  border-color: var(--fog);
+}
+
 /* --- Footer --- */
 
 .footer {
