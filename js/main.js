@@ -455,6 +455,11 @@
 
   var previewAudio = null;
   var previewTimer = null;
+  var userHasInteracted = false;
+
+  document.addEventListener('click', function () { userHasInteracted = true; }, { once: true });
+  document.addEventListener('keydown', function () { userHasInteracted = true; }, { once: true });
+  document.addEventListener('touchstart', function () { userHasInteracted = true; }, { once: true });
 
   function setupAudioPreview(sealWrap, ep) {
     var indicator = document.createElement('div');
@@ -462,6 +467,7 @@
     sealWrap.appendChild(indicator);
 
     sealWrap.addEventListener('mouseenter', function () {
+      if (!userHasInteracted) return;
       previewTimer = setTimeout(function () {
         if (previewAudio) {
           previewAudio.pause();
