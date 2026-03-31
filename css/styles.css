@@ -691,9 +691,25 @@ a:hover {
 }
 
 .transcript-content.open {
-  max-height: 3000px;
+  max-height: 400px;
+  overflow-y: auto;
   opacity: 1;
   margin-top: var(--padding-md);
+  padding-right: var(--padding-sm);
+}
+
+.transcript-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.transcript-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.transcript-content::-webkit-scrollbar-thumb {
+  background: var(--fog);
+  border-radius: 2px;
+  opacity: 0.3;
 }
 
 .transcript-content p {
