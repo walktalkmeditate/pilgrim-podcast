@@ -780,7 +780,7 @@
     window.addEventListener('scroll', handleScrollSound, { passive: true });
 
     scrollDecay = setInterval(function () {
-      scrollVelocity *= 0.85;
+      scrollVelocity *= 0.75;
       if (scrollAudio && scrollSoundEnabled) {
         scrollAudio.volume = Math.min(scrollVelocity, maxScrollVolume);
       }
@@ -801,7 +801,7 @@
     var currentY = window.scrollY;
     var delta = Math.abs(currentY - lastScrollY);
     lastScrollY = currentY;
-    scrollVelocity = Math.min(scrollVelocity + delta * 0.003, maxScrollVolume);
+    scrollVelocity = Math.min(scrollVelocity + delta * 0.0008, maxScrollVolume);
   }
 
   // --- Init ---
