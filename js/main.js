@@ -234,6 +234,9 @@
 
       var sealWrap = document.createElement('div');
       sealWrap.className = 'seal-container';
+      sealWrap.setAttribute('role', 'button');
+      sealWrap.setAttribute('tabindex', '0');
+      sealWrap.setAttribute('aria-label', 'Episode ' + ep.number + ': ' + ep.title);
       // PilgrimSeal.generate returns our own generated SVG string — not user content
       sealWrap.innerHTML = PilgrimSeal.generate(ep); // safe: own generated SVG
       stop.appendChild(sealWrap);
@@ -259,11 +262,65 @@
       sealWrap.addEventListener('click', function () {
         toggleExpand(stop, card, ep);
       });
+      sealWrap.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleExpand(stop, card, ep);
+        }
+      });
 
       container.appendChild(stop);
     });
 
     initScrollReveal();
+    requestAnimationFrame(function () { drawWindingPath(); });
+  }
+
+  function drawWindingPath() {
+    var pathContainer = document.querySelector('.journey-path');
+    if (!pathContainer) return;
+
+    var journey = document.querySelector('.journey');
+    var stops = document.querySelectorAll('.episode-stop');
+    if (stops.length === 0) return;
+
+    var journeyRect = journey.getBoundingClientRect();
+    var totalHeight = journey.scrollHeight;
+    var centerX = journeyRect.width / 2;
+
+    var points = [];
+    points.push({ x: centerX, y: 0 });
+
+    stops.forEach(function (stop) {
+      var seal = stop.querySelector('.seal-container');
+      if (seal) {
+        var sealRect = seal.getBoundingClientRect();
+        var y = sealRect.top - journeyRect.top + sealRect.height / 2;
+        points.push({ x: centerX, y: y });
+      }
+    });
+
+    points.push({ x: centerX, y: totalHeight });
+
+    var amplitude = 40;
+    var d = 'M ' + points[0].x + ' ' + points[0].y;
+
+    for (var i = 1; i < points.length; i++) {
+      var prev = points[i - 1];
+      var curr = points[i];
+      var midY = (prev.y + curr.y) / 2;
+      var direction = (i % 2 === 0) ? 1 : -1;
+      var cp1x = centerX + amplitude * direction;
+      var cp1y = prev.y + (curr.y - prev.y) * 0.3;
+      var cp2x = centerX - amplitude * direction;
+      var cp2y = prev.y + (curr.y - prev.y) * 0.7;
+      d += ' C ' + cp1x + ' ' + cp1y + ' ' + cp2x + ' ' + cp2y + ' ' + curr.x + ' ' + curr.y;
+    }
+
+    var svg = '<svg viewBox="0 0 ' + journeyRect.width + ' ' + totalHeight + '" preserveAspectRatio="none">';
+    svg += '<path class="winding-path" d="' + d + '"/>';
+    svg += '</svg>';
+    pathContainer.innerHTML = svg;
   }
 
   function buildExpandedCard(ep) {
@@ -368,6 +425,19 @@
     time.textContent = formatDuration(ep.duration);
     player.appendChild(time);
 
+    var speed = document.createElement('button');
+    speed.className = 'speed-btn';
+    speed.textContent = '1x';
+    speed.addEventListener('click', function () {
+      var speeds = [1, 1.25, 1.5, 1.75, 2];
+      var current = parseFloat(speed.textContent);
+      var idx = speeds.indexOf(current);
+      var next = speeds[(idx + 1) % speeds.length];
+      speed.textContent = next + 'x';
+      if (currentAudio) currentAudio.playbackRate = next;
+    });
+    player.appendChild(speed);
+
     wrapper.appendChild(player);
 
     if (ep.walkPage) {
@@ -393,9 +463,15 @@
 
       var transcriptContent = document.createElement('div');
       transcriptContent.className = 'transcript-content';
-      var transcriptText = document.createElement('p');
-      transcriptText.textContent = ep.transcript;
-      transcriptContent.appendChild(transcriptText);
+      var paragraphs = ep.transcript.split(/\n\n+/);
+      paragraphs.forEach(function (para) {
+        var trimmed = para.trim();
+        if (trimmed) {
+          var p = document.createElement('p');
+          p.textContent = trimmed;
+          transcriptContent.appendChild(p);
+        }
+      });
       wrapper.appendChild(transcriptContent);
     }
 

@@ -21,7 +21,7 @@
     stone: 'clear-ring'
   };
 
-  var R2_BASE = 'https://pub-c72c34fbaa6c1041a47d15961d16f398.r2.dev';
+  var R2_BASE = 'https://cdn.pilgrimapp.org';
 
   function bellUrl(guideId) {
     var bell = GUIDE_BELLS[guideId] || 'gentle-harp';
@@ -144,7 +144,7 @@
 
     // Center text — episode number
     svg += '<text x="' + cx + '" y="' + (cy - size * 0.02) + '" text-anchor="middle"';
-    svg += ' font-family="Cormorant Garamond, serif" font-size="' + (size * 0.22) + '"';
+    svg += ' font-family="Lato, sans-serif" font-size="' + (size * 0.2) + '"';
     svg += ' font-weight="300" fill="' + color + '" opacity="0.8">' + ep.number + '</text>';
 
     // "EPISODE" label
