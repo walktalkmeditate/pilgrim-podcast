@@ -879,20 +879,31 @@ a:hover {
 }
 
 .constellation .seal-container .seal-svg {
-  filter: drop-shadow(0 0 12px rgba(180, 180, 255, 0.3));
+  filter: drop-shadow(0 0 8px rgba(180, 180, 255, 0.25));
 }
 
 .constellation .seal-container .seal-svg circle[stroke],
 .constellation .seal-container .seal-svg line {
-  stroke: #C8C0FF !important;
+  stroke: rgba(200, 192, 255, 0.4) !important;
+  stroke-width: 0.8px !important;
 }
 
-.constellation .seal-container .seal-svg circle[fill] {
-  fill: #C8C0FF !important;
+.constellation .seal-container .seal-svg circle[fill]:not([stroke]) {
+  fill: rgba(200, 192, 255, 0.5) !important;
+  r: 1.5 !important;
 }
 
 .constellation .seal-container .seal-svg text {
-  fill: #D8D0FF !important;
+  fill: rgba(220, 215, 255, 0.7) !important;
+}
+
+.constellation .seal-container::after {
+  display: none;
+}
+
+.constellation .seal-visited .seal-container .seal-svg circle[stroke] {
+  stroke: rgba(200, 192, 255, 0.5) !important;
+  stroke-width: 1px !important;
 }
 
 .constellation .episode-label-title,
