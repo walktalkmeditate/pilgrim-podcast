@@ -6,19 +6,19 @@
   <channel>
     <title>Pilgrim on the Path</title>
     <link>https://podcast.pilgrimapp.org</link>
-    <description>A podcast of walks. One walker per episode. Unscripted thoughts from the path. Narrated by Dhyama voice guides.</description>
+    <description>Real voices from the path. Each episode is one walk, recorded by a pilgrim and narrated by a voice guide. Walk. Talk. Meditate.</description>
     <language>en</language>
-    <copyright>Walk Talk Meditate</copyright>
+    <copyright>walk · talk · meditate</copyright>
     <atom:link href="https://podcast.pilgrimapp.org/feed.xml" rel="self" type="application/rss+xml"/>
-    <itunes:author>Walk Talk Meditate</itunes:author>
-    <itunes:summary>A podcast of walks. One walker per episode. Unscripted thoughts from the path.</itunes:summary>
+    <itunes:author>walk · talk · meditate</itunes:author>
+    <itunes:summary>Real voices from the path. Each episode is one walk, recorded by a pilgrim and narrated by a voice guide. Walk. Talk. Meditate.</itunes:summary>
     <itunes:category text="Religion &amp; Spirituality">
       <itunes:category text="Spirituality"/>
     </itunes:category>
     <itunes:explicit>false</itunes:explicit>
     <itunes:image href="https://podcast.pilgrimapp.org/artwork.png"/>
     <itunes:owner>
-      <itunes:name>Walk Talk Meditate</itunes:name>
+      <itunes:name>walk · talk · meditate</itunes:name>
       <itunes:email>hello@walktalkmeditate.org</itunes:email>
     </itunes:owner>
     <item>
@@ -26,7 +26,7 @@
       <description>A pilgrim in Austin, Texas. Eighty degrees, clear sky. Three kilometers on a Monday evening. They had something to say. Quite a lot, actually. About building things, breaking things, and the price of biscuits at McDonald&apos;s. No one asked them to record it. They just did. That is already more than most people managed today.</description>
       <enclosure url="https://pub-c72c34fbaa6c1041a47d15961d16f398.r2.dev/podcast/ep1.m4a" length="30328251" type="audio/mp4"/>
       <guid isPermaLink="false">pilgrim-ep1</guid>
-      <pubDate>Mon, 30 Mar 2026 00:00:00 -0000</pubDate>
+      <pubDate>Mon, 30 Mar 2026 00:00:00 +0000</pubDate>
       <itunes:duration>24:39</itunes:duration>
       <itunes:episode>1</itunes:episode>
       <itunes:summary>A pilgrim in Austin, Texas. Eighty degrees, clear sky. Three kilometers on a Monday evening. They had something to say. Quite a lot, actually. About building things, breaking things, and the price of biscuits at McDonald&apos;s. No one asked them to record it. They just did. That is already more than most people managed today.</itunes:summary>
