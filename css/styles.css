@@ -553,7 +553,7 @@ a:hover {
 }
 
 .transcript-content.open {
-  max-height: 2000px;
+  max-height: 100000px;
   opacity: 1;
   margin-top: var(--padding-md);
 }
