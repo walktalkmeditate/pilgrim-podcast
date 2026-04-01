@@ -22,6 +22,16 @@
       <itunes:email>hello@walktalkmeditate.org</itunes:email>
     </itunes:owner>
     <item>
+      <title>Episode 2: Austin, Texas</title>
+      <description>Two pilgrims in Austin, Texas. Wind and warmth. Three and a half kilometers along a lake. They talked about memory and forgetting. About ego and flow. About circles that spiral upward. Some of the most important things will never teach. They can only be walked.</description>
+      <enclosure url="https://cdn.pilgrimapp.org/podcast/ep2.m4a" length="55143120" type="audio/mp4"/>
+      <guid isPermaLink="false">pilgrim-ep2</guid>
+      <pubDate>Tue, 31 Mar 2026 00:00:00 +0000</pubDate>
+      <itunes:duration>41:14</itunes:duration>
+      <itunes:episode>2</itunes:episode>
+      <itunes:summary>Two pilgrims in Austin, Texas. Wind and warmth. Three and a half kilometers along a lake. They talked about memory and forgetting. About ego and flow. About circles that spiral upward. Some of the most important things will never teach. They can only be walked.</itunes:summary>
+    </item>
+    <item>
       <title>Episode 1: Austin, Texas</title>
       <description>A pilgrim in Austin, Texas. Overcast sky. Thirty degrees. Four kilometers along a lake. They had a story to tell. Three words became an idea. The idea became an app. The app became this. No one asked them to build it. They just did. That is already more than most people managed today.</description>
       <enclosure url="https://cdn.pilgrimapp.org/podcast/ep1.m4a" length="63748456" type="audio/mp4"/>
