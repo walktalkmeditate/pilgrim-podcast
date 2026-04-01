@@ -745,8 +745,19 @@
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     if (localStorage.getItem('scroll-sound') === 'on') {
-      enableScrollSound();
       invite.classList.add('hidden');
+      var resumed = false;
+      function resumeScrollSound() {
+        if (resumed) return;
+        resumed = true;
+        enableScrollSound();
+        document.removeEventListener('click', resumeScrollSound);
+        document.removeEventListener('scroll', resumeScrollSound);
+        document.removeEventListener('touchstart', resumeScrollSound);
+      }
+      document.addEventListener('click', resumeScrollSound, { once: false });
+      document.addEventListener('scroll', resumeScrollSound, { once: false, passive: true });
+      document.addEventListener('touchstart', resumeScrollSound, { once: false });
       return;
     }
 
