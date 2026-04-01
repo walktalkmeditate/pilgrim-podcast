@@ -746,18 +746,22 @@
 
     if (localStorage.getItem('scroll-sound') === 'on') {
       invite.classList.add('hidden');
-      var resumed = false;
-      function resumeScrollSound() {
-        if (resumed) return;
-        resumed = true;
+      var scrollSoundReady = false;
+      var scrollSoundStarted = false;
+
+      function markReady() { scrollSoundReady = true; }
+      document.addEventListener('click', markReady);
+      document.addEventListener('touchstart', markReady);
+
+      function tryStartScrollSound() {
+        if (scrollSoundStarted || !scrollSoundReady) return;
+        scrollSoundStarted = true;
         enableScrollSound();
-        document.removeEventListener('click', resumeScrollSound);
-        document.removeEventListener('scroll', resumeScrollSound);
-        document.removeEventListener('touchstart', resumeScrollSound);
+        document.removeEventListener('click', markReady);
+        document.removeEventListener('touchstart', markReady);
+        window.removeEventListener('scroll', tryStartScrollSound);
       }
-      document.addEventListener('click', resumeScrollSound, { once: false });
-      document.addEventListener('scroll', resumeScrollSound, { once: false, passive: true });
-      document.addEventListener('touchstart', resumeScrollSound, { once: false });
+      window.addEventListener('scroll', tryStartScrollSound, { passive: true });
       return;
     }
 
