@@ -8,7 +8,7 @@
     <link>https://podcast.pilgrimapp.org</link>
     <description>Real voices from the path. Each episode is one walk, recorded by a pilgrim and narrated by a voice guide. Walk. Talk. Meditate.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 01 Apr 2026 01:47:32 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 01 Apr 2026 01:51:56 +0000</lastBuildDate>
     <copyright>walk · talk · meditate</copyright>
     <atom:link href="https://podcast.pilgrimapp.org/feed.xml" rel="self" type="application/rss+xml"/>
     <itunes:author>walk · talk · meditate</itunes:author>
@@ -32,6 +32,7 @@
       <itunes:duration>41:14</itunes:duration>
       <itunes:episode>2</itunes:episode>
       <itunes:episodeType>full</itunes:episodeType>
+      <itunes:image href=""/>
       <itunes:summary>Two pilgrims in Austin, Texas. Wind and warmth. Three and a half kilometers along a lake. They talked about memory and forgetting. About ego and flow. About circles that spiral upward. Some of the most important things will never teach. They can only be walked.</itunes:summary>
     </item>
     <item>
@@ -43,6 +44,7 @@
       <itunes:duration>49:41</itunes:duration>
       <itunes:episode>1</itunes:episode>
       <itunes:episodeType>full</itunes:episodeType>
+      <itunes:image href="https://cdn.pilgrimapp.org/podcast/ep1-artwork.png"/>
       <itunes:summary>A pilgrim in Austin, Texas. Overcast sky. Thirty degrees. Four kilometers along a lake. They had a story to tell. Three words became an idea. The idea became an app. The app became this. No one asked them to build it. They just did. That is already more than most people managed today.</itunes:summary>
     </item>
   </channel>
