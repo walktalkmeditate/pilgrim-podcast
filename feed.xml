@@ -8,7 +8,7 @@
     <link>https://podcast.pilgrimapp.org</link>
     <description>Real voices from the path. Each episode is one walk, recorded by a pilgrim and narrated by a voice guide. Walk. Talk. Meditate.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 01 Apr 2026 01:51:56 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 01 Apr 2026 01:52:40 +0000</lastBuildDate>
     <copyright>walk · talk · meditate</copyright>
     <atom:link href="https://podcast.pilgrimapp.org/feed.xml" rel="self" type="application/rss+xml"/>
     <itunes:author>walk · talk · meditate</itunes:author>
@@ -32,7 +32,7 @@
       <itunes:duration>41:14</itunes:duration>
       <itunes:episode>2</itunes:episode>
       <itunes:episodeType>full</itunes:episodeType>
-      <itunes:image href=""/>
+      <itunes:image href="https://cdn.pilgrimapp.org/podcast/ep2-artwork.png"/>
       <itunes:summary>Two pilgrims in Austin, Texas. Wind and warmth. Three and a half kilometers along a lake. They talked about memory and forgetting. About ego and flow. About circles that spiral upward. Some of the most important things will never teach. They can only be walked.</itunes:summary>
     </item>
     <item>
