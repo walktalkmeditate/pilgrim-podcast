@@ -83,7 +83,7 @@ body {
   transition: var(--transition-colors);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  animation: breathe 12s ease-in-out infinite;
+  animation: breathe 120s ease-in-out infinite;
 }
 
 @keyframes breathe {
