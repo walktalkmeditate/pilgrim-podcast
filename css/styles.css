@@ -742,6 +742,27 @@ a:hover {
   content: '\2192\00A0';
 }
 
+/* --- Walk Returned (expired) --- */
+
+.walk-returned {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--fog);
+  margin-top: var(--padding-md);
+  font-style: italic;
+}
+
+.walk-returned-ghost {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--stone);
+  margin-top: var(--padding-md);
+}
+
 /* --- Scroll Sound Invite --- */
 
 .scroll-sound-invite {
@@ -923,6 +944,49 @@ a:hover {
   pointer-events: none;
 }
 
+/* --- Seal Returned (walk expired) --- */
+
+.seal-returned .seal-container .seal-svg {
+  opacity: 0.7;
+  filter: saturate(0.4);
+  transition: opacity 0.6s ease, filter 0.6s ease;
+}
+
+.seal-returned .seal-container:hover .seal-svg {
+  filter: saturate(0.4) drop-shadow(0 0 8px var(--stone));
+}
+
+.seal-playing.seal-returned .seal-container .seal-svg {
+  opacity: 1;
+  filter: none;
+}
+
+/* --- Walk Returned Ceremony (one-time leaf settle) --- */
+
+@keyframes walk-returned-out {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(8px); }
+}
+
+@keyframes walk-returned-in {
+  0% { opacity: 0; transform: translateY(-8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.walk-returned-ceremony-out {
+  animation: walk-returned-out 0.7s ease forwards;
+}
+
+.walk-returned-ceremony-in {
+  animation: walk-returned-in 0.8s ease 0.7s forwards;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .walk-returned-ceremony-out { animation: none; opacity: 0; }
+  .walk-returned-ceremony-in { animation: none; opacity: 1; }
+}
+
 /* --- Constellation Easter Egg --- */
 
 .constellation {
@@ -983,6 +1047,11 @@ a:hover {
   stroke-width: 1px !important;
 }
 
+.constellation .seal-returned .seal-container .seal-svg {
+  opacity: 0.5;
+  filter: saturate(0.2) drop-shadow(0 0 8px rgba(180, 180, 255, 0.15));
+}
+
 .constellation .episode-label-title,
 .constellation .episode-expanded-title {
   color: #E8E0FF;
@@ -1009,6 +1078,10 @@ a:hover {
 
 .constellation .episode-walk-link:hover {
   color: rgba(220, 215, 255, 0.9) !important;
+}
+
+.constellation .walk-returned {
+  color: rgba(200, 192, 255, 0.35) !important;
 }
 
 .constellation .play-btn {

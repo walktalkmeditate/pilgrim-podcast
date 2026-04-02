@@ -267,6 +267,9 @@
       if (localStorage.getItem('visited-ep-' + ep.number)) {
         stop.classList.add('seal-visited');
       }
+      if (isWalkExpired(ep)) {
+        stop.classList.add('seal-returned');
+      }
 
       var sealWrap = document.createElement('div');
       sealWrap.className = 'seal-container';
@@ -532,6 +535,10 @@
     });
   }
 
+  function isWalkExpired(ep) {
+    return ep.walkPage && ep.walkPageExpires && new Date(ep.walkPageExpires + 'T00:00:00') < new Date();
+  }
+
   function buildExpandedCard(ep) {
     var ns = 'http://www.w3.org/2000/svg';
 
@@ -640,13 +647,41 @@
     wrapper.appendChild(player);
 
     if (ep.walkPage) {
-      var walkLink = document.createElement('a');
-      walkLink.className = 'episode-walk-link';
-      walkLink.href = ep.walkPage;
-      walkLink.target = '_blank';
-      walkLink.rel = 'noopener';
-      walkLink.textContent = 'View the walk';
-      wrapper.appendChild(walkLink);
+      if (isWalkExpired(ep)) {
+        var seenKey = 'returned-ep-' + ep.number;
+        var alreadySeen = false;
+        try { alreadySeen = localStorage.getItem(seenKey); } catch (e) {}
+
+        if (alreadySeen || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          var returned = document.createElement('div');
+          returned.className = 'walk-returned';
+          returned.textContent = 'This walk has returned to the trail.';
+          wrapper.appendChild(returned);
+          if (!alreadySeen) { try { localStorage.setItem(seenKey, '1'); } catch (e) {} }
+        } else {
+          var ghostLink = document.createElement('div');
+          ghostLink.className = 'walk-returned-ghost';
+          ghostLink.textContent = 'View the walk';
+          ghostLink.setAttribute('aria-hidden', 'true');
+          wrapper.appendChild(ghostLink);
+
+          var returned = document.createElement('div');
+          returned.className = 'walk-returned';
+          returned.textContent = 'This walk has returned to the trail.';
+          returned.style.display = 'none';
+          wrapper.appendChild(returned);
+
+          wrapper.setAttribute('data-ceremony-pending', ep.number);
+        }
+      } else {
+        var walkLink = document.createElement('a');
+        walkLink.className = 'episode-walk-link';
+        walkLink.href = ep.walkPage;
+        walkLink.target = '_blank';
+        walkLink.rel = 'noopener';
+        walkLink.textContent = 'View the walk';
+        wrapper.appendChild(walkLink);
+      }
     }
 
     if (ep.transcript) {
@@ -686,6 +721,22 @@
       card.classList.add('open');
       stop.classList.add('seal-visited');
       localStorage.setItem('visited-ep-' + ep.number, '1');
+
+      var pending = card.getAttribute('data-ceremony-pending');
+      if (pending) {
+        card.removeAttribute('data-ceremony-pending');
+        var ghost = card.querySelector('.walk-returned-ghost');
+        var returned = card.querySelector('.walk-returned');
+        if (ghost) {
+          ghost.classList.add('walk-returned-ceremony-out');
+          ghost.addEventListener('animationend', function () { ghost.style.display = 'none'; }, { once: true });
+        }
+        if (returned) {
+          returned.style.display = '';
+          returned.classList.add('walk-returned-ceremony-in');
+        }
+        try { localStorage.setItem('returned-ep-' + pending, '1'); } catch (e) {}
+      }
     }
   }
 
