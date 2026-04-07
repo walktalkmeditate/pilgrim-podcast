@@ -779,7 +779,6 @@
   var scrollCtx = null;
   var scrollGain = null;
   var scrollSource = null;
-  var scrollElAudio = null;
   var scrollSoundEnabled = false;
   var lastScrollY = 0;
   var scrollVelocity = 0;
@@ -828,10 +827,10 @@
     scrollGain.gain.value = 0;
     scrollGain.connect(scrollCtx.destination);
 
-    scrollCtx.resume();
-
     var season = document.documentElement.getAttribute('data-season') || 'spring';
-    loadScrollAudio(season);
+    scrollCtx.resume().then(function () {
+      loadScrollAudio(season);
+    }).catch(function () {});
     scrollSoundEnabled = true;
 
     var mute = document.createElement('button');
@@ -863,18 +862,29 @@
     var url = SCROLL_SOUNDS[season];
     if (!url || !scrollCtx) return;
     if (scrollSource) {
+      try { scrollSource.stop(); } catch (e) {}
       scrollSource.disconnect();
       scrollSource = null;
     }
-    if (scrollElAudio) {
-      scrollElAudio.pause();
-    }
-    scrollElAudio = new Audio(url);
-    scrollElAudio.crossOrigin = 'anonymous';
-    scrollElAudio.loop = true;
-    scrollSource = scrollCtx.createMediaElementSource(scrollElAudio);
-    scrollSource.connect(scrollGain);
-    scrollElAudio.play().catch(function () {});
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'arraybuffer';
+    xhr.onload = function () {
+      if (xhr.status !== 200) return;
+      scrollCtx.decodeAudioData(xhr.response, function (audioBuffer) {
+        if (scrollSource) {
+          try { scrollSource.stop(); } catch (e) {}
+          scrollSource.disconnect();
+          scrollSource = null;
+        }
+        scrollSource = scrollCtx.createBufferSource();
+        scrollSource.buffer = audioBuffer;
+        scrollSource.loop = true;
+        scrollSource.connect(scrollGain);
+        scrollSource.start();
+      });
+    };
+    xhr.send();
   }
 
   function handleScrollSound() {
