@@ -821,17 +821,18 @@
   }
 
   function enableScrollSound() {
+    if (scrollCtx) return;
     scrollCtx = new (window.AudioContext || window.webkitAudioContext)();
     scrollGain = scrollCtx.createGain();
     scrollGain.gain.value = 0;
     scrollGain.connect(scrollCtx.destination);
 
-    if (scrollCtx.state === 'suspended') {
-      scrollCtx.resume();
-    }
-
     var season = document.documentElement.getAttribute('data-season') || 'spring';
-    loadScrollAudio(season);
+    if (scrollCtx.state === 'suspended') {
+      scrollCtx.resume().then(function () { loadScrollAudio(season); });
+    } else {
+      loadScrollAudio(season);
+    }
     scrollSoundEnabled = true;
 
     var mute = document.createElement('button');
