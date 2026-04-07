@@ -783,7 +783,7 @@
   var lastScrollY = 0;
   var scrollVelocity = 0;
   var scrollDecay = null;
-  var maxScrollVolume = 0.08;
+  var maxScrollVolume = 0.5;
 
   var SCROLL_SOUNDS = {
     spring: 'https://cdn.pilgrimapp.org/audio/scroll/spring.aac',
@@ -924,11 +924,17 @@
     xhr.send();
   }
 
+  var lastScrollDbg = 0;
   function handleScrollSound() {
     var currentY = window.scrollY;
     var delta = Math.abs(currentY - lastScrollY);
     lastScrollY = currentY;
     scrollVelocity = Math.min(scrollVelocity + delta * 0.0008, maxScrollVolume);
+    var now = Date.now();
+    if (now - lastScrollDbg > 500) {
+      lastScrollDbg = now;
+      dbg('scroll: vel=' + scrollVelocity.toFixed(4) + ' gain=' + (scrollGain ? scrollGain.gain.value.toFixed(4) : 'null') + ' ctx=' + (scrollCtx ? scrollCtx.state : 'null'));
+    }
   }
 
   // --- Init ---
