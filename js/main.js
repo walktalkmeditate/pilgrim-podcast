@@ -783,7 +783,7 @@
   var lastScrollY = 0;
   var scrollVelocity = 0;
   var scrollDecay = null;
-  var maxScrollVolume = 0.5;
+  var maxScrollVolume = 0.08;
 
   var SCROLL_SOUNDS = {
     spring: 'https://cdn.pilgrimapp.org/audio/scroll/spring.aac',
@@ -820,45 +820,18 @@
     });
   }
 
-  var scrollDebug = null;
-  function dbg(msg) {
-    if (!scrollDebug) {
-      scrollDebug = document.createElement('div');
-      scrollDebug.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:black;color:lime;font:12px monospace;padding:8px;z-index:99999;max-height:40vh;overflow:auto;';
-      document.body.appendChild(scrollDebug);
-    }
-    var line = document.createElement('div');
-    line.textContent = msg;
-    scrollDebug.appendChild(line);
-    scrollDebug.scrollTop = scrollDebug.scrollHeight;
-  }
-
   function enableScrollSound() {
     if (scrollCtx) return;
-    dbg('enableScrollSound called');
-    try {
-      scrollCtx = new (window.AudioContext || window.webkitAudioContext)();
-    } catch (e) {
-      dbg('AudioContext error: ' + e.message);
-      return;
-    }
-    dbg('AudioContext state: ' + scrollCtx.state);
+    scrollCtx = new (window.AudioContext || window.webkitAudioContext)();
     scrollGain = scrollCtx.createGain();
     scrollGain.gain.value = 0;
     scrollGain.connect(scrollCtx.destination);
 
     var season = document.documentElement.getAttribute('data-season') || 'spring';
-    var resumeResult = scrollCtx.resume();
-    dbg('resume() returned: ' + typeof resumeResult);
-    if (resumeResult && typeof resumeResult.then === 'function') {
-      resumeResult.then(function () {
-        dbg('resume resolved, state: ' + scrollCtx.state);
-        loadScrollAudio(season);
-      }).catch(function (e) {
-        dbg('resume rejected: ' + e);
-      });
+    var p = scrollCtx.resume();
+    if (p && typeof p.then === 'function') {
+      p.then(function () { loadScrollAudio(season); }).catch(function () {});
     } else {
-      dbg('resume() not a promise, calling loadScrollAudio directly');
       loadScrollAudio(season);
     }
     scrollSoundEnabled = true;
@@ -896,16 +869,12 @@
       scrollSource.disconnect();
       scrollSource = null;
     }
-    dbg('loadScrollAudio: fetching ' + season);
     var xhr = new XMLHttpRequest();
     xhr.open('GET', url, true);
     xhr.responseType = 'arraybuffer';
-    xhr.onerror = function () { dbg('XHR error'); };
     xhr.onload = function () {
-      dbg('XHR status: ' + xhr.status + ', bytes: ' + (xhr.response ? xhr.response.byteLength : 0));
       if (xhr.status !== 200) return;
       scrollCtx.decodeAudioData(xhr.response, function (audioBuffer) {
-        dbg('decodeAudioData OK, duration: ' + audioBuffer.duration.toFixed(1) + 's');
         if (scrollSource) {
           try { scrollSource.stop(); } catch (e) {}
           scrollSource.disconnect();
@@ -916,25 +885,16 @@
         scrollSource.loop = true;
         scrollSource.connect(scrollGain);
         scrollSource.start();
-        dbg('BufferSource started, gain: ' + scrollGain.gain.value);
-      }, function (err) {
-        dbg('decodeAudioData FAILED: ' + err);
       });
     };
     xhr.send();
   }
 
-  var lastScrollDbg = 0;
   function handleScrollSound() {
     var currentY = window.scrollY;
     var delta = Math.abs(currentY - lastScrollY);
     lastScrollY = currentY;
     scrollVelocity = Math.min(scrollVelocity + delta * 0.0008, maxScrollVolume);
-    var now = Date.now();
-    if (now - lastScrollDbg > 500) {
-      lastScrollDbg = now;
-      dbg('scroll: vel=' + scrollVelocity.toFixed(4) + ' gain=' + (scrollGain ? scrollGain.gain.value.toFixed(4) : 'null') + ' ctx=' + (scrollCtx ? scrollCtx.state : 'null'));
-    }
   }
 
   // --- Init ---
