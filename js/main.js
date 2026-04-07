@@ -483,9 +483,9 @@
 
   document.addEventListener('click', function () { userHasInteracted = true; }, { once: true });
   document.addEventListener('keydown', function () { userHasInteracted = true; }, { once: true });
-  document.addEventListener('touchstart', function () { userHasInteracted = true; }, { once: true });
 
   function setupAudioPreview(sealWrap, ep) {
+    if (!window.matchMedia('(hover: hover)').matches) return;
     var indicator = document.createElement('div');
     indicator.className = 'preview-indicator';
     sealWrap.appendChild(indicator);
