@@ -829,7 +829,7 @@
 
     var season = document.documentElement.getAttribute('data-season') || 'spring';
     if (scrollCtx.state === 'suspended') {
-      scrollCtx.resume().then(function () { loadScrollAudio(season); });
+      scrollCtx.resume().then(function () { loadScrollAudio(season); }).catch(function () {});
     } else {
       loadScrollAudio(season);
     }
@@ -870,6 +870,7 @@
         if (scrollSource) {
           try { scrollSource.stop(); } catch (e) {}
           scrollSource.disconnect();
+          scrollSource = null;
         }
         scrollSource = scrollCtx.createBufferSource();
         scrollSource.buffer = audioBuffer;
