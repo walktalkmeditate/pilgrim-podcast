@@ -774,9 +774,11 @@
     });
   }
 
-  // --- Scroll Sound ---
+  // --- Scroll Sound (Web Audio API) ---
 
-  var scrollAudio = null;
+  var scrollCtx = null;
+  var scrollGain = null;
+  var scrollSource = null;
   var scrollSoundEnabled = false;
   var lastScrollY = 0;
   var scrollVelocity = 0;
@@ -797,22 +799,17 @@
 
     if (localStorage.getItem('scroll-sound') === 'on') {
       invite.classList.add('hidden');
-      var scrollSoundReady = false;
       var scrollSoundStarted = false;
 
-      function markReady() { scrollSoundReady = true; }
-      document.addEventListener('click', markReady);
-      document.addEventListener('touchstart', markReady);
-
-      function tryStartScrollSound() {
-        if (scrollSoundStarted || !scrollSoundReady) return;
+      function startOnGesture() {
+        if (scrollSoundStarted) return;
         scrollSoundStarted = true;
         enableScrollSound();
-        document.removeEventListener('click', markReady);
-        document.removeEventListener('touchstart', markReady);
-        window.removeEventListener('scroll', tryStartScrollSound);
+        document.removeEventListener('click', startOnGesture);
+        document.removeEventListener('touchstart', startOnGesture);
       }
-      window.addEventListener('scroll', tryStartScrollSound, { passive: true });
+      document.addEventListener('click', startOnGesture);
+      document.addEventListener('touchstart', startOnGesture);
       return;
     }
 
@@ -824,6 +821,15 @@
   }
 
   function enableScrollSound() {
+    scrollCtx = new (window.AudioContext || window.webkitAudioContext)();
+    scrollGain = scrollCtx.createGain();
+    scrollGain.gain.value = 0;
+    scrollGain.connect(scrollCtx.destination);
+
+    if (scrollCtx.state === 'suspended') {
+      scrollCtx.resume();
+    }
+
     var season = document.documentElement.getAttribute('data-season') || 'spring';
     loadScrollAudio(season);
     scrollSoundEnabled = true;
@@ -835,8 +841,8 @@
     mute.addEventListener('click', function () {
       scrollSoundEnabled = !scrollSoundEnabled;
       mute.textContent = scrollSoundEnabled ? '\uD83D\uDD0A' : '\uD83D\uDD07';
-      if (!scrollSoundEnabled && scrollAudio) {
-        scrollAudio.volume = 0;
+      if (!scrollSoundEnabled && scrollGain) {
+        scrollGain.gain.value = 0;
       }
       localStorage.setItem('scroll-sound', scrollSoundEnabled ? 'on' : 'off');
     });
@@ -847,20 +853,30 @@
 
     scrollDecay = setInterval(function () {
       scrollVelocity *= 0.75;
-      if (scrollAudio && scrollSoundEnabled) {
-        scrollAudio.volume = Math.min(scrollVelocity, maxScrollVolume);
+      if (scrollGain && scrollSoundEnabled) {
+        scrollGain.gain.value = Math.min(scrollVelocity, maxScrollVolume);
       }
     }, 50);
   }
 
   function loadScrollAudio(season) {
     var url = SCROLL_SOUNDS[season];
-    if (!url) return;
-    if (scrollAudio) { scrollAudio.pause(); }
-    scrollAudio = new Audio(url);
-    scrollAudio.loop = true;
-    scrollAudio.volume = 0;
-    scrollAudio.play().catch(function () {});
+    if (!url || !scrollCtx) return;
+    fetch(url)
+      .then(function (res) { return res.arrayBuffer(); })
+      .then(function (buf) { return scrollCtx.decodeAudioData(buf); })
+      .then(function (audioBuffer) {
+        if (scrollSource) {
+          try { scrollSource.stop(); } catch (e) {}
+          scrollSource.disconnect();
+        }
+        scrollSource = scrollCtx.createBufferSource();
+        scrollSource.buffer = audioBuffer;
+        scrollSource.loop = true;
+        scrollSource.connect(scrollGain);
+        scrollSource.start();
+      })
+      .catch(function () {});
   }
 
   function handleScrollSound() {
