@@ -779,6 +779,7 @@
   var scrollCtx = null;
   var scrollGain = null;
   var scrollSource = null;
+  var scrollElAudio = null;
   var scrollSoundEnabled = false;
   var lastScrollY = 0;
   var scrollVelocity = 0;
@@ -827,12 +828,10 @@
     scrollGain.gain.value = 0;
     scrollGain.connect(scrollCtx.destination);
 
+    scrollCtx.resume();
+
     var season = document.documentElement.getAttribute('data-season') || 'spring';
-    if (scrollCtx.state === 'suspended') {
-      scrollCtx.resume().then(function () { loadScrollAudio(season); }).catch(function () {});
-    } else {
-      loadScrollAudio(season);
-    }
+    loadScrollAudio(season);
     scrollSoundEnabled = true;
 
     var mute = document.createElement('button');
@@ -863,22 +862,19 @@
   function loadScrollAudio(season) {
     var url = SCROLL_SOUNDS[season];
     if (!url || !scrollCtx) return;
-    fetch(url)
-      .then(function (res) { return res.arrayBuffer(); })
-      .then(function (buf) { return scrollCtx.decodeAudioData(buf); })
-      .then(function (audioBuffer) {
-        if (scrollSource) {
-          try { scrollSource.stop(); } catch (e) {}
-          scrollSource.disconnect();
-          scrollSource = null;
-        }
-        scrollSource = scrollCtx.createBufferSource();
-        scrollSource.buffer = audioBuffer;
-        scrollSource.loop = true;
-        scrollSource.connect(scrollGain);
-        scrollSource.start();
-      })
-      .catch(function () {});
+    if (scrollSource) {
+      scrollSource.disconnect();
+      scrollSource = null;
+    }
+    if (scrollElAudio) {
+      scrollElAudio.pause();
+    }
+    scrollElAudio = new Audio(url);
+    scrollElAudio.crossOrigin = 'anonymous';
+    scrollElAudio.loop = true;
+    scrollSource = scrollCtx.createMediaElementSource(scrollElAudio);
+    scrollSource.connect(scrollGain);
+    scrollElAudio.play().catch(function () {});
   }
 
   function handleScrollSound() {
