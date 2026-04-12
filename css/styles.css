@@ -409,6 +409,37 @@ a:hover {
   max-width: 420px;
   margin: 0 auto;
   line-height: 1.6;
+  transition: opacity 0.4s ease;
+}
+
+.journey-koan p.fading {
+  opacity: 0;
+}
+
+.journey-koan-cycle {
+  display: block;
+  margin: 0.75rem auto 0;
+  background: none;
+  border: none;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--fog);
+  cursor: pointer;
+  opacity: 0.35;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  padding: 0.5rem;
+  line-height: 1;
+}
+
+.journey-koan-cycle:hover {
+  opacity: 0.7;
+  transform: scale(1.15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journey-koan p {
+    transition: none;
+  }
 }
 
 /* --- Cumulative Stats --- */

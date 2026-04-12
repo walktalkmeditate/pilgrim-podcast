@@ -7,6 +7,9 @@
 
   var currentAudio = null;
   var currentBtn = null;
+  var koanReflections = [];
+  var currentKoanIndex = -1;
+  var koanCycling = false;
 
   // --- Theme ---
 
@@ -241,13 +244,27 @@
     var sorted = episodes.slice().sort(function (a, b) { return a.number - b.number; });
 
     // Koan — random reflection from an episode
-    var reflections = sorted.filter(function (ep) { return ep.reflection; });
-    if (reflections.length > 0) {
+    koanReflections = sorted
+      .map(function (ep) { return ep.reflection; })
+      .filter(function (r) { return r; });
+    if (koanReflections.length > 0) {
+      currentKoanIndex = Math.floor(Math.random() * koanReflections.length);
+
       var koan = document.createElement('div');
       koan.className = 'journey-koan reveal';
       var koanP = document.createElement('p');
-      koanP.textContent = reflections[Math.floor(Math.random() * reflections.length)].reflection;
+      koanP.className = 'journey-koan-text';
+      koanP.textContent = koanReflections[currentKoanIndex];
       koan.appendChild(koanP);
+
+      if (koanReflections.length > 1) {
+        var koanBtn = document.createElement('button');
+        koanBtn.className = 'journey-koan-cycle';
+        koanBtn.setAttribute('aria-label', 'Show another reflection');
+        koanBtn.textContent = '\u2766';
+        koan.appendChild(koanBtn);
+      }
+
       container.appendChild(koan);
     }
 
@@ -940,6 +957,26 @@
         var rect = bar.getBoundingClientRect();
         var ratio = (e.clientX - rect.left) / rect.width;
         currentAudio.currentTime = ratio * currentAudio.duration;
+      }
+
+      var koanCycleBtn = e.target.closest('.journey-koan-cycle');
+      if (koanCycleBtn && !koanCycling && koanReflections.length > 1) {
+        var textEl = document.querySelector('.journey-koan-text');
+        if (textEl) {
+          koanCycling = true;
+          var nextIdx;
+          do {
+            nextIdx = Math.floor(Math.random() * koanReflections.length);
+          } while (nextIdx === currentKoanIndex);
+          currentKoanIndex = nextIdx;
+
+          textEl.classList.add('fading');
+          setTimeout(function () {
+            textEl.textContent = koanReflections[nextIdx];
+            textEl.classList.remove('fading');
+            koanCycling = false;
+          }, 400);
+        }
       }
 
       var cycleBtn = e.target.closest('.season-cycle');
