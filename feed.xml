@@ -8,7 +8,7 @@
     <link>https://podcast.pilgrimapp.org</link>
     <description>Real voices from the path. Each episode is one walk, recorded by a pilgrim and narrated by a voice guide. Walk. Talk. Meditate.</description>
     <language>en</language>
-    <lastBuildDate>Sun, 12 Apr 2026 02:46:37 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 13 Apr 2026 01:31:07 +0000</lastBuildDate>
     <copyright>walk · talk · meditate</copyright>
     <atom:link href="https://podcast.pilgrimapp.org/feed.xml" rel="self" type="application/rss+xml"/>
     <itunes:author>walk · talk · meditate</itunes:author>
@@ -23,6 +23,18 @@
       <itunes:name>walk · talk · meditate</itunes:name>
       <itunes:email>hello@walktalkmeditate.org</itunes:email>
     </itunes:owner>
+    <item>
+      <title>Episode 4: Just Little Kids</title>
+      <description>Two pilgrims in North Shoal Creek, Texas. Overcast. Twenty-six degrees. An almost-rainy day. Three and a half kilometers, walking and talking. They said words are a limited bandwidth. That everything is a misunderstanding. That the little kid inside wants to cuddle up when it gets scary. That surrender looks like the arms raising out. That the darkest cloud is always one step away from its ending.</description>
+      <enclosure url="https://cdn.pilgrimapp.org/podcast/ep4.m4a" length="77942554" type="audio/x-m4a"/>
+      <guid isPermaLink="false">pilgrim-ep4</guid>
+      <pubDate>Sat, 11 Apr 2026 00:00:00 +0000</pubDate>
+      <itunes:duration>47:58</itunes:duration>
+      <itunes:episode>4</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:image href="https://cdn.pilgrimapp.org/podcast/ep4-artwork.png"/>
+      <itunes:summary>Two pilgrims in North Shoal Creek, Texas. Overcast. Twenty-six degrees. An almost-rainy day. Three and a half kilometers, walking and talking. They said words are a limited bandwidth. That everything is a misunderstanding. That the little kid inside wants to cuddle up when it gets scary. That surrender looks like the arms raising out. That the darkest cloud is always one step away from its ending.</itunes:summary>
+    </item>
     <item>
       <title>Episode 3: Kindling Of Fire</title>
       <description>A pilgrim in Austin, Texas. Overcast sky. Drizzle and twenty-five degrees. Five kilometers along a lake. They came back from a mushroom journey carrying questions. About sacred fire and the smallest kindling. About the spiral that always returns to the beginning. About the one piece at the center of every story, which turns out to be nothing. We are actors in a divine comedy who forgot we are in a play. The treasure was always where we started.</description>
