@@ -40,6 +40,22 @@
     }
   }
 
+  // --- Analytics ---
+
+  function track(event, props) {
+    if (window.umami && typeof window.umami.track === 'function') {
+      try { window.umami.track(event, props || {}); } catch (e) {}
+    }
+  }
+
+  function epProps(btn) {
+    return {
+      number: parseInt(btn.getAttribute('data-episode-number'), 10) || 0,
+      title: btn.getAttribute('data-episode-title') || '',
+      guide: btn.getAttribute('data-episode-guide') || '',
+    };
+  }
+
   // --- Audio Player ---
 
   function handlePlay(btn) {
@@ -50,6 +66,7 @@
       btn.classList.remove('playing');
       var stopEl = btn.closest('.episode-stop');
       if (stopEl) stopEl.classList.remove('seal-playing');
+      track('episode_pause', epProps(btn));
       return;
     }
 
@@ -67,6 +84,7 @@
       btn.classList.add('playing');
       var resumeStop = btn.closest('.episode-stop');
       if (resumeStop) resumeStop.classList.add('seal-playing');
+      track('episode_resume', epProps(btn));
       return;
     }
 
@@ -76,6 +94,8 @@
     var playingStop = btn.closest('.episode-stop');
     if (playingStop) playingStop.classList.add('seal-playing');
 
+    var progressMarks = { 25: false, 50: false, 75: false };
+
     currentAudio.addEventListener('timeupdate', function () {
       if (!currentAudio.duration) return;
       var stop = btn.closest('.episode-stop');
@@ -84,6 +104,16 @@
       var timeEl = stop.querySelector('.player-time');
       if (fillEl) fillEl.style.width = (currentAudio.currentTime / currentAudio.duration * 100) + '%';
       if (timeEl) timeEl.textContent = formatDuration(Math.floor(currentAudio.duration - currentAudio.currentTime));
+
+      var pct = (currentAudio.currentTime / currentAudio.duration) * 100;
+      [25, 50, 75].forEach(function (threshold) {
+        if (!progressMarks[threshold] && pct >= threshold) {
+          progressMarks[threshold] = true;
+          var props = epProps(btn);
+          props.percent = threshold;
+          track('episode_progress', props);
+        }
+      });
     });
 
     currentAudio.addEventListener('ended', function () {
@@ -96,14 +126,17 @@
         var fillEl = stop.querySelector('.progress-fill');
         if (fillEl) fillEl.style.width = '0%';
       }
+      track('episode_ended', epProps(btn));
       currentAudio = null;
       currentBtn = null;
     });
 
+    track('episode_play', epProps(btn));
     currentAudio.play().catch(function () {
       btn.classList.remove('playing');
       var failStop = btn.closest('.episode-stop');
       if (failStop) failStop.classList.remove('seal-playing');
+      track('episode_play_failed', epProps(btn));
     });
   }
 
@@ -611,6 +644,9 @@
     var btn = document.createElement('button');
     btn.className = 'play-btn';
     btn.setAttribute('data-src', ep.audioUrl);
+    btn.setAttribute('data-episode-number', ep.number);
+    btn.setAttribute('data-episode-title', ep.title);
+    btn.setAttribute('data-episode-guide', ep.guide);
     btn.setAttribute('aria-label', 'Play episode');
 
     var playSvg = document.createElementNS(ns, 'svg');
@@ -709,6 +745,9 @@
         var content = this.nextElementSibling;
         var isOpen = content.classList.toggle('open');
         this.textContent = isOpen ? 'Hide transcript' : 'Read transcript';
+        if (isOpen) {
+          track('transcript_open', { number: ep.number, title: ep.title });
+        }
       });
       wrapper.appendChild(transcriptToggle);
 
@@ -738,6 +777,7 @@
       card.classList.add('open');
       stop.classList.add('seal-visited');
       localStorage.setItem('visited-ep-' + ep.number, '1');
+      track('seal_click', { number: ep.number, title: ep.title, guide: ep.guide });
 
       var pending = card.getAttribute('data-ceremony-pending');
       if (pending) {
