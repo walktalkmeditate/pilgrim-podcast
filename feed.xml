@@ -8,7 +8,7 @@
     <link>https://podcast.pilgrimapp.org</link>
     <description>Real voices from the path. Each episode is one walk, recorded by a pilgrim and narrated by a voice guide. Walk. Talk. Meditate.</description>
     <language>en</language>
-    <lastBuildDate>Sun, 12 Apr 2026 02:46:37 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 14 Apr 2026 23:44:51 +0000</lastBuildDate>
     <copyright>walk · talk · meditate</copyright>
     <atom:link href="https://podcast.pilgrimapp.org/feed.xml" rel="self" type="application/rss+xml"/>
     <itunes:author>walk · talk · meditate</itunes:author>
@@ -25,7 +25,10 @@
     </itunes:owner>
     <item>
       <title>Episode 3: Kindling Of Fire</title>
-      <description>A pilgrim in Austin, Texas. Overcast sky. Drizzle and twenty-five degrees. Five kilometers along a lake. They came back from a mushroom journey carrying questions. About sacred fire and the smallest kindling. About the spiral that always returns to the beginning. About the one piece at the center of every story, which turns out to be nothing. We are actors in a divine comedy who forgot we are in a play. The treasure was always where we started.</description>
+      <link>https://plgr.im/ep3</link>
+      <description>A pilgrim in Austin, Texas. Overcast sky. Drizzle and twenty-five degrees. Five kilometers along a lake. They came back from a mushroom journey carrying questions. About sacred fire and the smallest kindling. About the spiral that always returns to the beginning. About the one piece at the center of every story, which turns out to be nothing. We are actors in a divine comedy who forgot we are in a play. The treasure was always where we started.
+
+Walk: https://walk.pilgrimapp.org/nYJw3Qyfof</description>
       <enclosure url="https://cdn.pilgrimapp.org/podcast/ep3.m4a" length="75525546" type="audio/x-m4a"/>
       <guid isPermaLink="false">pilgrim-ep3</guid>
       <pubDate>Sat, 11 Apr 2026 00:00:00 +0000</pubDate>
@@ -33,11 +36,16 @@
       <itunes:episode>3</itunes:episode>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:image href="https://cdn.pilgrimapp.org/podcast/ep3-artwork.png"/>
-      <itunes:summary>A pilgrim in Austin, Texas. Overcast sky. Drizzle and twenty-five degrees. Five kilometers along a lake. They came back from a mushroom journey carrying questions. About sacred fire and the smallest kindling. About the spiral that always returns to the beginning. About the one piece at the center of every story, which turns out to be nothing. We are actors in a divine comedy who forgot we are in a play. The treasure was always where we started.</itunes:summary>
+      <itunes:summary>A pilgrim in Austin, Texas. Overcast sky. Drizzle and twenty-five degrees. Five kilometers along a lake. They came back from a mushroom journey carrying questions. About sacred fire and the smallest kindling. About the spiral that always returns to the beginning. About the one piece at the center of every story, which turns out to be nothing. We are actors in a divine comedy who forgot we are in a play. The treasure was always where we started.
+
+Walk: https://walk.pilgrimapp.org/nYJw3Qyfof</itunes:summary>
     </item>
     <item>
       <title>Episode 2: Only Be Walked</title>
-      <description>Two pilgrims in Austin, Texas. Wind and warmth. Three and a half kilometers along a lake. They talked about memory and forgetting. About ego and flow. About circles that spiral upward. Some of the most important things will never teach. They can only be walked.</description>
+      <link>https://plgr.im/ep2</link>
+      <description>Two pilgrims in Austin, Texas. Wind and warmth. Three and a half kilometers along a lake. They talked about memory and forgetting. About ego and flow. About circles that spiral upward. Some of the most important things will never teach. They can only be walked.
+
+Walk: https://walk.pilgrimapp.org/GkbHKpNWw-</description>
       <enclosure url="https://cdn.pilgrimapp.org/podcast/ep2.m4a" length="55143120" type="audio/x-m4a"/>
       <guid isPermaLink="false">pilgrim-ep2</guid>
       <pubDate>Tue, 31 Mar 2026 00:00:00 +0000</pubDate>
@@ -45,11 +53,16 @@
       <itunes:episode>2</itunes:episode>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:image href="https://cdn.pilgrimapp.org/podcast/ep2-artwork.png"/>
-      <itunes:summary>Two pilgrims in Austin, Texas. Wind and warmth. Three and a half kilometers along a lake. They talked about memory and forgetting. About ego and flow. About circles that spiral upward. Some of the most important things will never teach. They can only be walked.</itunes:summary>
+      <itunes:summary>Two pilgrims in Austin, Texas. Wind and warmth. Three and a half kilometers along a lake. They talked about memory and forgetting. About ego and flow. About circles that spiral upward. Some of the most important things will never teach. They can only be walked.
+
+Walk: https://walk.pilgrimapp.org/GkbHKpNWw-</itunes:summary>
     </item>
     <item>
       <title>Episode 1: Just Begin Walking</title>
-      <description>A pilgrim in Austin, Texas. Overcast sky. Thirty degrees. Four kilometers along a lake. They had a story to tell. Three words became an idea. The idea became an app. The app became this. No one asked them to build it. They just did. That is already more than most people managed today.</description>
+      <link>https://plgr.im/ep1</link>
+      <description>A pilgrim in Austin, Texas. Overcast sky. Thirty degrees. Four kilometers along a lake. They had a story to tell. Three words became an idea. The idea became an app. The app became this. No one asked them to build it. They just did. That is already more than most people managed today.
+
+Walk: https://walk.pilgrimapp.org/JLSQ_xmjpU</description>
       <enclosure url="https://cdn.pilgrimapp.org/podcast/ep1.m4a" length="63748456" type="audio/x-m4a"/>
       <guid isPermaLink="false">pilgrim-ep1</guid>
       <pubDate>Mon, 30 Mar 2026 00:00:00 +0000</pubDate>
@@ -57,7 +70,9 @@
       <itunes:episode>1</itunes:episode>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:image href="https://cdn.pilgrimapp.org/podcast/ep1-artwork.png"/>
-      <itunes:summary>A pilgrim in Austin, Texas. Overcast sky. Thirty degrees. Four kilometers along a lake. They had a story to tell. Three words became an idea. The idea became an app. The app became this. No one asked them to build it. They just did. That is already more than most people managed today.</itunes:summary>
+      <itunes:summary>A pilgrim in Austin, Texas. Overcast sky. Thirty degrees. Four kilometers along a lake. They had a story to tell. Three words became an idea. The idea became an app. The app became this. No one asked them to build it. They just did. That is already more than most people managed today.
+
+Walk: https://walk.pilgrimapp.org/JLSQ_xmjpU</itunes:summary>
     </item>
   </channel>
 </rss>

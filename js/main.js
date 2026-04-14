@@ -313,6 +313,7 @@
 
       var stop = document.createElement('div');
       stop.className = 'episode-stop reveal';
+      stop.id = 'ep-' + ep.number;
       stop.setAttribute('data-episode', ep.number);
       if (localStorage.getItem('visited-ep-' + ep.number)) {
         stop.classList.add('seal-visited');
