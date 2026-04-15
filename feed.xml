@@ -8,7 +8,7 @@
     <link>https://podcast.pilgrimapp.org</link>
     <description>Real voices from the path. Each episode is one walk, recorded by a pilgrim and narrated by a voice guide. Walk. Talk. Meditate.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 14 Apr 2026 23:44:51 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 15 Apr 2026 00:39:52 +0000</lastBuildDate>
     <copyright>walk · talk · meditate</copyright>
     <atom:link href="https://podcast.pilgrimapp.org/feed.xml" rel="self" type="application/rss+xml"/>
     <itunes:author>walk · talk · meditate</itunes:author>
@@ -23,6 +23,23 @@
       <itunes:name>walk · talk · meditate</itunes:name>
       <itunes:email>hello@walktalkmeditate.org</itunes:email>
     </itunes:owner>
+    <item>
+      <title>Episode 4: Play In Play</title>
+      <link>https://plgr.im/ep4</link>
+      <description>Two pilgrims in Downtown, Texas. Overcast. Twenty-nine degrees. Four and a half kilometers of reunion talk. They traced the edge of what AI can reach and what it cannot. They said the soul is not a transformer. That the tree is the universe, and the word for tree is not. That the child inside everyone only wants to play. That forgetting to play is the recipe for death. Remember the light inside.
+
+Walk: https://walk.pilgrimapp.org/zczp6WsGIh</description>
+      <enclosure url="https://cdn.pilgrimapp.org/podcast/ep4.m4a" length="125216377" type="audio/x-m4a"/>
+      <guid isPermaLink="false">pilgrim-ep4</guid>
+      <pubDate>Tue, 14 Apr 2026 00:00:00 +0000</pubDate>
+      <itunes:duration>1:34:22</itunes:duration>
+      <itunes:episode>4</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:image href="https://cdn.pilgrimapp.org/podcast/ep4-artwork.png"/>
+      <itunes:summary>Two pilgrims in Downtown, Texas. Overcast. Twenty-nine degrees. Four and a half kilometers of reunion talk. They traced the edge of what AI can reach and what it cannot. They said the soul is not a transformer. That the tree is the universe, and the word for tree is not. That the child inside everyone only wants to play. That forgetting to play is the recipe for death. Remember the light inside.
+
+Walk: https://walk.pilgrimapp.org/zczp6WsGIh</itunes:summary>
+    </item>
     <item>
       <title>Episode 3: Kindling Of Fire</title>
       <link>https://plgr.im/ep3</link>
