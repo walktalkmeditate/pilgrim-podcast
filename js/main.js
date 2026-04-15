@@ -40,6 +40,27 @@
     }
   }
 
+  // --- Hash scroll ---
+
+  // The episodes list is rendered after an async fetch, so the browser's
+  // native scroll-to-anchor on page load fires before the #ep-N targets
+  // exist. Call this after renderJourney (and on hashchange) to land
+  // listeners on the right seal when they arrive from plgr.im/epN etc.
+  function handleHashScroll() {
+    var hash = window.location.hash;
+    if (!hash || hash.length < 2) return;
+    var target;
+    try {
+      target = document.querySelector(hash);
+    } catch (e) {
+      return; // invalid selector (e.g. unescaped chars)
+    }
+    if (!target) return;
+    requestAnimationFrame(function () {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
   // --- Analytics ---
 
   function track(event, props) {
@@ -966,10 +987,13 @@
       .then(function (res) { return res.json(); })
       .then(function (episodes) {
         renderJourney(episodes);
+        handleHashScroll();
       })
       .catch(function () {
         renderJourney([]);
       });
+
+    window.addEventListener('hashchange', handleHashScroll);
 
     var toggle = document.querySelector('.theme-toggle');
     if (toggle) toggle.addEventListener('click', toggleTheme);
