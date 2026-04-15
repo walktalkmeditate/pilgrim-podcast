@@ -69,6 +69,31 @@
 [data-theme="dark"][data-season="autumn"] { --stone: #C47E63; --fog: #886050; --parchment-secondary: #281810; }
 [data-theme="dark"][data-season="winter"] { --stone: #7098C0; --fog: #506878; --parchment-secondary: #141C22; }
 
+/* Whisper category colors — match pilgrim-ios WhisperCategory.borderColor.
+ * Light mode uses the iOS values directly; dark mode lifts each toward
+ * brighter saturation so the icons read on a dark parchment background. */
+:root {
+  --whisper-presence:   #1C3A4A;
+  --whisper-lightness:  #C2A68C;
+  --whisper-wonder:     #A8B7BF;
+  --whisper-gratitude:  #C7A14F;
+  --whisper-compassion: #A8D8D0;
+  --whisper-courage:    #C7B788;
+  --whisper-stillness:  #B8956A;
+  --whisper-play:       #EB8252;
+}
+
+[data-theme="dark"] {
+  --whisper-presence:   #5A8AA0;
+  --whisper-lightness:  #C2A68C;
+  --whisper-wonder:     #B8C8D0;
+  --whisper-gratitude:  #E0B860;
+  --whisper-compassion: #A8D8D0;
+  --whisper-courage:    #D4C898;
+  --whisper-stillness:  #C8A47A;
+  --whisper-play:       #FF9968;
+}
+
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
@@ -115,6 +140,95 @@ body {
 @media (prefers-reduced-motion: reduce) {
   body { animation: none; }
   .episode-stop .seal-svg { animation: none; }
+}
+
+/* --- Whisper button (guest's parting gift in the expanded card) --- */
+
+.whisper-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding: 0.4rem 0.6rem 0.4rem 0.4rem;
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.875rem;
+  color: var(--whisper-color, var(--stone));
+  transition: opacity 200ms ease, background-color 300ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.whisper-btn:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="dark"] .whisper-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.whisper-btn:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+.whisper-btn .whisper-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.whisper-btn .whisper-icon svg {
+  display: block;
+  /* Inherit the breathing rhythm from the parent .episode-stop. The seal
+   * above also reads these same vars, so seal + whisper breathe in unison
+   * — one organism. */
+  transform-origin: center center;
+  animation: seal-breathe var(--seal-breathe-duration, 4s) ease-in-out infinite;
+  animation-delay: var(--seal-breathe-delay, 0s);
+}
+
+/* Per-category color binding. The button class carries the category. */
+.whisper-presence   { --whisper-color: var(--whisper-presence); }
+.whisper-lightness  { --whisper-color: var(--whisper-lightness); }
+.whisper-wonder     { --whisper-color: var(--whisper-wonder); }
+.whisper-gratitude  { --whisper-color: var(--whisper-gratitude); }
+.whisper-compassion { --whisper-color: var(--whisper-compassion); }
+.whisper-courage    { --whisper-color: var(--whisper-courage); }
+.whisper-stillness  { --whisper-color: var(--whisper-stillness); }
+.whisper-play       { --whisper-color: var(--whisper-play); }
+
+/* Playing — soft glow ring, breathing slows and deepens.
+ * The pulse is on the icon wrapper so it doesn't fight the SVG's scale. */
+@keyframes whisper-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 currentColor; }
+  50%      { box-shadow: 0 0 0 6px rgba(0, 0, 0, 0); }
+}
+
+.whisper-btn.playing .whisper-icon {
+  animation: whisper-pulse 1.6s ease-in-out infinite;
+}
+
+.whisper-btn.playing .whisper-icon svg {
+  animation-duration: calc(var(--seal-breathe-duration, 4s) * 0.6);
+}
+
+/* Received — once the listener has heard the gift, a faint persistent
+ * ring stays around the icon for the rest of the session (and across
+ * sessions via localStorage). Like a kept token. */
+.whisper-btn.received .whisper-icon {
+  box-shadow: 0 0 0 1px currentColor inset;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whisper-btn .whisper-icon svg { animation: none; }
+  .whisper-btn.playing .whisper-icon { animation: none; }
 }
 
 /* --- Typography --- */

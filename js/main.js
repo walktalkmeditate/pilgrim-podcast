@@ -61,6 +61,139 @@
     });
   }
 
+  // --- Whisper (guest's parting gift) ---
+
+  // 8 hand-crafted SVG glyphs, one per whisper category. Each is a 32x32
+  // viewBox single-color line drawing, fill/stroke uses currentColor so
+  // the parent CSS class can color it via the --whisper-{category} vars.
+  var WHISPER_GLYPHS = {
+    presence: '<circle cx="16" cy="16" r="3" fill="currentColor"/>'
+            + '<circle cx="16" cy="16" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/>',
+    lightness: '<circle cx="9" cy="22" r="1.8" fill="currentColor"/>'
+             + '<circle cx="16" cy="16" r="1.5" fill="currentColor"/>'
+             + '<circle cx="22" cy="9" r="1.2" fill="currentColor"/>',
+    wonder: '<line x1="16" y1="6" x2="16" y2="26" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>'
+          + '<line x1="6" y1="16" x2="26" y2="16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>'
+          + '<line x1="9" y1="9" x2="23" y2="23" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>'
+          + '<line x1="9" y1="23" x2="23" y2="9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>',
+    gratitude: '<path d="M16 25 C9 19 6 14 9 11 C12 8 15 11 16 13 C17 11 20 8 23 11 C26 14 23 19 16 25 Z" '
+             + 'fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>',
+    compassion: '<circle cx="12" cy="16" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/>'
+              + '<circle cx="20" cy="16" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/>',
+    courage: '<path d="M16 6 C19 11 22 14 22 19 C22 22.5 19.3 25 16 25 C12.7 25 10 22.5 10 19 C10 14 13 11 16 6 Z" '
+           + 'fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>',
+    stillness: '<circle cx="16" cy="16" r="3.5" fill="none" stroke="currentColor" stroke-width="1.5"/>'
+             + '<circle cx="16" cy="16" r="7" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.55"/>'
+             + '<circle cx="16" cy="16" r="10.5" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.28"/>',
+    play: '<path d="M7 18 Q11 8 15 14 T22 14 Q25 13 25 11" '
+        + 'fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>'
+  };
+
+  // Parse the category from a whisper URL like:
+  //   https://cdn.pilgrimapp.org/audio/whisper/whisper-presence-4.aac
+  function parseWhisperCategory(url) {
+    if (!url) return null;
+    var m = url.match(/whisper-([a-z]+)-\d+\.[a-z0-9]+$/i);
+    return m ? m[1].toLowerCase() : null;
+  }
+
+  var currentWhisperAudio = null;
+  var currentWhisperBtn = null;
+
+  function buildWhisper(ep) {
+    var category = parseWhisperCategory(ep.whisper);
+    if (!category || !WHISPER_GLYPHS[category]) return null;
+
+    var btn = document.createElement('button');
+    btn.className = 'whisper-btn whisper-' + category;
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Play a whisper of ' + category + ' from the guest');
+    btn.title = 'a whisper of ' + category;
+
+    // localStorage flag persists the "received" state across sessions so the
+    // ring stays once a listener has heard the gift.
+    var storageKey = 'whisper-received-' + ep.number;
+    if (localStorage.getItem(storageKey) === '1') {
+      btn.classList.add('received');
+    }
+
+    var iconWrap = document.createElement('span');
+    iconWrap.className = 'whisper-icon';
+    // Inline SVG glyph — own generated content, not user input
+    iconWrap.innerHTML = '<svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true">' + WHISPER_GLYPHS[category] + '</svg>';
+    btn.appendChild(iconWrap);
+
+    var label = document.createElement('span');
+    label.className = 'whisper-label';
+    label.textContent = 'a whisper of ' + category;
+    btn.appendChild(label);
+
+    btn.addEventListener('click', function (event) {
+      event.stopPropagation();
+      handleWhisperClick(btn, ep, category, storageKey);
+    });
+
+    return btn;
+  }
+
+  function handleWhisperClick(btn, ep, category, storageKey) {
+    // If this whisper is already playing, pause and return
+    if (currentWhisperBtn === btn && currentWhisperAudio && !currentWhisperAudio.paused) {
+      currentWhisperAudio.pause();
+      btn.classList.remove('playing');
+      return;
+    }
+
+    // If a different whisper was playing, stop it
+    if (currentWhisperAudio) {
+      currentWhisperAudio.pause();
+      if (currentWhisperBtn) currentWhisperBtn.classList.remove('playing');
+      currentWhisperAudio = null;
+      currentWhisperBtn = null;
+    }
+
+    // If the main episode audio is playing, pause it so the whisper has the floor
+    if (currentAudio && !currentAudio.paused) {
+      currentAudio.pause();
+      if (currentBtn) {
+        currentBtn.classList.remove('playing');
+        var stop = currentBtn.closest('.episode-stop');
+        if (stop) stop.classList.remove('seal-playing');
+      }
+    }
+
+    var audio = new Audio(ep.whisper);
+    currentWhisperAudio = audio;
+    currentWhisperBtn = btn;
+    btn.classList.add('playing');
+
+    audio.addEventListener('ended', function () {
+      btn.classList.remove('playing');
+      btn.classList.add('received');
+      try { localStorage.setItem(storageKey, '1'); } catch (e) {}
+      if (currentWhisperAudio === audio) {
+        currentWhisperAudio = null;
+        currentWhisperBtn = null;
+      }
+    });
+
+    audio.addEventListener('error', function () {
+      btn.classList.remove('playing');
+      if (currentWhisperAudio === audio) {
+        currentWhisperAudio = null;
+        currentWhisperBtn = null;
+      }
+    });
+
+    audio.play().then(function () {
+      track('whisper_played', { number: ep.number, title: ep.title, category: category });
+    }).catch(function () {
+      btn.classList.remove('playing');
+      currentWhisperAudio = null;
+      currentWhisperBtn = null;
+    });
+  }
+
   // --- Share copy ---
 
   // Click the episode title to copy plgr.im/ep<N> to the clipboard.
@@ -419,14 +552,14 @@
       // Randomize each seal's breathing cycle so they feel organic, not
       // synchronized. Duration between ~3.4s and ~5.2s, with a negative
       // phase delay up to -5s so seals are already mid-cycle at page load
-      // rather than all starting at scale(1) simultaneously.
-      var sealSvg = sealWrap.querySelector('.seal-svg');
-      if (sealSvg) {
-        var breatheDur = (3.4 + Math.random() * 1.8).toFixed(2);
-        var breatheDelay = (-Math.random() * 5).toFixed(2);
-        sealSvg.style.setProperty('--seal-breathe-duration', breatheDur + 's');
-        sealSvg.style.setProperty('--seal-breathe-delay', breatheDelay + 's');
-      }
+      // rather than all starting at scale(1) simultaneously. The vars are
+      // set on the .episode-stop parent so the whisper icon (a sibling of
+      // the seal in the expanded card) inherits the same rhythm — seal +
+      // whisper breathe in unison as one organism.
+      var breatheDur = (3.4 + Math.random() * 1.8).toFixed(2);
+      var breatheDelay = (-Math.random() * 5).toFixed(2);
+      stop.style.setProperty('--seal-breathe-duration', breatheDur + 's');
+      stop.style.setProperty('--seal-breathe-delay', breatheDelay + 's');
 
       stop.appendChild(sealWrap);
 
@@ -842,6 +975,9 @@
         wrapper.appendChild(walkLink);
       }
     }
+
+    var whisperBtn = buildWhisper(ep);
+    if (whisperBtn) wrapper.appendChild(whisperBtn);
 
     if (ep.transcript) {
       var transcriptToggle = document.createElement('button');
