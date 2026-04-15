@@ -61,6 +61,71 @@
     });
   }
 
+  // --- Share copy ---
+
+  // Click the episode title to copy plgr.im/ep<N> to the clipboard.
+  // The title morphs to "Link copied" for ~1.4s then restores.
+  // Stops event propagation so the seal doesn't expand on click.
+  function attachShareCopy(titleEl, ep) {
+    function trigger(event) {
+      event.stopPropagation();
+      if (titleEl.classList.contains('copied')) return; // debounce mid-cycle
+      var shareUrl = 'https://plgr.im/ep' + ep.number;
+      copyToClipboard(shareUrl).then(function (ok) {
+        if (!ok) return;
+        track('share_copied', { number: ep.number, title: ep.title });
+        morphTitleToCopied(titleEl);
+      });
+    }
+    titleEl.addEventListener('click', trigger);
+    titleEl.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        trigger(event);
+      }
+    });
+  }
+
+  function morphTitleToCopied(titleEl) {
+    var original = titleEl.textContent;
+    titleEl.classList.add('copying');         // CSS: opacity 0
+    setTimeout(function () {
+      titleEl.textContent = 'Link copied';
+      titleEl.classList.remove('copying');
+      titleEl.classList.add('copied');        // CSS: highlight color
+      setTimeout(function () {
+        titleEl.classList.add('copying');
+        setTimeout(function () {
+          titleEl.textContent = original;
+          titleEl.classList.remove('copying', 'copied');
+        }, 200);
+      }, 1000);
+    }, 200);
+  }
+
+  function copyToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text).then(
+        function () { return true; },
+        function () { return false; }
+      );
+    }
+    // Fallback for older browsers / non-secure contexts.
+    return new Promise(function (resolve) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.top = '-9999px';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      resolve(ok);
+    });
+  }
+
   // --- Analytics ---
 
   function track(event, props) {
@@ -371,6 +436,12 @@
       var labelTitle = document.createElement('div');
       labelTitle.className = 'episode-label-title';
       labelTitle.textContent = ep.title;
+      labelTitle.setAttribute('role', 'button');
+      labelTitle.setAttribute('tabindex', '0');
+      labelTitle.setAttribute('aria-label', 'Copy share link for ' + ep.title);
+      labelTitle.setAttribute('aria-live', 'polite');
+      labelTitle.title = 'Click to copy share link';
+      attachShareCopy(labelTitle, ep);
       label.appendChild(labelTitle);
 
       var labelMeta = document.createElement('div');

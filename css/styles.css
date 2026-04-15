@@ -318,6 +318,35 @@ a:hover {
   font-weight: 600;
   font-size: 1rem;
   color: var(--ink);
+  cursor: pointer;
+  transition: opacity 200ms ease, color 200ms ease;
+  display: inline-block;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.episode-label-title:hover {
+  color: var(--rust);
+}
+
+.episode-label-title:focus-visible {
+  outline: 2px solid var(--rust);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+.episode-label-title.copying {
+  opacity: 0;
+}
+
+.episode-label-title.copied {
+  color: var(--rust);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .episode-label-title {
+    transition: none;
+  }
 }
 
 .episode-label-meta {
