@@ -144,48 +144,54 @@ body {
 
 /* --- Whisper button (guest's parting gift in the expanded card) --- */
 
+/* Whisper button — icon-only, anchored to the top-right of the
+ * expanded card so it reads as a small offering tucked into the
+ * corner. The card itself is set position: relative so this can
+ * absolute-position from its corners. */
+.episode-expanded {
+  position: relative;
+}
+
 .whisper-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
-  padding: 0.4rem 0.6rem 0.4rem 0.4rem;
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 36px;
+  height: 36px;
+  padding: 0;
   background: transparent;
   border: none;
-  border-radius: 999px;
   cursor: pointer;
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 0.875rem;
   color: var(--whisper-color, var(--stone));
-  transition: opacity 200ms ease, background-color 300ms ease;
+  transition: opacity 200ms ease, transform 300ms ease;
   -webkit-tap-highlight-color: transparent;
+  z-index: 2;
 }
 
 .whisper-btn:hover {
-  background: rgba(0, 0, 0, 0.04);
-}
-
-[data-theme="dark"] .whisper-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
+  opacity: 0.75;
+  transform: scale(1.06);
 }
 
 .whisper-btn:focus-visible {
   outline: 2px solid currentColor;
-  outline-offset: 4px;
+  outline-offset: 6px;
+  border-radius: 50%;
 }
 
 .whisper-btn .whisper-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
 }
 
 .whisper-btn .whisper-icon svg {
   display: block;
+  width: 100%;
+  height: 100%;
   /* Inherit the breathing rhythm from the parent .episode-stop. The seal
    * above also reads these same vars, so seal + whisper breathe in unison
    * — one organism. */

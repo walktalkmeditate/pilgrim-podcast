@@ -123,11 +123,6 @@
     iconWrap.innerHTML = '<svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true">' + WHISPER_GLYPHS[category] + '</svg>';
     btn.appendChild(iconWrap);
 
-    var label = document.createElement('span');
-    label.className = 'whisper-label';
-    label.textContent = 'a whisper of ' + category;
-    btn.appendChild(label);
-
     btn.addEventListener('click', function (event) {
       event.stopPropagation();
       handleWhisperClick(btn, ep, category, storageKey);
