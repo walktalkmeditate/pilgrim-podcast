@@ -36,7 +36,8 @@
     "reflection": "what came forth during a mushroom trip",
     "artworkUrl": "https://cdn.pilgrimapp.org/podcast/ep3-artwork.png",
     "recordingCount": 3,
-    "walkPageExpires": "2027-04-11"
+    "walkPageExpires": "2027-04-11",
+    "whisper": "https://cdn.pilgrimapp.org/audio/whisper/whisper-play-1.aac"
   },
   {
     "number": 2,
@@ -74,6 +75,7 @@
     "reflection": "first podcast let’s gooo",
     "artworkUrl": "https://cdn.pilgrimapp.org/podcast/ep1-artwork.png",
     "recordingCount": 3,
-    "walkPageExpires": "2026-06-29"
+    "walkPageExpires": "2026-06-29",
+    "whisper": "https://cdn.pilgrimapp.org/audio/whisper/whisper-play-7.aac"
   }
 ]
