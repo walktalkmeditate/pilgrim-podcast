@@ -70,7 +70,7 @@
     function trigger(event) {
       event.stopPropagation();
       if (titleEl.classList.contains('copied')) return; // debounce mid-cycle
-      var shareUrl = 'https://plgr.im/ep' + ep.number;
+      var shareUrl = 'https://p.plgr.im/#ep-' + ep.number;
       copyToClipboard(shareUrl).then(function (ok) {
         if (!ok) return;
         track('share_copied', { number: ep.number, title: ep.title });
