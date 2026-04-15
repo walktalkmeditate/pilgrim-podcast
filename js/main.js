@@ -963,7 +963,11 @@
       } else {
         var walkLink = document.createElement('a');
         walkLink.className = 'episode-walk-link';
-        walkLink.href = ep.walkPage;
+        // Use the plgr.im short URL instead of the raw walk page. plgrim
+        // worker redirects /ep<N> to ep.walkPage via episodes.json lookup
+        // and tracks the click via Umami, so this gives us visibility into
+        // which episodes drive walk-page visits.
+        walkLink.href = 'https://plgr.im/ep' + ep.number;
         walkLink.target = '_blank';
         walkLink.rel = 'noopener';
         walkLink.textContent = 'View the walk';
