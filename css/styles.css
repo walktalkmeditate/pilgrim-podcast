@@ -91,8 +91,30 @@ body {
   50% { background-color: var(--parchment-secondary); }
 }
 
+/* Each seal breathes at its own subtle rhythm. Duration and delay are
+ * randomized per seal via JS (--seal-breathe-duration / --seal-breathe-delay),
+ * so a grove of seals feels organic rather than synchronized. Paused on
+ * the currently-playing seal so the breath doesn't compete with the
+ * progress-fill UI. */
+@keyframes seal-breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.025); }
+}
+
+.episode-stop .seal-svg {
+  transform-origin: center center;
+  animation: seal-breathe var(--seal-breathe-duration, 4s) ease-in-out infinite;
+  animation-delay: var(--seal-breathe-delay, 0s);
+  will-change: transform;
+}
+
+.episode-stop.seal-playing .seal-svg {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
   body { animation: none; }
+  .episode-stop .seal-svg { animation: none; }
 }
 
 /* --- Typography --- */

@@ -350,6 +350,19 @@
       sealWrap.setAttribute('aria-label', 'Episode ' + ep.number + ': ' + ep.title);
       // PilgrimSeal.generate returns our own generated SVG string — not user content
       sealWrap.innerHTML = PilgrimSeal.generate(ep); // safe: own generated SVG
+
+      // Randomize each seal's breathing cycle so they feel organic, not
+      // synchronized. Duration between ~3.4s and ~5.2s, with a negative
+      // phase delay up to -5s so seals are already mid-cycle at page load
+      // rather than all starting at scale(1) simultaneously.
+      var sealSvg = sealWrap.querySelector('.seal-svg');
+      if (sealSvg) {
+        var breatheDur = (3.4 + Math.random() * 1.8).toFixed(2);
+        var breatheDelay = (-Math.random() * 5).toFixed(2);
+        sealSvg.style.setProperty('--seal-breathe-duration', breatheDur + 's');
+        sealSvg.style.setProperty('--seal-breathe-delay', breatheDelay + 's');
+      }
+
       stop.appendChild(sealWrap);
 
       var label = document.createElement('div');
