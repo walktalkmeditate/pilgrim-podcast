@@ -8,7 +8,7 @@
     <link>https://podcast.pilgrimapp.org</link>
     <description>Real voices from the path. Each episode is one walk, recorded by a pilgrim and narrated by a voice guide. Walk. Talk. Meditate.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 15 Apr 2026 00:48:08 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 17 Apr 2026 20:14:49 +0000</lastBuildDate>
     <copyright>walk · talk · meditate</copyright>
     <atom:link href="https://podcast.pilgrimapp.org/feed.xml" rel="self" type="application/rss+xml"/>
     <itunes:author>walk · talk · meditate</itunes:author>
@@ -23,6 +23,23 @@
       <itunes:name>walk · talk · meditate</itunes:name>
       <itunes:email>hello@walktalkmeditate.org</itunes:email>
     </itunes:owner>
+    <item>
+      <title>Episode 5: Discernment Is Key</title>
+      <link>https://podcast.pilgrimapp.org/#ep-5</link>
+      <description>A pilgrim in Austin, Texas. Wind by the lake. Two kilometers on a favorite secluded path. They talked about photos pinned to a path as relics. About the endless chase for digits on a screen. About the old teaching. To know there is enough. About the wave of AI that no one can stop. About the discernment that remains. We do not stop the ocean. We flow with life.
+
+Walk: https://plgr.im/ep5 — returns to the trail on April 17, 2027</description>
+      <enclosure url="https://cdn.pilgrimapp.org/podcast/ep5.m4a" length="49349415" type="audio/x-m4a"/>
+      <guid isPermaLink="false">pilgrim-ep5</guid>
+      <pubDate>Fri, 17 Apr 2026 00:00:00 +0000</pubDate>
+      <itunes:duration>38:28</itunes:duration>
+      <itunes:episode>5</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:image href="https://cdn.pilgrimapp.org/podcast/ep5-artwork.png"/>
+      <itunes:summary>A pilgrim in Austin, Texas. Wind by the lake. Two kilometers on a favorite secluded path. They talked about photos pinned to a path as relics. About the endless chase for digits on a screen. About the old teaching. To know there is enough. About the wave of AI that no one can stop. About the discernment that remains. We do not stop the ocean. We flow with life.
+
+Walk: https://plgr.im/ep5 — returns to the trail on April 17, 2027</itunes:summary>
+    </item>
     <item>
       <title>Episode 4: Play In Play</title>
       <link>https://podcast.pilgrimapp.org/#ep-4</link>
