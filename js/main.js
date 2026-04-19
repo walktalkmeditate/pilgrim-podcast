@@ -40,12 +40,23 @@
     }
   }
 
+  function slugify(s) {
+    return String(s || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
   // --- Hash scroll ---
 
   // The episodes list is rendered after an async fetch, so the browser's
   // native scroll-to-anchor on page load fires before the #ep-N targets
   // exist. Call this after renderJourney (and on hashchange) to land
   // listeners on the right seal when they arrive from plgr.im/epN etc.
+  //
+  // Accepts both the new title-slug form (#ep-5-discernment-is-key) and
+  // the legacy bare-number form (#ep-5) so old feed.xml links and past
+  // shares keep working.
   function handleHashScroll() {
     var hash = window.location.hash;
     if (!hash || hash.length < 2) return;
@@ -53,7 +64,15 @@
     try {
       target = document.querySelector(hash);
     } catch (e) {
-      return; // invalid selector (e.g. unescaped chars)
+      target = null; // invalid selector (e.g. unescaped chars) — try fallback
+    }
+    if (!target) {
+      var m = hash.match(/^#ep-(\d+)/);
+      if (m) {
+        var n = m[1];
+        target = document.getElementById('ep-' + n)
+              || document.querySelector('[id^="ep-' + n + '-"]');
+      }
     }
     if (!target) return;
     requestAnimationFrame(function () {
@@ -198,7 +217,7 @@
     function trigger(event) {
       event.stopPropagation();
       if (titleEl.classList.contains('copied')) return; // debounce mid-cycle
-      var shareUrl = 'https://p.plgr.im/#ep-' + ep.number;
+      var shareUrl = 'https://p.plgr.im/#ep-' + ep.number + '-' + slugify(ep.title);
       copyToClipboard(shareUrl).then(function (ok) {
         if (!ok) return;
         track('share_copied', { number: ep.number, title: ep.title });
@@ -527,7 +546,7 @@
 
       var stop = document.createElement('div');
       stop.className = 'episode-stop reveal';
-      stop.id = 'ep-' + ep.number;
+      stop.id = 'ep-' + ep.number + '-' + slugify(ep.title);
       stop.setAttribute('data-episode', ep.number);
       if (localStorage.getItem('visited-ep-' + ep.number)) {
         stop.classList.add('seal-visited');
