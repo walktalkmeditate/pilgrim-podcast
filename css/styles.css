@@ -1400,6 +1400,11 @@ a:hover {
   z-index: 1;
 }
 
+.constellation .footer {
+  border-top: 1px solid transparent;
+  border-image: linear-gradient(to right, transparent, rgba(200, 192, 255, 0.2), transparent) 1;
+}
+
 /* --- Responsive --- */
 
 @media (max-width: 600px) {
