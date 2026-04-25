@@ -1403,6 +1403,17 @@ a:hover {
   border-image: linear-gradient(to right, transparent, rgba(200, 192, 255, 0.2), transparent) 1;
 }
 
+.constellation .scroll-sound-invite {
+  background: rgba(200, 192, 255, 0.06);
+  border-color: rgba(200, 192, 255, 0.18);
+  color: rgba(200, 192, 255, 0.6);
+}
+
+.constellation .scroll-sound-invite:hover {
+  color: rgba(220, 215, 255, 0.9);
+  border-color: rgba(200, 192, 255, 0.4);
+}
+
 /* --- Responsive --- */
 
 @media (max-width: 600px) {
