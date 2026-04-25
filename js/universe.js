@@ -24,6 +24,10 @@
   var TRAIL_MAX = 60;
   var TRAIL_SPAWN_DIST = 10;
 
+  var hoverX = -9999;
+  var hoverY = -9999;
+  var HOVER_RADIUS = 80;
+
   var LAYERS = [
     { name: 'far',  count: 150, rMin: 0.5, rMax: 1.0, depth: 0.2 },
     { name: 'mid',  count: 80,  rMin: 1.0, rMax: 1.5, depth: 0.5 },
@@ -89,6 +93,11 @@
     scrollY = window.scrollY || window.pageYOffset || 0;
   }
 
+  function onMouseMoveHover(e) {
+    hoverX = e.clientX;
+    hoverY = e.clientY;
+  }
+
   function drawStars() {
     var w = window.innerWidth;
     var h = window.innerHeight;
@@ -100,10 +109,17 @@
       var breath = 0.8 + 0.2 * Math.sin((t / s.period) * Math.PI * 2 + s.phase);
       var offsetX = mouseRatioX * s.depth * 12;
       var offsetY = mouseRatioY * s.depth * 12 + scrollY * s.depth * 0.05;
-      var x = s.xNorm * w - sprite.width / 2 + offsetX;
-      var y = s.yNorm * h - sprite.height / 2 + offsetY;
-      ctx.globalAlpha = s.baseAlpha * breath;
-      ctx.drawImage(sprite, x, y);
+      var x = s.xNorm * w + offsetX;
+      var y = s.yNorm * h + offsetY;
+      var dx = x - hoverX;
+      var dy = y - hoverY;
+      var hoverDist = Math.sqrt(dx * dx + dy * dy);
+      var hoverBoost = 1;
+      if (hoverDist < HOVER_RADIUS) {
+        hoverBoost = 1 + (1 - hoverDist / HOVER_RADIUS) * 1.5;
+      }
+      ctx.globalAlpha = Math.min(s.baseAlpha * breath * hoverBoost, 1);
+      ctx.drawImage(sprite, x - sprite.width / 2, y - sprite.height / 2);
     }
     ctx.globalAlpha = 1;
     ctx.globalCompositeOperation = 'source-over';
@@ -281,6 +297,7 @@
     on(document, 'visibilitychange', onVisibility);
     on(window, 'mousemove', onMouseMoveParallax);
     on(window, 'mousemove', onMouseMoveTrail);
+    on(window, 'mousemove', onMouseMoveHover);
     on(window, 'scroll', onScrollParallax, { passive: true });
     scheduleShootingStar(performance.now());
     if (!rafId) rafId = requestAnimationFrame(loop);
@@ -293,6 +310,8 @@
     trailParticles = [];
     lastMouseX = -1;
     lastMouseY = -1;
+    hoverX = -9999;
+    hoverY = -9999;
     if (canvas) {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
       canvas.style.display = 'none';
