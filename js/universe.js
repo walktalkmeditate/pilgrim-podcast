@@ -28,6 +28,8 @@
   var hoverY = -9999;
   var HOVER_RADIUS = 80;
 
+  var ripples = [];
+
   var LAYERS = [
     { name: 'far',  count: 150, rMin: 0.5, rMax: 1.0, depth: 0.2 },
     { name: 'mid',  count: 80,  rMin: 1.0, rMax: 1.5, depth: 0.5 },
@@ -98,6 +100,49 @@
     hoverY = e.clientY;
   }
 
+  function onClickRipple(e) {
+    var x = e.clientX;
+    var y = e.clientY;
+    ripples.push({
+      x: x,
+      y: y,
+      tStart: lastFrameTime,
+      duration: 700
+    });
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    for (var i = 0; i < stars.length; i++) {
+      var s = stars[i];
+      var sx = s.xNorm * w + mouseRatioX * s.depth * 12;
+      var sy = s.yNorm * h + mouseRatioY * s.depth * 12 + scrollY * s.depth * 0.05;
+      var dx = sx - x;
+      var dy = sy - y;
+      if (dx * dx + dy * dy < 400) {
+        s.burstUntil = lastFrameTime + 1000;
+      }
+    }
+  }
+
+  function drawRipples() {
+    if (!ripples.length) return;
+    for (var i = ripples.length - 1; i >= 0; i--) {
+      var r = ripples[i];
+      var t = lastFrameTime - r.tStart;
+      if (t >= r.duration) {
+        ripples.splice(i, 1);
+        continue;
+      }
+      var progress = t / r.duration;
+      var radius = 80 * progress;
+      var alpha = (1 - progress) * 0.4;
+      ctx.strokeStyle = 'rgba(232,224,255,' + alpha + ')';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(r.x, r.y, radius, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+  }
+
   function drawStars() {
     var w = window.innerWidth;
     var h = window.innerHeight;
@@ -118,7 +163,12 @@
       if (hoverDist < HOVER_RADIUS) {
         hoverBoost = 1 + (1 - hoverDist / HOVER_RADIUS) * 1.5;
       }
-      ctx.globalAlpha = Math.min(s.baseAlpha * breath * hoverBoost, 1);
+      var burstBoost = 1;
+      if (s.burstUntil && s.burstUntil > t) {
+        var burstK = (s.burstUntil - t) / 1000;
+        burstBoost = 1 + burstK * 1.5;
+      }
+      ctx.globalAlpha = Math.min(s.baseAlpha * breath * hoverBoost * burstBoost, 1);
       ctx.drawImage(sprite, x - sprite.width / 2, y - sprite.height / 2);
     }
     ctx.globalAlpha = 1;
@@ -277,6 +327,7 @@
     }
     drawShootingStar();
     drawTrail(dt);
+    drawRipples();
   }
 
   function onVisibility() {
@@ -298,6 +349,7 @@
     on(window, 'mousemove', onMouseMoveParallax);
     on(window, 'mousemove', onMouseMoveTrail);
     on(window, 'mousemove', onMouseMoveHover);
+    on(window, 'click', onClickRipple);
     on(window, 'scroll', onScrollParallax, { passive: true });
     scheduleShootingStar(performance.now());
     if (!rafId) rafId = requestAnimationFrame(loop);
@@ -312,6 +364,7 @@
     lastMouseY = -1;
     hoverX = -9999;
     hoverY = -9999;
+    ripples = [];
     if (canvas) {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
       canvas.style.display = 'none';
