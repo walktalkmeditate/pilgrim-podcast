@@ -366,7 +366,7 @@ Replace `drawStars()` with:
     for (var i = 0; i < stars.length; i++) {
       var s = stars[i];
       var sprite = sprites[s.layer + (s.warm ? '_warm' : '_cool')];
-      var breath = 0.6 + 0.4 * Math.sin((t / s.period) * Math.PI * 2 + s.phase);
+      var breath = 0.8 + 0.2 * Math.sin((t / s.period) * Math.PI * 2 + s.phase);
       var x = s.xNorm * w - sprite.width / 2;
       var y = s.yNorm * h - sprite.height / 2;
       ctx.globalAlpha = s.baseAlpha * breath;
@@ -449,7 +449,7 @@ Replace `drawStars()` with:
     for (var i = 0; i < stars.length; i++) {
       var s = stars[i];
       var sprite = sprites[s.layer + (s.warm ? '_warm' : '_cool')];
-      var breath = 0.6 + 0.4 * Math.sin((t / s.period) * Math.PI * 2 + s.phase);
+      var breath = 0.8 + 0.2 * Math.sin((t / s.period) * Math.PI * 2 + s.phase);
       var offsetX = mouseRatioX * s.depth * 12;
       var offsetY = mouseRatioY * s.depth * 12 + scrollY * s.depth * 0.05;
       var x = s.xNorm * w - sprite.width / 2 + offsetX;
@@ -778,7 +778,7 @@ Replace `drawStars()` with:
     for (var i = 0; i < stars.length; i++) {
       var s = stars[i];
       var sprite = sprites[s.layer + (s.warm ? '_warm' : '_cool')];
-      var breath = 0.6 + 0.4 * Math.sin((t / s.period) * Math.PI * 2 + s.phase);
+      var breath = 0.8 + 0.2 * Math.sin((t / s.period) * Math.PI * 2 + s.phase);
       var offsetX = mouseRatioX * s.depth * 12;
       var offsetY = mouseRatioY * s.depth * 12 + scrollY * s.depth * 0.05;
       var x = s.xNorm * w + offsetX;
@@ -893,7 +893,7 @@ Replace `drawStars()` with the version that includes burst handling:
     for (var i = 0; i < stars.length; i++) {
       var s = stars[i];
       var sprite = sprites[s.layer + (s.warm ? '_warm' : '_cool')];
-      var breath = 0.6 + 0.4 * Math.sin((t / s.period) * Math.PI * 2 + s.phase);
+      var breath = 0.8 + 0.2 * Math.sin((t / s.period) * Math.PI * 2 + s.phase);
       var offsetX = mouseRatioX * s.depth * 12;
       var offsetY = mouseRatioY * s.depth * 12 + scrollY * s.depth * 0.05;
       var x = s.xNorm * w + offsetX;
@@ -1132,7 +1132,7 @@ Replace `buildStars()` with:
 In `drawStars()`, replace the `breath` line with:
 
 ```javascript
-      var breath = reducedMotion ? 1 : (0.6 + 0.4 * Math.sin((t / s.period) * Math.PI * 2 + s.phase));
+      var breath = reducedMotion ? 1 : (0.8 + 0.2 * Math.sin((t / s.period) * Math.PI * 2 + s.phase));
 ```
 
 In `loop`, gate the shooting-star spawn:

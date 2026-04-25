@@ -26,7 +26,7 @@ A new module `js/universe.js` exposes `Universe.activate()` / `Universe.deactiva
 - **Layer mid:** ~80 stars, radius 1–1.5px, parallax depth 0.5
 - **Layer near:** ~30 stars, radius 1.5–2.5px, brightest, parallax depth 1.0
 - Each star has its own breath phase (random 0–2π) and period (random 3–7s), so stars breathe out of sync.
-- Brightness modulates `0.6 → 1.0` of base via `0.6 + 0.4·sin(t/period + phase)`.
+- Brightness modulates `0.6 → 1.0` of base via `0.8 + 0.2·sin(t/period + phase)` (subtle range so stars never disappear).
 - **Color:** Mostly cool tint `rgba(232, 224, 255, α)`. ~1 in 10 stars is warm: `rgba(255, 232, 220, α)`. Adds variation without breaking the cool palette.
 - **Coordinate space:** Stars stored as `{xNorm, yNorm}` in [0, 1]; multiplied by canvas dimensions in the render loop. Survives resize without regeneration.
 - **Bloom rendering:** Pre-render one sprite per layer (a soft radial gradient on an offscreen canvas) at `activate()`. Per frame, `drawImage` each star's sprite at its position with `globalAlpha` set from breath × hover modulation. Avoids per-frame `shadowBlur` (jank-prone on mobile).
