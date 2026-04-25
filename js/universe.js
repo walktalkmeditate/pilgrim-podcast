@@ -30,6 +30,9 @@
 
   var ripples = [];
 
+  var reducedMotion = false;
+  var touchDevice = false;
+
   var LAYERS = [
     { name: 'far',  count: 150, rMin: 0.5, rMax: 1.0, depth: 0.2 },
     { name: 'mid',  count: 80,  rMin: 1.0, rMax: 1.5, depth: 0.5 },
@@ -65,11 +68,18 @@
     }
   }
 
+  function detectEnv() {
+    reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    touchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+  }
+
   function buildStars() {
     stars = [];
+    var densityMul = touchDevice ? 0.5 : 1;
     for (var i = 0; i < LAYERS.length; i++) {
       var L = LAYERS[i];
-      for (var j = 0; j < L.count; j++) {
+      var n = Math.round(L.count * densityMul);
+      for (var j = 0; j < n; j++) {
         stars.push({
           layer: L.name,
           depth: L.depth,
@@ -133,13 +143,20 @@
         continue;
       }
       var progress = t / r.duration;
-      var radius = 80 * progress;
       var alpha = (1 - progress) * 0.4;
-      ctx.strokeStyle = 'rgba(232,224,255,' + alpha + ')';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.arc(r.x, r.y, radius, 0, Math.PI * 2);
-      ctx.stroke();
+      if (reducedMotion) {
+        ctx.fillStyle = 'rgba(232,224,255,' + alpha + ')';
+        ctx.beginPath();
+        ctx.arc(r.x, r.y, 12, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        var radius = 80 * progress;
+        ctx.strokeStyle = 'rgba(232,224,255,' + alpha + ')';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(r.x, r.y, radius, 0, Math.PI * 2);
+        ctx.stroke();
+      }
     }
   }
 
@@ -151,7 +168,7 @@
     for (var i = 0; i < stars.length; i++) {
       var s = stars[i];
       var sprite = sprites[s.layer + (s.warm ? '_warm' : '_cool')];
-      var breath = 0.8 + 0.2 * Math.sin((t / s.period) * Math.PI * 2 + s.phase);
+      var breath = reducedMotion ? 1 : (0.8 + 0.2 * Math.sin((t / s.period) * Math.PI * 2 + s.phase));
       var offsetX = mouseRatioX * s.depth * 12;
       var offsetY = mouseRatioY * s.depth * 12 + scrollY * s.depth * 0.05;
       var x = s.xNorm * w + offsetX;
@@ -321,7 +338,7 @@
     lastFrameTime = t;
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     drawStars();
-    if (!shootingStar && t >= nextShootingStarAt) {
+    if (!reducedMotion && !shootingStar && t >= nextShootingStarAt) {
       spawnShootingStar(t);
       scheduleShootingStar(t);
     }
@@ -342,16 +359,23 @@
   function activate() {
     ensureCanvas();
     canvas.style.display = 'block';
+    detectEnv();
     if (!stars.length) buildStars();
     if (!sprites.far_cool) buildSprites();
     on(window, 'resize', sizeCanvas);
     on(document, 'visibilitychange', onVisibility);
-    on(window, 'mousemove', onMouseMoveParallax);
-    on(window, 'mousemove', onMouseMoveTrail);
-    on(window, 'mousemove', onMouseMoveHover);
+    if (!touchDevice) {
+      on(window, 'mousemove', onMouseMoveHover);
+      if (!reducedMotion) {
+        on(window, 'mousemove', onMouseMoveParallax);
+        on(window, 'mousemove', onMouseMoveTrail);
+      }
+    }
+    if (!reducedMotion) {
+      on(window, 'scroll', onScrollParallax, { passive: true });
+    }
     on(window, 'click', onClickRipple);
-    on(window, 'scroll', onScrollParallax, { passive: true });
-    scheduleShootingStar(performance.now());
+    if (!reducedMotion) scheduleShootingStar(performance.now());
     if (!rafId) rafId = requestAnimationFrame(loop);
   }
 

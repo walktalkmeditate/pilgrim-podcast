@@ -1361,28 +1361,6 @@ a:hover {
   background: linear-gradient(to bottom, rgba(180, 180, 255, 0.1), transparent);
 }
 
-/* Stars background */
-.constellation::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(1px 1px at 25% 45%, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1px 1px at 40% 15%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(1px 1px at 55% 60%, rgba(255,255,255,0.3), transparent),
-    radial-gradient(1px 1px at 70% 30%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(1px 1px at 85% 55%, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1px 1px at 15% 75%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(1px 1px at 50% 85%, rgba(255,255,255,0.3), transparent),
-    radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(1px 1px at 35% 90%, rgba(255,255,255,0.4), transparent),
-    radial-gradient(2px 2px at 60% 40%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 20% 60%, rgba(255,255,255,0.5), transparent);
-  pointer-events: none;
-  z-index: 0;
-}
-
 .constellation .journey,
 .constellation .footer {
   position: relative;
