@@ -57,7 +57,9 @@
           xNorm: Math.random(),
           yNorm: Math.random(),
           baseAlpha: 0.4 + Math.random() * 0.5,
-          warm: Math.random() < 0.1
+          warm: Math.random() < 0.1,
+          phase: Math.random() * Math.PI * 2,
+          period: 3000 + Math.random() * 4000
         });
       }
     }
@@ -66,13 +68,15 @@
   function drawStars() {
     var w = window.innerWidth;
     var h = window.innerHeight;
+    var t = lastFrameTime;
     ctx.globalCompositeOperation = 'lighter';
     for (var i = 0; i < stars.length; i++) {
       var s = stars[i];
       var sprite = sprites[s.layer + (s.warm ? '_warm' : '_cool')];
+      var breath = 0.6 + 0.4 * Math.sin((t / s.period) * Math.PI * 2 + s.phase);
       var x = s.xNorm * w - sprite.width / 2;
       var y = s.yNorm * h - sprite.height / 2;
-      ctx.globalAlpha = s.baseAlpha;
+      ctx.globalAlpha = s.baseAlpha * breath;
       ctx.drawImage(sprite, x, y);
     }
     ctx.globalAlpha = 1;
