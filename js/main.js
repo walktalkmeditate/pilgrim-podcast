@@ -1245,6 +1245,13 @@
       if (clickCount >= 3) {
         clickCount = 0;
         document.body.classList.toggle('constellation');
+        if (window.Universe) {
+          if (document.body.classList.contains('constellation')) {
+            window.Universe.activate();
+          } else {
+            window.Universe.deactivate();
+          }
+        }
       }
     });
 

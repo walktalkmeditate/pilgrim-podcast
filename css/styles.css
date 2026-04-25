@@ -1377,3 +1377,13 @@ a:hover {
   .seal-container { width: 80px; height: 80px; }
   .episode-expanded { max-width: 100%; }
 }
+
+/* --- Universe Mode Canvas --- */
+
+#universe-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  display: none;
+}
