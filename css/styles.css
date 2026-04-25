@@ -329,6 +329,10 @@ a:hover {
   opacity: 1;
 }
 
+.constellation .theme-toggle {
+  opacity: 0.85;
+}
+
 .theme-toggle svg {
   width: 18px;
   height: 18px;

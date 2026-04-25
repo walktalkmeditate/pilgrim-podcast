@@ -13,8 +13,26 @@
 
   // --- Theme ---
 
+  var currentMode = null;
+
+  function readSavedTheme() {
+    try {
+      return localStorage.getItem('pilgrim-theme');
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function writeSavedTheme(theme) {
+    try {
+      if (localStorage.getItem('pilgrim-theme') !== theme) {
+        localStorage.setItem('pilgrim-theme', theme);
+      }
+    } catch (e) {}
+  }
+
   function initTheme() {
-    var saved = localStorage.getItem('pilgrim-theme');
+    var saved = readSavedTheme();
     var theme;
     if (saved === 'light' || saved === 'dark' || saved === 'star') {
       theme = saved;
@@ -26,11 +44,6 @@
     applyTheme(theme);
   }
 
-  function currentTheme() {
-    if (document.body.classList.contains('constellation')) return 'star';
-    return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-  }
-
   function applyTheme(theme) {
     if (theme === 'star' && !window.Universe) theme = 'dark';
     if (theme === 'star') {
@@ -39,9 +52,13 @@
       try {
         window.Universe.activate();
       } catch (err) {
+        document.body.classList.remove('constellation');
+        try { window.Universe.deactivate(); } catch (e2) {}
+        theme = 'dark';
         if (window.console && console.warn) console.warn('Universe activate failed', err);
       }
-    } else {
+    }
+    if (theme !== 'star') {
       document.documentElement.setAttribute('data-theme', theme);
       if (document.body.classList.contains('constellation')) {
         document.body.classList.remove('constellation');
@@ -54,12 +71,13 @@
         }
       }
     }
-    localStorage.setItem('pilgrim-theme', theme);
+    currentMode = theme;
+    writeSavedTheme(theme);
     updateThemeIcon(theme);
   }
 
   function cycleTheme() {
-    var current = currentTheme();
+    var current = currentMode || 'light';
     var next = current === 'light' ? 'dark' : (current === 'dark' ? 'star' : 'light');
     applyTheme(next);
   }
@@ -70,6 +88,7 @@
     while (toggle.firstChild) toggle.removeChild(toggle.firstChild);
     if (theme === 'star') {
       renderStarIcon(toggle);
+      toggle.setAttribute('title', 'Star mode');
     } else if (window.Moon) {
       window.Moon.renderMoon(toggle);
     }
