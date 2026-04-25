@@ -15,29 +15,97 @@
 
   function initTheme() {
     var saved = localStorage.getItem('pilgrim-theme');
-    if (saved) {
-      document.documentElement.setAttribute('data-theme', saved);
+    var theme;
+    if (saved === 'light' || saved === 'dark' || saved === 'star') {
+      theme = saved;
     } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      document.documentElement.setAttribute('data-theme', 'dark');
+      theme = 'dark';
+    } else {
+      theme = 'light';
     }
-    updateThemeIcon();
+    applyTheme(theme);
   }
 
-  function toggleTheme() {
-    var current = document.documentElement.getAttribute('data-theme');
-    var next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('pilgrim-theme', next);
-    updateThemeIcon();
+  function currentTheme() {
+    if (document.body.classList.contains('constellation')) return 'star';
+    return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
   }
 
-  function updateThemeIcon() {
+  function applyTheme(theme) {
+    if (theme === 'star' && !window.Universe) theme = 'dark';
+    if (theme === 'star') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.body.classList.add('constellation');
+      try {
+        window.Universe.activate();
+      } catch (err) {
+        if (window.console && console.warn) console.warn('Universe activate failed', err);
+      }
+    } else {
+      document.documentElement.setAttribute('data-theme', theme);
+      if (document.body.classList.contains('constellation')) {
+        document.body.classList.remove('constellation');
+        if (window.Universe) {
+          try {
+            window.Universe.deactivate();
+          } catch (err) {
+            if (window.console && console.warn) console.warn('Universe deactivate failed', err);
+          }
+        }
+      }
+    }
+    localStorage.setItem('pilgrim-theme', theme);
+    updateThemeIcon(theme);
+  }
+
+  function cycleTheme() {
+    var current = currentTheme();
+    var next = current === 'light' ? 'dark' : (current === 'dark' ? 'star' : 'light');
+    applyTheme(next);
+  }
+
+  function updateThemeIcon(theme) {
     var toggle = document.querySelector('.theme-toggle');
     if (!toggle) return;
     while (toggle.firstChild) toggle.removeChild(toggle.firstChild);
-    if (window.Moon) {
+    if (theme === 'star') {
+      renderStarIcon(toggle);
+    } else if (window.Moon) {
       window.Moon.renderMoon(toggle);
     }
+    var nextLabel = theme === 'light' ? 'Switch to dark mode' :
+                    theme === 'dark' ? 'Switch to star mode' :
+                    'Switch to light mode';
+    toggle.setAttribute('aria-label', nextLabel);
+  }
+
+  function renderStarIcon(container) {
+    var size = 32;
+    var c = document.createElement('canvas');
+    c.width = size * 2;
+    c.height = size * 2;
+    c.style.width = size + 'px';
+    c.style.height = size + 'px';
+    var sctx = c.getContext('2d');
+    sctx.scale(2, 2);
+    var cx = size / 2;
+    var cy = size / 2;
+    var rOuter = size * 0.42;
+    var rInner = size * 0.17;
+    sctx.beginPath();
+    for (var i = 0; i < 10; i++) {
+      var ang = -Math.PI / 2 + (i * Math.PI) / 5;
+      var r = (i % 2 === 0) ? rOuter : rInner;
+      var x = cx + Math.cos(ang) * r;
+      var y = cy + Math.sin(ang) * r;
+      if (i === 0) sctx.moveTo(x, y); else sctx.lineTo(x, y);
+    }
+    sctx.closePath();
+    sctx.fillStyle = '#E8E0FF';
+    sctx.shadowColor = 'rgba(232, 224, 255, 0.6)';
+    sctx.shadowBlur = 6;
+    sctx.fill();
+    container.appendChild(c);
   }
 
   function slugify(s) {
@@ -1236,29 +1304,7 @@
     window.addEventListener('hashchange', handleHashScroll);
 
     var toggle = document.querySelector('.theme-toggle');
-    if (toggle) toggle.addEventListener('click', toggleTheme);
-
-    var clickCount = 0;
-    var clickTimer = null;
-    if (toggle) toggle.addEventListener('click', function () {
-      clickCount++;
-      clearTimeout(clickTimer);
-      clickTimer = setTimeout(function () { clickCount = 0; }, 600);
-      if (clickCount >= 3) {
-        clickCount = 0;
-        if (!window.Universe) return;
-        document.body.classList.toggle('constellation');
-        try {
-          if (document.body.classList.contains('constellation')) {
-            window.Universe.activate();
-          } else {
-            window.Universe.deactivate();
-          }
-        } catch (err) {
-          if (window.console && console.warn) console.warn('Universe toggle failed', err);
-        }
-      }
-    });
+    if (toggle) toggle.addEventListener('click', cycleTheme);
 
     document.addEventListener('click', function (e) {
       var btn = e.target.closest('.play-btn');

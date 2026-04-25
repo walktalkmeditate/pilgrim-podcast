@@ -2,7 +2,7 @@
 
 **Date:** 2026-04-24
 **Status:** Approved (pending spec review)
-**Scope:** Visual polish on the existing constellation easter egg (triggered by triple-clicking the theme toggle, which adds `body.constellation`). Default (non-constellation) mode visuals are untouched.
+**Scope:** Visual polish on the constellation mode (formerly an easter egg triggered by triple-clicking the theme toggle; now reachable via the regular theme toggle as a third state in the cycle light → dark → star → light, see post-implementation followup). Default (non-constellation) mode visuals are untouched.
 
 ## Goal
 
