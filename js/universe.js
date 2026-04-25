@@ -18,6 +18,12 @@
   var shootingStar = null;
   var nextShootingStarAt = 0;
 
+  var trailParticles = [];
+  var lastMouseX = -1;
+  var lastMouseY = -1;
+  var TRAIL_MAX = 60;
+  var TRAIL_SPAWN_DIST = 10;
+
   var LAYERS = [
     { name: 'far',  count: 150, rMin: 0.5, rMax: 1.0, depth: 0.2 },
     { name: 'mid',  count: 80,  rMin: 1.0, rMax: 1.5, depth: 0.5 },
@@ -159,6 +165,57 @@
     ctx.globalCompositeOperation = 'source-over';
   }
 
+  function onMouseMoveTrail(e) {
+    if (lastMouseX < 0) {
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+      return;
+    }
+    var dx = e.clientX - lastMouseX;
+    var dy = e.clientY - lastMouseY;
+    var dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < TRAIL_SPAWN_DIST) return;
+    var steps = Math.min(Math.floor(dist / TRAIL_SPAWN_DIST), 5);
+    for (var i = 0; i < steps; i++) {
+      var k = (i + 1) / steps;
+      trailParticles.push({
+        x: lastMouseX + dx * k,
+        y: lastMouseY + dy * k,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        life: 0,
+        maxLife: 600 + Math.random() * 600,
+        r: 1 + Math.random()
+      });
+    }
+    while (trailParticles.length > TRAIL_MAX) trailParticles.shift();
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
+  }
+
+  function drawTrail(dt) {
+    if (!trailParticles.length) return;
+    ctx.globalCompositeOperation = 'lighter';
+    for (var i = trailParticles.length - 1; i >= 0; i--) {
+      var p = trailParticles[i];
+      p.life += dt;
+      if (p.life >= p.maxLife) {
+        trailParticles.splice(i, 1);
+        continue;
+      }
+      var k = p.life / p.maxLife;
+      p.x += p.vx;
+      p.y += p.vy;
+      var alpha = (1 - k) * 0.6;
+      var r = p.r * (1 - k * 0.5);
+      ctx.fillStyle = 'rgba(232,224,255,' + alpha + ')';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalCompositeOperation = 'source-over';
+  }
+
   function ensureCanvas() {
     if (canvas) return;
     canvas = document.createElement('canvas');
@@ -194,6 +251,7 @@
 
   function loop(t) {
     rafId = requestAnimationFrame(loop);
+    var dt = lastFrameTime ? t - lastFrameTime : 16;
     lastFrameTime = t;
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     drawStars();
@@ -202,6 +260,7 @@
       scheduleShootingStar(t);
     }
     drawShootingStar();
+    drawTrail(dt);
   }
 
   function onVisibility() {
@@ -221,6 +280,7 @@
     on(window, 'resize', sizeCanvas);
     on(document, 'visibilitychange', onVisibility);
     on(window, 'mousemove', onMouseMoveParallax);
+    on(window, 'mousemove', onMouseMoveTrail);
     on(window, 'scroll', onScrollParallax, { passive: true });
     scheduleShootingStar(performance.now());
     if (!rafId) rafId = requestAnimationFrame(loop);
@@ -230,6 +290,9 @@
     if (rafId) cancelAnimationFrame(rafId);
     rafId = null;
     offAll();
+    trailParticles = [];
+    lastMouseX = -1;
+    lastMouseY = -1;
     if (canvas) {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
       canvas.style.display = 'none';
