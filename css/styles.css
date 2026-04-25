@@ -556,8 +556,6 @@ a:hover {
   margin-bottom: 1rem;
 }
 
-.episode-expanded-meta .guide { color: var(--moss); }
-.episode-expanded-meta .location { color: var(--stone); }
 .episode-expanded-meta .sep { opacity: 0.4; }
 
 .episode-summary {

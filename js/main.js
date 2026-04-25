@@ -977,6 +977,9 @@
     var guideSpan = document.createElement('span');
     guideSpan.className = 'guide';
     guideSpan.textContent = 'guided by ' + capitalize(ep.guide);
+    if (window.PilgrimSeal && window.PilgrimSeal.guideColor) {
+      guideSpan.style.color = window.PilgrimSeal.guideColor(ep.guide);
+    }
     meta.appendChild(guideSpan);
 
     var sep3 = document.createElement('span');
