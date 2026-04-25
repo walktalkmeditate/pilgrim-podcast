@@ -15,6 +15,9 @@
   var stars = [];
   var sprites = {};
 
+  var shootingStar = null;
+  var nextShootingStarAt = 0;
+
   var LAYERS = [
     { name: 'far',  count: 150, rMin: 0.5, rMax: 1.0, depth: 0.2 },
     { name: 'mid',  count: 80,  rMin: 1.0, rMax: 1.5, depth: 0.5 },
@@ -100,6 +103,62 @@
     ctx.globalCompositeOperation = 'source-over';
   }
 
+  function scheduleShootingStar(now) {
+    nextShootingStarAt = now + 18000 + Math.random() * 17000;
+  }
+
+  function spawnShootingStar(now) {
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    var fromLeft = Math.random() < 0.5;
+    var startX = fromLeft ? -50 : w + 50;
+    var startY = Math.random() * h * 0.5;
+    var dx = (fromLeft ? 1 : -1) * (w * 0.6);
+    var dy = h * 0.4;
+    shootingStar = {
+      x0: startX,
+      y0: startY,
+      dx: dx,
+      dy: dy,
+      tStart: now,
+      duration: 700
+    };
+  }
+
+  function drawShootingStar() {
+    if (!shootingStar) return;
+    var t = lastFrameTime - shootingStar.tStart;
+    if (t < 0) return;
+    var progress = t / shootingStar.duration;
+    if (progress >= 1) {
+      shootingStar = null;
+      return;
+    }
+    var eased = 1 - Math.pow(1 - progress, 3);
+    var hx = shootingStar.x0 + shootingStar.dx * eased;
+    var hy = shootingStar.y0 + shootingStar.dy * eased;
+    var len = 120;
+    var ang = Math.atan2(shootingStar.dy, shootingStar.dx);
+    var tx = hx - Math.cos(ang) * len;
+    var ty = hy - Math.sin(ang) * len;
+    var fade = 1 - progress;
+    var grad = ctx.createLinearGradient(hx, hy, tx, ty);
+    grad.addColorStop(0, 'rgba(255,255,255,' + (0.9 * fade) + ')');
+    grad.addColorStop(1, 'rgba(232,224,255,0)');
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(hx, hy);
+    ctx.lineTo(tx, ty);
+    ctx.stroke();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.fillStyle = 'rgba(255,255,255,' + (0.9 * fade) + ')';
+    ctx.beginPath();
+    ctx.arc(hx, hy, 1.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalCompositeOperation = 'source-over';
+  }
+
   function ensureCanvas() {
     if (canvas) return;
     canvas = document.createElement('canvas');
@@ -138,6 +197,11 @@
     lastFrameTime = t;
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     drawStars();
+    if (!shootingStar && t >= nextShootingStarAt) {
+      spawnShootingStar(t);
+      scheduleShootingStar(t);
+    }
+    drawShootingStar();
   }
 
   function onVisibility() {
@@ -158,6 +222,7 @@
     on(document, 'visibilitychange', onVisibility);
     on(window, 'mousemove', onMouseMoveParallax);
     on(window, 'scroll', onScrollParallax, { passive: true });
+    scheduleShootingStar(performance.now());
     if (!rafId) rafId = requestAnimationFrame(loop);
   }
 
