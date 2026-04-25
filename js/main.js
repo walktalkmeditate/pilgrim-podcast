@@ -1248,10 +1248,14 @@
         clickCount = 0;
         document.body.classList.toggle('constellation');
         if (window.Universe) {
-          if (document.body.classList.contains('constellation')) {
-            window.Universe.activate();
-          } else {
-            window.Universe.deactivate();
+          try {
+            if (document.body.classList.contains('constellation')) {
+              window.Universe.activate();
+            } else {
+              window.Universe.deactivate();
+            }
+          } catch (err) {
+            // Universe failed; rest of the page keeps working
           }
         }
       }

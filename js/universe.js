@@ -14,6 +14,7 @@
 
   var stars = [];
   var sprites = {};
+  var spritesBuilt = false;
 
   var shootingStar = null;
   var nextShootingStarAt = 0;
@@ -34,9 +35,9 @@
   var touchDevice = false;
 
   var LAYERS = [
-    { name: 'far',  count: 150, rMin: 0.5, rMax: 1.0, depth: 0.2 },
-    { name: 'mid',  count: 80,  rMin: 1.0, rMax: 1.5, depth: 0.5 },
-    { name: 'near', count: 30,  rMin: 1.5, rMax: 2.5, depth: 1.0 }
+    { name: 'far',  count: 150, rMax: 1.0, depth: 0.2 },
+    { name: 'mid',  count: 80,  rMax: 1.5, depth: 0.5 },
+    { name: 'near', count: 30,  rMax: 2.5, depth: 1.0 }
   ];
 
   var TINT_COOL = [232, 224, 255];
@@ -66,6 +67,7 @@
       sprites[L.name + '_cool'] = makeStarSprite(L.rMax, TINT_COOL);
       sprites[L.name + '_warm'] = makeStarSprite(L.rMax, TINT_WARM);
     }
+    spritesBuilt = true;
   }
 
   function detectEnv() {
@@ -173,12 +175,14 @@
       var offsetY = mouseRatioY * s.depth * 12 + scrollY * s.depth * 0.05;
       var x = s.xNorm * w + offsetX;
       var y = s.yNorm * h + offsetY;
-      var dx = x - hoverX;
-      var dy = y - hoverY;
-      var hoverDist = Math.sqrt(dx * dx + dy * dy);
       var hoverBoost = 1;
-      if (hoverDist < HOVER_RADIUS) {
-        hoverBoost = 1 + (1 - hoverDist / HOVER_RADIUS) * 1.5;
+      if (hoverX !== -9999) {
+        var dx = x - hoverX;
+        var dy = y - hoverY;
+        var hoverDist = Math.sqrt(dx * dx + dy * dy);
+        if (hoverDist < HOVER_RADIUS) {
+          hoverBoost = 1 + (1 - hoverDist / HOVER_RADIUS) * 1.5;
+        }
       }
       var burstBoost = 1;
       if (s.burstUntil && s.burstUntil > t) {
@@ -361,7 +365,7 @@
     canvas.style.display = 'block';
     detectEnv();
     if (!stars.length) buildStars();
-    if (!sprites.far_cool) buildSprites();
+    if (!spritesBuilt) buildSprites();
     on(window, 'resize', sizeCanvas);
     on(document, 'visibilitychange', onVisibility);
     if (!touchDevice) {
@@ -374,7 +378,9 @@
     if (!reducedMotion) {
       on(window, 'scroll', onScrollParallax, { passive: true });
     }
-    on(window, 'click', onClickRipple);
+    setTimeout(function () {
+      on(window, 'click', onClickRipple);
+    }, 0);
     if (!reducedMotion) scheduleShootingStar(performance.now());
     if (!rafId) rafId = requestAnimationFrame(loop);
   }
@@ -389,6 +395,10 @@
     hoverX = -9999;
     hoverY = -9999;
     ripples = [];
+    lastFrameTime = 0;
+    shootingStar = null;
+    nextShootingStarAt = 0;
+    for (var bi = 0; bi < stars.length; bi++) stars[bi].burstUntil = 0;
     if (canvas) {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
       canvas.style.display = 'none';
