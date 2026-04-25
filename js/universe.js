@@ -8,6 +8,10 @@
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
   var lastFrameTime = 0;
 
+  var mouseRatioX = 0;
+  var mouseRatioY = 0;
+  var scrollY = 0;
+
   var stars = [];
   var sprites = {};
 
@@ -65,6 +69,17 @@
     }
   }
 
+  function onMouseMoveParallax(e) {
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    mouseRatioX = (e.clientX - w / 2) / (w / 2);
+    mouseRatioY = (e.clientY - h / 2) / (h / 2);
+  }
+
+  function onScrollParallax() {
+    scrollY = window.scrollY || window.pageYOffset || 0;
+  }
+
   function drawStars() {
     var w = window.innerWidth;
     var h = window.innerHeight;
@@ -74,8 +89,10 @@
       var s = stars[i];
       var sprite = sprites[s.layer + (s.warm ? '_warm' : '_cool')];
       var breath = 0.8 + 0.2 * Math.sin((t / s.period) * Math.PI * 2 + s.phase);
-      var x = s.xNorm * w - sprite.width / 2;
-      var y = s.yNorm * h - sprite.height / 2;
+      var offsetX = mouseRatioX * s.depth * 12;
+      var offsetY = mouseRatioY * s.depth * 12 + scrollY * s.depth * 0.05;
+      var x = s.xNorm * w - sprite.width / 2 + offsetX;
+      var y = s.yNorm * h - sprite.height / 2 + offsetY;
       ctx.globalAlpha = s.baseAlpha * breath;
       ctx.drawImage(sprite, x, y);
     }
@@ -139,6 +156,8 @@
     if (!sprites.far_cool) buildSprites();
     on(window, 'resize', sizeCanvas);
     on(document, 'visibilitychange', onVisibility);
+    on(window, 'mousemove', onMouseMoveParallax);
+    on(window, 'scroll', onScrollParallax, { passive: true });
     if (!rafId) rafId = requestAnimationFrame(loop);
   }
 
