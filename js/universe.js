@@ -8,6 +8,77 @@
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
   var lastFrameTime = 0;
 
+  var stars = [];
+  var sprites = {};
+
+  var LAYERS = [
+    { name: 'far',  count: 150, rMin: 0.5, rMax: 1.0, depth: 0.2 },
+    { name: 'mid',  count: 80,  rMin: 1.0, rMax: 1.5, depth: 0.5 },
+    { name: 'near', count: 30,  rMin: 1.5, rMax: 2.5, depth: 1.0 }
+  ];
+
+  var TINT_COOL = [232, 224, 255];
+  var TINT_WARM = [255, 232, 220];
+
+  function makeStarSprite(maxRadius, rgb) {
+    var size = Math.ceil(maxRadius * 4);
+    var c = document.createElement('canvas');
+    c.width = size;
+    c.height = size;
+    var sctx = c.getContext('2d');
+    var center = size / 2;
+    var grad = sctx.createRadialGradient(center, center, 0, center, center, maxRadius * 2);
+    var rgbStr = rgb[0] + ',' + rgb[1] + ',' + rgb[2];
+    grad.addColorStop(0, 'rgba(' + rgbStr + ',1)');
+    grad.addColorStop(0.3, 'rgba(' + rgbStr + ',0.6)');
+    grad.addColorStop(1, 'rgba(' + rgbStr + ',0)');
+    sctx.fillStyle = grad;
+    sctx.fillRect(0, 0, size, size);
+    return c;
+  }
+
+  function buildSprites() {
+    sprites = {};
+    for (var i = 0; i < LAYERS.length; i++) {
+      var L = LAYERS[i];
+      sprites[L.name + '_cool'] = makeStarSprite(L.rMax, TINT_COOL);
+      sprites[L.name + '_warm'] = makeStarSprite(L.rMax, TINT_WARM);
+    }
+  }
+
+  function buildStars() {
+    stars = [];
+    for (var i = 0; i < LAYERS.length; i++) {
+      var L = LAYERS[i];
+      for (var j = 0; j < L.count; j++) {
+        stars.push({
+          layer: L.name,
+          depth: L.depth,
+          xNorm: Math.random(),
+          yNorm: Math.random(),
+          baseAlpha: 0.4 + Math.random() * 0.5,
+          warm: Math.random() < 0.1
+        });
+      }
+    }
+  }
+
+  function drawStars() {
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    ctx.globalCompositeOperation = 'lighter';
+    for (var i = 0; i < stars.length; i++) {
+      var s = stars[i];
+      var sprite = sprites[s.layer + (s.warm ? '_warm' : '_cool')];
+      var x = s.xNorm * w - sprite.width / 2;
+      var y = s.yNorm * h - sprite.height / 2;
+      ctx.globalAlpha = s.baseAlpha;
+      ctx.drawImage(sprite, x, y);
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+  }
+
   function ensureCanvas() {
     if (canvas) return;
     canvas = document.createElement('canvas');
@@ -45,7 +116,7 @@
     rafId = requestAnimationFrame(loop);
     lastFrameTime = t;
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    // layers added in later tasks
+    drawStars();
   }
 
   function onVisibility() {
@@ -60,6 +131,8 @@
   function activate() {
     ensureCanvas();
     canvas.style.display = 'block';
+    if (!stars.length) buildStars();
+    if (!sprites.far_cool) buildSprites();
     on(window, 'resize', sizeCanvas);
     on(document, 'visibilitychange', onVisibility);
     if (!rafId) rafId = requestAnimationFrame(loop);
