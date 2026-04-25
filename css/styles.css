@@ -1196,10 +1196,28 @@ a:hover {
   animation: none !important;
 }
 
+.winding-path-glow,
+.winding-path-mid {
+  display: none;
+  fill: none;
+}
+
+.constellation .journey-path .winding-path-glow {
+  display: block;
+  stroke: rgba(200, 192, 255, 0.05);
+  stroke-width: 12;
+}
+
+.constellation .journey-path .winding-path-mid {
+  display: block;
+  stroke: rgba(200, 192, 255, 0.12);
+  stroke-width: 4;
+}
+
 .constellation .journey-path .winding-path {
-  stroke: rgba(180, 180, 255, 0.15);
-  stroke-width: 1;
-  stroke-dasharray: 2 4;
+  stroke: rgba(200, 192, 255, 0.4);
+  stroke-width: 1.2;
+  stroke-dasharray: none;
 }
 
 .constellation .journey-path .trail-marker {

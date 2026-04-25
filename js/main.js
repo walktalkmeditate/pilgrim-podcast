@@ -682,6 +682,8 @@
     }
 
     var svg = '<svg viewBox="0 0 ' + journeyRect.width + ' ' + totalHeight + '" preserveAspectRatio="none">';
+    svg += '<path class="winding-path-glow" d="' + d + '"/>';
+    svg += '<path class="winding-path-mid" d="' + d + '"/>';
     svg += '<path class="winding-path" d="' + d + '"/>';
 
     // Trail markers — small dots along the path
