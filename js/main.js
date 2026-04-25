@@ -111,6 +111,14 @@
     var cy = size / 2;
     var rOuter = size * 0.42;
     var rInner = size * 0.17;
+
+    var halo = sctx.createRadialGradient(cx, cy, 0, cx, cy, size * 0.5);
+    halo.addColorStop(0, 'rgba(232, 224, 255, 0.5)');
+    halo.addColorStop(0.45, 'rgba(232, 224, 255, 0.15)');
+    halo.addColorStop(1, 'rgba(232, 224, 255, 0)');
+    sctx.fillStyle = halo;
+    sctx.fillRect(0, 0, size, size);
+
     sctx.beginPath();
     for (var i = 0; i < 10; i++) {
       var ang = -Math.PI / 2 + (i * Math.PI) / 5;
@@ -121,9 +129,16 @@
     }
     sctx.closePath();
     sctx.fillStyle = '#E8E0FF';
-    sctx.shadowColor = 'rgba(232, 224, 255, 0.6)';
-    sctx.shadowBlur = 6;
+    sctx.shadowColor = 'rgba(232, 224, 255, 0.8)';
+    sctx.shadowBlur = 8;
     sctx.fill();
+
+    sctx.shadowBlur = 0;
+    sctx.fillStyle = '#FFFFFF';
+    sctx.beginPath();
+    sctx.arc(cx, cy, 1.4, 0, Math.PI * 2);
+    sctx.fill();
+
     container.appendChild(c);
   }
 

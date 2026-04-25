@@ -330,7 +330,29 @@ a:hover {
 }
 
 .constellation .theme-toggle {
-  opacity: 0.85;
+  opacity: 0.9;
+}
+
+.constellation .theme-toggle canvas {
+  animation: theme-toggle-breathe 4s ease-in-out infinite;
+}
+
+@keyframes theme-toggle-breathe {
+  0%, 100% {
+    filter: drop-shadow(0 0 3px rgba(232, 224, 255, 0.35));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 9px rgba(232, 224, 255, 0.7));
+    transform: scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .constellation .theme-toggle canvas {
+    animation: none;
+    filter: drop-shadow(0 0 5px rgba(232, 224, 255, 0.5));
+  }
 }
 
 .theme-toggle svg {
