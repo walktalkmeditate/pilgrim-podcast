@@ -34,6 +34,8 @@
   var reducedMotion = false;
   var touchDevice = false;
 
+  var pendingClickAttach = null;
+
   var LAYERS = [
     { name: 'far',  count: 150, rMax: 1.0, depth: 0.2 },
     { name: 'mid',  count: 80,  rMax: 1.5, depth: 0.5 },
@@ -338,7 +340,7 @@
 
   function loop(t) {
     rafId = requestAnimationFrame(loop);
-    var dt = lastFrameTime ? t - lastFrameTime : 16;
+    var dt = lastFrameTime ? Math.min(t - lastFrameTime, 100) : 16;
     lastFrameTime = t;
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     drawStars();
@@ -378,7 +380,8 @@
     if (!reducedMotion) {
       on(window, 'scroll', onScrollParallax, { passive: true });
     }
-    setTimeout(function () {
+    pendingClickAttach = setTimeout(function () {
+      pendingClickAttach = null;
       on(window, 'click', onClickRipple);
     }, 0);
     if (!reducedMotion) scheduleShootingStar(performance.now());
@@ -388,6 +391,10 @@
   function deactivate() {
     if (rafId) cancelAnimationFrame(rafId);
     rafId = null;
+    if (pendingClickAttach) {
+      clearTimeout(pendingClickAttach);
+      pendingClickAttach = null;
+    }
     offAll();
     trailParticles = [];
     lastMouseX = -1;
