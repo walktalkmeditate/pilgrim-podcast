@@ -92,11 +92,13 @@ A new module `js/universe.js` exposes `Universe.activate()` / `Universe.deactiva
 - **Tab hidden:** pause RAF (resume on `visible`).
 - **Reduced-motion check:** done at `activate()` time. No mid-session reaction to media query changes.
 
-## Mobile / touch behavior
+## Mobile / touch / hybrid behavior
 
-- Star count reduced (×0.5) on touch devices (detected via `'ontouchstart' in window || navigator.maxTouchPoints > 0`).
-- No mousemove → no cursor comet trail, no hover bloom, no mouse parallax.
-- Still active: stars (with breath), scroll-based parallax, shooting star, milky-way path, click/tap ripple.
+Two independent capability checks (touch presence, precise-pointer presence) so hybrid devices (Surface, touchscreen laptops, iPad + trackpad) get the right experience:
+
+- **Density:** Star count reduced (×0.5) on any device with touch capability (detected via `'ontouchstart' in window || navigator.maxTouchPoints > 0`). Acts as a perf safety margin even when the device also has a mouse.
+- **Mouse-driven effects (cursor trail, hover bloom, mouse parallax):** Gated on `(hover: hover) and (pointer: fine)` media query. A pure-touch phone has no mouse effects; a hybrid device with both touch and a precise pointer gets full mouse effects (and halved density as a perf cushion).
+- **Always active regardless of device:** stars (with breath), scroll-based parallax, shooting star, milky-way path, click/tap ripple.
 
 ## Z-index / layering
 

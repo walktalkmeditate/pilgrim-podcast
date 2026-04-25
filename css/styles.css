@@ -1239,6 +1239,13 @@ a:hover {
   50% { opacity: 0.9; transform: scale(1.8); }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .constellation .journey-path .trail-marker {
+    animation: none !important;
+    opacity: 0.6 !important;
+  }
+}
+
 .constellation .seal-container .seal-svg {
   filter: drop-shadow(0 0 8px rgba(180, 180, 255, 0.25));
 }

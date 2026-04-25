@@ -1246,17 +1246,16 @@
       clickTimer = setTimeout(function () { clickCount = 0; }, 600);
       if (clickCount >= 3) {
         clickCount = 0;
+        if (!window.Universe) return;
         document.body.classList.toggle('constellation');
-        if (window.Universe) {
-          try {
-            if (document.body.classList.contains('constellation')) {
-              window.Universe.activate();
-            } else {
-              window.Universe.deactivate();
-            }
-          } catch (err) {
-            // Universe failed; rest of the page keeps working
+        try {
+          if (document.body.classList.contains('constellation')) {
+            window.Universe.activate();
+          } else {
+            window.Universe.deactivate();
           }
+        } catch (err) {
+          if (window.console && console.warn) console.warn('Universe toggle failed', err);
         }
       }
     });

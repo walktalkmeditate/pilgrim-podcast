@@ -5,8 +5,8 @@
   var ctx = null;
   var rafId = null;
   var listeners = [];
-  var dpr = Math.min(window.devicePixelRatio || 1, 2);
   var lastFrameTime = 0;
+  var isActive = false;
 
   var mouseRatioX = 0;
   var mouseRatioY = 0;
@@ -32,7 +32,8 @@
   var ripples = [];
 
   var reducedMotion = false;
-  var touchDevice = false;
+  var hasMouse = false;
+  var hasTouch = false;
 
   var pendingClickAttach = null;
 
@@ -74,12 +75,13 @@
 
   function detectEnv() {
     reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    touchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    hasMouse = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    hasTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
   }
 
   function buildStars() {
     stars = [];
-    var densityMul = touchDevice ? 0.5 : 1;
+    var densityMul = hasTouch ? 0.5 : 1;
     for (var i = 0; i < LAYERS.length; i++) {
       var L = LAYERS[i];
       var n = Math.round(L.count * densityMul);
@@ -117,10 +119,11 @@
   function onClickRipple(e) {
     var x = e.clientX;
     var y = e.clientY;
+    var now = performance.now();
     ripples.push({
       x: x,
       y: y,
-      tStart: lastFrameTime,
+      tStart: now,
       duration: 700
     });
     var w = window.innerWidth;
@@ -132,7 +135,7 @@
       var dx = sx - x;
       var dy = sy - y;
       if (dx * dx + dy * dy < 400) {
-        s.burstUntil = lastFrameTime + 1000;
+        s.burstUntil = now + 1000;
       }
     }
   }
@@ -318,8 +321,12 @@
     if (!canvas) return;
     var w = window.innerWidth;
     var h = window.innerHeight;
-    canvas.width = Math.floor(w * dpr);
-    canvas.height = Math.floor(h * dpr);
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var targetW = Math.floor(w * dpr);
+    var targetH = Math.floor(h * dpr);
+    if (canvas.width === targetW && canvas.height === targetH) return;
+    canvas.width = targetW;
+    canvas.height = targetH;
     canvas.style.width = w + 'px';
     canvas.style.height = h + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -363,14 +370,17 @@
   }
 
   function activate() {
+    if (isActive) return;
+    isActive = true;
     ensureCanvas();
+    sizeCanvas();
     canvas.style.display = 'block';
     detectEnv();
     if (!stars.length) buildStars();
     if (!spritesBuilt) buildSprites();
     on(window, 'resize', sizeCanvas);
     on(document, 'visibilitychange', onVisibility);
-    if (!touchDevice) {
+    if (hasMouse) {
       on(window, 'mousemove', onMouseMoveHover);
       if (!reducedMotion) {
         on(window, 'mousemove', onMouseMoveParallax);
@@ -389,6 +399,8 @@
   }
 
   function deactivate() {
+    if (!isActive) return;
+    isActive = false;
     if (rafId) cancelAnimationFrame(rafId);
     rafId = null;
     if (pendingClickAttach) {
