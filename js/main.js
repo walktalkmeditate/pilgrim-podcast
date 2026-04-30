@@ -12,23 +12,51 @@
   var koanCycling = false;
 
   // --- Theme ---
+  // Persistence: cookie scoped to .pilgrimapp.org so theme follows visitor
+  // across landing + podcast subdomains. localStorage kept as fallback for
+  // localhost dev (cookie domain rejected) and as migration target.
+  // Legacy `pilgrim-theme` localStorage is migrated on first read.
 
   var currentMode = null;
 
-  function readSavedTheme() {
-    try {
-      return localStorage.getItem('pilgrim-theme');
-    } catch (e) {
-      return null;
+  function readThemeCookie() {
+    var m = document.cookie.match(/(?:^|;\s*)theme=(light|dark|star)\b/);
+    return m ? m[1] : null;
+  }
+
+  function writeThemeCookie(theme) {
+    var attrs = 'theme=' + theme + '; Path=/; Max-Age=31536000; SameSite=Lax';
+    // Suffix match avoids 'evilpilgrimapp.org' false-positive.
+    if (/(^|\.)pilgrimapp\.org$/.test(location.hostname)) {
+      attrs += '; Domain=.pilgrimapp.org';
     }
+    if (location.protocol === 'https:') attrs += '; Secure';
+    document.cookie = attrs;
+  }
+
+  function readSavedTheme() {
+    var fromCookie = readThemeCookie();
+    if (fromCookie) return fromCookie;
+    try {
+      var legacy = localStorage.getItem('pilgrim-theme');
+      if (legacy === 'light' || legacy === 'dark' || legacy === 'star') {
+        localStorage.setItem('theme', legacy);
+        localStorage.removeItem('pilgrim-theme');
+        return legacy;
+      }
+      var stored = localStorage.getItem('theme');
+      if (stored === 'light' || stored === 'dark' || stored === 'star') return stored;
+    } catch (e) {}
+    return null;
   }
 
   function writeSavedTheme(theme) {
     try {
-      if (localStorage.getItem('pilgrim-theme') !== theme) {
-        localStorage.setItem('pilgrim-theme', theme);
+      if (localStorage.getItem('theme') !== theme) {
+        localStorage.setItem('theme', theme);
       }
     } catch (e) {}
+    writeThemeCookie(theme);
   }
 
   function initTheme() {
