@@ -8,7 +8,7 @@
     <link>https://podcast.pilgrimapp.org</link>
     <description>Real voices from the path. Each episode is one walk, recorded by a pilgrim and narrated by a voice guide. Walk. Talk. Meditate.</description>
     <language>en</language>
-    <lastBuildDate>Fri, 24 Apr 2026 23:59:06 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 05 May 2026 21:45:39 +0000</lastBuildDate>
     <copyright>walk · talk · meditate</copyright>
     <atom:link href="https://podcast.pilgrimapp.org/feed.xml" rel="self" type="application/rss+xml"/>
     <itunes:author>walk · talk · meditate</itunes:author>
@@ -23,6 +23,23 @@
       <itunes:name>walk · talk · meditate</itunes:name>
       <itunes:email>hello@walktalkmeditate.org</itunes:email>
     </itunes:owner>
+    <item>
+      <title>Episode 7: Three Layers Deep</title>
+      <link>https://podcast.pilgrimapp.org/#ep-7</link>
+      <description>A pilgrim in Austin, Texas. Overcast sky. Eighty degrees. Three kilometers along a lake. They told the story of a season of building. About a book on noticing. About a spiral of hexagons that begins at zero. About a community that walks together once a month. About a wave that is already here. The only way forward is to surf.
+
+Walk: https://plgr.im/ep7 — returns to the trail on May 5, 2027</description>
+      <enclosure url="https://cdn.pilgrimapp.org/podcast/ep7.m4a" length="47979871" type="audio/x-m4a"/>
+      <guid isPermaLink="false">pilgrim-ep7</guid>
+      <pubDate>Tue, 05 May 2026 00:00:00 +0000</pubDate>
+      <itunes:duration>37:50</itunes:duration>
+      <itunes:episode>7</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:image href="https://cdn.pilgrimapp.org/podcast/ep7-artwork.png"/>
+      <itunes:summary>A pilgrim in Austin, Texas. Overcast sky. Eighty degrees. Three kilometers along a lake. They told the story of a season of building. About a book on noticing. About a spiral of hexagons that begins at zero. About a community that walks together once a month. About a wave that is already here. The only way forward is to surf.
+
+Walk: https://plgr.im/ep7 — returns to the trail on May 5, 2027</itunes:summary>
+    </item>
     <item>
       <title>Episode 6: Field Of Awareness</title>
       <link>https://podcast.pilgrimapp.org/#ep-6</link>
