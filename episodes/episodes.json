@@ -16,7 +16,8 @@
     "reflection": "a reflection on recent projects on and offline",
     "artworkUrl": "https://cdn.pilgrimapp.org/podcast/ep7-artwork.png",
     "recordingCount": 2,
-    "walkPageExpires": "2027-05-05"
+    "walkPageExpires": "2027-05-05",
+    "whisper": "https://cdn.pilgrimapp.org/audio/whisper/whisper-play-8.aac"
   },
   {
     "number": 6,
