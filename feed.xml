@@ -8,7 +8,7 @@
     <link>https://podcast.pilgrimapp.org</link>
     <description>Real voices from the path. Each episode is one walk, recorded by a pilgrim and narrated by a voice guide. Walk. Talk. Meditate.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 27 May 2026 04:28:31 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 04 Jun 2026 18:19:01 +0000</lastBuildDate>
     <copyright>walk · talk · meditate</copyright>
     <atom:link href="https://podcast.pilgrimapp.org/feed.xml" rel="self" type="application/rss+xml"/>
     <itunes:author>walk · talk · meditate</itunes:author>
@@ -23,6 +23,23 @@
       <itunes:name>walk · talk · meditate</itunes:name>
       <itunes:email>hello@walktalkmeditate.org</itunes:email>
     </itunes:owner>
+    <item>
+      <title>Episode 9: The Inner Compass</title>
+      <link>https://podcast.pilgrimapp.org/#ep-9</link>
+      <description>Two pilgrims in The Domain, Texas. Overcast and seventy-seven degrees. Three kilometers through a district of shops and open walkways. Two old friends, one who speaks in visions, in one long unbroken conversation. It opened with pilgrimage as the exit from life&apos;s normality. About sauntering instead of hiking, and the ground John Muir called holy. About wandering versus the destination, and how the detours hold the treasure. About GPS, and the part of the brain that forgets how to find its own way. About the inner compass — the inner CEO, the disruptive manager, the inner lobbyist. About mantras chanted a hundred thousand times, and guidance that arrives all at once. About small towns that turn the chains away, and a vision of AI as a bridge between worlds. Some walks are one long conversation about how to find the way.
+
+Walk: https://plgr.im/ep9 — returns to the trail on June 4, 2027</description>
+      <enclosure url="https://cdn.pilgrimapp.org/podcast/ep9.m4a" length="113107112" type="audio/x-m4a"/>
+      <guid isPermaLink="false">pilgrim-ep9</guid>
+      <pubDate>Thu, 04 Jun 2026 00:00:00 +0000</pubDate>
+      <itunes:duration>1:22:50</itunes:duration>
+      <itunes:episode>9</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:image href="https://cdn.pilgrimapp.org/podcast/ep9-artwork.png"/>
+      <itunes:summary>Two pilgrims in The Domain, Texas. Overcast and seventy-seven degrees. Three kilometers through a district of shops and open walkways. Two old friends, one who speaks in visions, in one long unbroken conversation. It opened with pilgrimage as the exit from life&apos;s normality. About sauntering instead of hiking, and the ground John Muir called holy. About wandering versus the destination, and how the detours hold the treasure. About GPS, and the part of the brain that forgets how to find its own way. About the inner compass — the inner CEO, the disruptive manager, the inner lobbyist. About mantras chanted a hundred thousand times, and guidance that arrives all at once. About small towns that turn the chains away, and a vision of AI as a bridge between worlds. Some walks are one long conversation about how to find the way.
+
+Walk: https://plgr.im/ep9 — returns to the trail on June 4, 2027</itunes:summary>
+    </item>
     <item>
       <title>Episode 8: Pace Of Reunion</title>
       <link>https://podcast.pilgrimapp.org/#ep-8</link>
