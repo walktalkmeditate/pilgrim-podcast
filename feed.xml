@@ -8,7 +8,7 @@
     <link>https://podcast.pilgrimapp.org</link>
     <description>Real voices from the path. Each episode is one walk, recorded by a pilgrim and narrated by a voice guide. Walk. Talk. Meditate.</description>
     <language>en</language>
-    <lastBuildDate>Thu, 04 Jun 2026 18:19:01 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 30 Jun 2026 21:22:27 +0000</lastBuildDate>
     <copyright>walk · talk · meditate</copyright>
     <atom:link href="https://podcast.pilgrimapp.org/feed.xml" rel="self" type="application/rss+xml"/>
     <itunes:author>walk · talk · meditate</itunes:author>
@@ -23,6 +23,23 @@
       <itunes:name>walk · talk · meditate</itunes:name>
       <itunes:email>hello@walktalkmeditate.org</itunes:email>
     </itunes:owner>
+    <item>
+      <title>Episode 10: Cost Of Distrust</title>
+      <link>https://podcast.pilgrimapp.org/#ep-10</link>
+      <description>A pilgrim in Austin, Texas. Partly cloudy. Ninety-two degrees of dry heat. Three kilometers, and a check-in after a while away. They&apos;d been heads-down building — deep in the Pilgrim app with Claude, turning a swarm of agents loose on the code until the tokens ran dry. About a model that launched and was pulled inside a week. About a tool closed to anyone who couldn&apos;t prove where they were born. About one country closing its source while another opens theirs, and who that leaves to set the direction. About Fight Club, a duvet, and the things we buy that we never really wanted. New projects, and the quiet cost of distrust.
+
+Walk: https://plgr.im/ep10 — returns to the trail on June 30, 2027</description>
+      <enclosure url="https://cdn.pilgrimapp.org/podcast/ep10.m4a" length="48618039" type="audio/x-m4a"/>
+      <guid isPermaLink="false">pilgrim-ep10</guid>
+      <pubDate>Tue, 30 Jun 2026 00:00:00 +0000</pubDate>
+      <itunes:duration>36:54</itunes:duration>
+      <itunes:episode>10</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:image href="https://cdn.pilgrimapp.org/podcast/ep10-artwork.png"/>
+      <itunes:summary>A pilgrim in Austin, Texas. Partly cloudy. Ninety-two degrees of dry heat. Three kilometers, and a check-in after a while away. They&apos;d been heads-down building — deep in the Pilgrim app with Claude, turning a swarm of agents loose on the code until the tokens ran dry. About a model that launched and was pulled inside a week. About a tool closed to anyone who couldn&apos;t prove where they were born. About one country closing its source while another opens theirs, and who that leaves to set the direction. About Fight Club, a duvet, and the things we buy that we never really wanted. New projects, and the quiet cost of distrust.
+
+Walk: https://plgr.im/ep10 — returns to the trail on June 30, 2027</itunes:summary>
+    </item>
     <item>
       <title>Episode 9: The Inner Compass</title>
       <link>https://podcast.pilgrimapp.org/#ep-9</link>
