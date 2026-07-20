@@ -16,7 +16,8 @@
     "reflection": "the stories we tell to ourselves",
     "artworkUrl": "https://cdn.pilgrimapp.org/podcast/ep11-artwork.png",
     "recordingCount": 1,
-    "walkPageExpires": "2027-07-20"
+    "walkPageExpires": "2027-07-20",
+    "whisper": "https://cdn.pilgrimapp.org/audio/whisper/whisper-presence-6.aac"
   },
   {
     "number": 10,
