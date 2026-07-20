@@ -8,7 +8,7 @@
     <link>https://podcast.pilgrimapp.org</link>
     <description>Real voices from the path. Each episode is one walk, recorded by a pilgrim and narrated by a voice guide. Walk. Talk. Meditate.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 30 Jun 2026 21:22:27 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 20 Jul 2026 11:47:52 +0000</lastBuildDate>
     <copyright>walk · talk · meditate</copyright>
     <atom:link href="https://podcast.pilgrimapp.org/feed.xml" rel="self" type="application/rss+xml"/>
     <itunes:author>walk · talk · meditate</itunes:author>
@@ -23,6 +23,23 @@
       <itunes:name>walk · talk · meditate</itunes:name>
       <itunes:email>hello@walktalkmeditate.org</itunes:email>
     </itunes:owner>
+    <item>
+      <title>Episode 11: Stories We Tell</title>
+      <link>https://podcast.pilgrimapp.org/#ep-11</link>
+      <description>Two pilgrims in downtown Austin. Clear. Eighty-nine degrees. Nearly four miles, with the turns left to chance. They set an intention and let randomness choose the route. About the story the mind writes and then believes. About pausing to ask what story you are telling, and whether it could be told another way. About walking past a rented room and an old yoga studio, now luxury condos — the same street in a different light. About graffiti on a fence, and the narratives we lay over things that carry none. About a scooter that said please help me up, and stopping to lift it. About letting randomness in until the fear of the different loosens its grip. The stories we tell ourselves are the ones we end up walking.
+
+Walk: https://plgr.im/ep11 — returns to the trail on July 20, 2027</description>
+      <enclosure url="https://cdn.pilgrimapp.org/podcast/ep11.m4a" length="117088818" type="audio/x-m4a"/>
+      <guid isPermaLink="false">pilgrim-ep11</guid>
+      <pubDate>Sun, 19 Jul 2026 00:00:00 +0000</pubDate>
+      <itunes:duration>1:28:16</itunes:duration>
+      <itunes:episode>11</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:image href="https://cdn.pilgrimapp.org/podcast/ep11-artwork.png"/>
+      <itunes:summary>Two pilgrims in downtown Austin. Clear. Eighty-nine degrees. Nearly four miles, with the turns left to chance. They set an intention and let randomness choose the route. About the story the mind writes and then believes. About pausing to ask what story you are telling, and whether it could be told another way. About walking past a rented room and an old yoga studio, now luxury condos — the same street in a different light. About graffiti on a fence, and the narratives we lay over things that carry none. About a scooter that said please help me up, and stopping to lift it. About letting randomness in until the fear of the different loosens its grip. The stories we tell ourselves are the ones we end up walking.
+
+Walk: https://plgr.im/ep11 — returns to the trail on July 20, 2027</itunes:summary>
+    </item>
     <item>
       <title>Episode 10: Cost Of Distrust</title>
       <link>https://podcast.pilgrimapp.org/#ep-10</link>
