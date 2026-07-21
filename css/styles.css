@@ -946,6 +946,32 @@ a:hover {
   margin-bottom: 1rem;
 }
 
+.transcript-turn {
+  margin-bottom: 1rem;
+}
+
+.transcript-turn p {
+  margin-bottom: 0.25rem;
+}
+
+.transcript-speaker {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--stone);
+  opacity: 0.7;
+  margin-bottom: 0.2rem;
+}
+
+.transcript-loading {
+  font-family: var(--font-body);
+  font-style: italic;
+  color: var(--fog);
+  opacity: 0.6;
+}
+
 /* --- Walk Link --- */
 
 .episode-walk-link {

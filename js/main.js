@@ -576,6 +576,59 @@
     return result;
   }
 
+  function renderPlainTranscript(text, container) {
+    splitTranscript(text).forEach(function (para) {
+      var p = document.createElement('p');
+      p.textContent = para;
+      container.appendChild(p);
+    });
+  }
+
+  function renderRichTranscript(doc, container) {
+    doc.turns.forEach(function (turn) {
+      var t = document.createElement('div');
+      t.className = 'transcript-turn';
+      if (turn.speaker) {
+        var label = document.createElement('span');
+        label.className = 'transcript-speaker';
+        label.textContent = turn.speaker;
+        t.appendChild(label);
+      }
+      var p = document.createElement('p');
+      p.textContent = turn.text;
+      t.appendChild(p);
+      container.appendChild(t);
+    });
+  }
+
+  // Lazily fetch the speaker-attributed transcript (episodes/transcripts/ep<N>.json)
+  // when the reader opens it. Falls back to the plain inline transcript when no
+  // rich file exists (older episodes) or the fetch fails.
+  function loadTranscript(ep, container) {
+    if (!ep.richTranscript) {
+      renderPlainTranscript(ep.transcript, container);
+      return;
+    }
+    var loading = document.createElement('p');
+    loading.className = 'transcript-loading';
+    loading.textContent = 'Loading transcript…';
+    container.appendChild(loading);
+    fetch('episodes/transcripts/ep' + ep.number + '.json')
+      .then(function (r) { if (!r.ok) throw new Error('no rich transcript'); return r.json(); })
+      .then(function (doc) {
+        container.removeChild(loading);
+        if (doc && doc.turns && doc.turns.length) {
+          renderRichTranscript(doc, container);
+        } else {
+          renderPlainTranscript(ep.transcript, container);
+        }
+      })
+      .catch(function () {
+        if (loading.parentNode) container.removeChild(loading);
+        renderPlainTranscript(ep.transcript, container);
+      });
+  }
+
   function capitalize(str) {
     if (!str) return str;
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -1136,23 +1189,20 @@
       var transcriptToggle = document.createElement('button');
       transcriptToggle.className = 'transcript-toggle';
       transcriptToggle.textContent = 'Read transcript';
+      var transcriptContent = document.createElement('div');
+      transcriptContent.className = 'transcript-content';
       transcriptToggle.addEventListener('click', function () {
-        var content = this.nextElementSibling;
-        var isOpen = content.classList.toggle('open');
+        var isOpen = transcriptContent.classList.toggle('open');
         this.textContent = isOpen ? 'Hide transcript' : 'Read transcript';
         if (isOpen) {
           track('transcript_open', { number: ep.number, title: ep.title });
+          if (!transcriptContent.dataset.loaded) {
+            transcriptContent.dataset.loaded = '1';
+            loadTranscript(ep, transcriptContent);
+          }
         }
       });
       wrapper.appendChild(transcriptToggle);
-
-      var transcriptContent = document.createElement('div');
-      transcriptContent.className = 'transcript-content';
-      splitTranscript(ep.transcript).forEach(function (para) {
-        var p = document.createElement('p');
-        p.textContent = para;
-        transcriptContent.appendChild(p);
-      });
       wrapper.appendChild(transcriptContent);
     }
 
