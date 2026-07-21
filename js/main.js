@@ -477,6 +477,8 @@
           track('episode_progress', props);
         }
       });
+
+      updateTranscriptHighlight(stop, currentAudio.currentTime);
     });
 
     currentAudio.addEventListener('ended', function () {
@@ -585,9 +587,14 @@
   }
 
   function renderRichTranscript(doc, container) {
+    // audioOffset = seconds of guide intro + bells before the recording starts
+    // in the played m4a, so playback time maps to recording-relative timestamps.
+    container.dataset.audioOffset = doc.audioOffset || 0;
     doc.turns.forEach(function (turn) {
       var t = document.createElement('div');
       t.className = 'transcript-turn';
+      t.dataset.start = turn.start;
+      t.dataset.end = turn.end;
       if (turn.speaker) {
         var label = document.createElement('span');
         label.className = 'transcript-speaker';
@@ -597,8 +604,47 @@
       var p = document.createElement('p');
       p.textContent = turn.text;
       t.appendChild(p);
+      t.addEventListener('click', function () {
+        seekToTurn(container, this);
+      });
       container.appendChild(t);
     });
+  }
+
+  // Jump audio playback to a turn — only when this episode is the one playing.
+  function seekToTurn(container, turnEl) {
+    var stop = container.closest('.episode-stop');
+    if (!currentAudio || !currentBtn || !stop || !stop.contains(currentBtn)) return;
+    var offset = parseFloat(container.dataset.audioOffset || '0');
+    currentAudio.currentTime = parseFloat(turnEl.dataset.start) + offset;
+    if (currentAudio.paused) currentAudio.play();
+  }
+
+  // Highlight the turn matching the current playback position and keep it in view.
+  function updateTranscriptHighlight(stop, currentTime) {
+    var content = stop.querySelector('.transcript-content');
+    if (!content || !content.classList.contains('open')) return;
+    var turns = content.querySelectorAll('.transcript-turn');
+    if (!turns.length) return;
+    var recTime = currentTime - parseFloat(content.dataset.audioOffset || '0');
+    var current = null;
+    for (var i = 0; i < turns.length; i++) {
+      if (recTime >= parseFloat(turns[i].dataset.start) &&
+          recTime < parseFloat(turns[i].dataset.end)) {
+        current = turns[i];
+        break;
+      }
+    }
+    var prev = content.querySelector('.transcript-turn.current');
+    if (prev === current) return;
+    if (prev) prev.classList.remove('current');
+    if (!current) return;
+    current.classList.add('current');
+    var cRect = content.getBoundingClientRect();
+    var tRect = current.getBoundingClientRect();
+    if (tRect.top < cRect.top || tRect.bottom > cRect.bottom) {
+      content.scrollTop += (tRect.top - cRect.top) - (content.clientHeight / 2 - current.clientHeight / 2);
+    }
   }
 
   // Lazily fetch the speaker-attributed transcript (episodes/transcripts/ep<N>.json)

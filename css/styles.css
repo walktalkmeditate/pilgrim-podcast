@@ -948,6 +948,20 @@ a:hover {
 
 .transcript-turn {
   margin-bottom: 1rem;
+  padding: 0.2rem 0 0.2rem 0.75rem;
+  border-left: 2px solid transparent;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: border-color 0.35s ease, background 0.35s ease;
+}
+
+.transcript-turn.current {
+  border-left-color: var(--stone);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.transcript-turn.current .transcript-speaker {
+  opacity: 1;
 }
 
 .transcript-turn p {
