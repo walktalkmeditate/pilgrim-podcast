@@ -144,7 +144,10 @@
     if (!ripples.length) return;
     for (var i = ripples.length - 1; i >= 0; i--) {
       var r = ripples[i];
-      var t = lastFrameTime - r.tStart;
+      // A ripple is created with a fresh timestamp on click, but the last
+      // rendered frame can be slightly earlier — so clamp to 0, else the first
+      // frame yields a negative progress and arc() throws IndexSizeError.
+      var t = Math.max(0, lastFrameTime - r.tStart);
       if (t >= r.duration) {
         ripples.splice(i, 1);
         continue;
