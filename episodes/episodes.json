@@ -80,7 +80,8 @@
     "artworkUrl": "https://cdn.pilgrimapp.org/podcast/ep8-artwork.png",
     "recordingCount": 1,
     "walkPageExpires": "2027-05-26",
-    "whisper": "https://cdn.pilgrimapp.org/audio/whisper/whisper-lightness-4.aac"
+    "whisper": "https://cdn.pilgrimapp.org/audio/whisper/whisper-lightness-4.aac",
+    "richTranscript": true
   },
   {
     "number": 7,
