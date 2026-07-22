@@ -59,7 +59,8 @@
     "artworkUrl": "https://cdn.pilgrimapp.org/podcast/ep9-artwork.png",
     "recordingCount": 1,
     "walkPageExpires": "2027-06-04",
-    "whisper": "https://cdn.pilgrimapp.org/audio/whisper/whisper-stillness-4.aac"
+    "whisper": "https://cdn.pilgrimapp.org/audio/whisper/whisper-stillness-4.aac",
+    "richTranscript": true
   },
   {
     "number": 8,
