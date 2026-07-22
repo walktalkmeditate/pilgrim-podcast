@@ -38,7 +38,8 @@
     "artworkUrl": "https://cdn.pilgrimapp.org/podcast/ep10-artwork.png",
     "recordingCount": 2,
     "walkPageExpires": "2027-06-30",
-    "whisper": "https://cdn.pilgrimapp.org/audio/whisper/whisper-play-6.aac"
+    "whisper": "https://cdn.pilgrimapp.org/audio/whisper/whisper-play-6.aac",
+    "richTranscript": true
   },
   {
     "number": 9,
