@@ -143,7 +143,8 @@
     "artworkUrl": "https://cdn.pilgrimapp.org/podcast/ep5-artwork.png",
     "recordingCount": 2,
     "walkPageExpires": "2027-04-17",
-    "whisper": "https://cdn.pilgrimapp.org/audio/whisper/whisper-play-11.aac"
+    "whisper": "https://cdn.pilgrimapp.org/audio/whisper/whisper-play-11.aac",
+    "richTranscript": true
   },
   {
     "number": 4,
