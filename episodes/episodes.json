@@ -206,7 +206,8 @@
     "artworkUrl": "https://cdn.pilgrimapp.org/podcast/ep2-artwork.png",
     "recordingCount": 1,
     "walkPageExpires": "2026-06-29",
-    "whisper": "https://cdn.pilgrimapp.org/audio/whisper/whisper-wonder-4.aac"
+    "whisper": "https://cdn.pilgrimapp.org/audio/whisper/whisper-wonder-4.aac",
+    "richTranscript": true
   },
   {
     "number": 1,
