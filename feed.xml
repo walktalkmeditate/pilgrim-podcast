@@ -8,7 +8,7 @@
     <link>https://podcast.pilgrimapp.org</link>
     <description>Real voices from the path. Each episode is one walk, recorded by a pilgrim and narrated by a voice guide. Walk. Talk. Meditate.</description>
     <language>en</language>
-    <lastBuildDate>Sat, 15 Aug 2026 16:43:12 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 15 Aug 2026 17:13:53 +0000</lastBuildDate>
     <copyright>walk · talk · meditate</copyright>
     <atom:link href="https://podcast.pilgrimapp.org/feed.xml" rel="self" type="application/rss+xml"/>
     <itunes:author>walk · talk · meditate</itunes:author>
@@ -29,10 +29,10 @@
       <description>A pilgrim in downtown Austin, Texas. Clear skies. Eighty degrees. Nearly four miles through the heart of the city. A walk carried home from New Mexico, still turning. About the emptiness that makes a bowl useful. About honoring the paths walked before us. About the curiosity we are born with and slowly forget. The walker becomes a guide.
 
 Walk: https://plgr.im/ep12 — returns to the trail on August 15, 2036</description>
-      <enclosure url="https://cdn.pilgrimapp.org/podcast/ep12.m4a" length="80164182" type="audio/x-m4a"/>
+      <enclosure url="https://cdn.pilgrimapp.org/podcast/ep12.m4a" length="80022761" type="audio/x-m4a"/>
       <guid isPermaLink="false">pilgrim-ep12</guid>
       <pubDate>Sat, 15 Aug 2026 00:00:00 +0000</pubDate>
-      <itunes:duration>1:01:16</itunes:duration>
+      <itunes:duration>1:01:09</itunes:duration>
       <itunes:episode>12</itunes:episode>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:image href="https://cdn.pilgrimapp.org/podcast/ep12-artwork.png"/>
