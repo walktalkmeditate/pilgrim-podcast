@@ -626,7 +626,9 @@
     if (!content || !content.classList.contains('open')) return;
     var turns = content.querySelectorAll('.transcript-turn');
     if (!turns.length) return;
-    var recTime = currentTime - parseFloat(content.dataset.audioOffset || '0');
+    // WhisperKit marks word onsets slightly early; match a beat behind the clock
+    // so a paragraph lights up as you hear it, not just before.
+    var recTime = currentTime - parseFloat(content.dataset.audioOffset || '0') - 0.25;
     var current = null;
     for (var i = 0; i < turns.length; i++) {
       if (recTime >= parseFloat(turns[i].dataset.start) &&
