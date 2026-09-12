@@ -17,7 +17,8 @@
     "artworkUrl": "https://cdn.pilgrimapp.org/podcast/ep13-artwork.png",
     "recordingCount": 1,
     "walkPageExpires": "2027-09-12",
-    "whisper": "https://cdn.pilgrimapp.org/audio/whisper/whisper-play-9.aac"
+    "whisper": "https://cdn.pilgrimapp.org/audio/whisper/whisper-play-9.aac",
+    "richTranscript": true
   },
   {
     "number": 12,
