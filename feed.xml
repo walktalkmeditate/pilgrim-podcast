@@ -8,7 +8,7 @@
     <link>https://podcast.pilgrimapp.org</link>
     <description>Real voices from the path. Each episode is one walk, recorded by a pilgrim and narrated by a voice guide. Walk. Talk. Meditate.</description>
     <language>en</language>
-    <lastBuildDate>Sat, 15 Aug 2026 17:13:53 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 12 Sep 2026 18:02:52 +0000</lastBuildDate>
     <copyright>walk · talk · meditate</copyright>
     <atom:link href="https://podcast.pilgrimapp.org/feed.xml" rel="self" type="application/rss+xml"/>
     <itunes:author>walk · talk · meditate</itunes:author>
@@ -23,6 +23,23 @@
       <itunes:name>walk · talk · meditate</itunes:name>
       <itunes:email>hello@walktalkmeditate.org</itunes:email>
     </itunes:owner>
+    <item>
+      <title>Episode 13: The Final Exam</title>
+      <link>https://podcast.pilgrimapp.org/#ep-13</link>
+      <description>A pilgrim in downtown Austin, Texas. Clear skies. Eighty degrees. Two and a half miles around the lake, the air still humid from yesterday&apos;s rain. The fifth week of a spiritual counseling course lands on death. About a culture that will not speak of the one thing it is certain of. About Bhutan, where death is met five times a day, and about the thought you carry through the last breath. About a Pixar writer who could not find his ending, so he started there and worked backwards. About a year spent waiting on a visa to Japan, and the Sunday it all turned around. About the mind as a battleground, and guarding what walks in. They start at the finish, and find the way back already drawn.
+
+Walk: https://plgr.im/ep13 — returns to the trail on September 12, 2027</description>
+      <enclosure url="https://cdn.pilgrimapp.org/podcast/ep13.m4a" length="52963380" type="audio/x-m4a"/>
+      <guid isPermaLink="false">pilgrim-ep13</guid>
+      <pubDate>Sat, 12 Sep 2026 00:00:00 +0000</pubDate>
+      <itunes:duration>40:49</itunes:duration>
+      <itunes:episode>13</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:image href="https://cdn.pilgrimapp.org/podcast/ep13-artwork.png"/>
+      <itunes:summary>A pilgrim in downtown Austin, Texas. Clear skies. Eighty degrees. Two and a half miles around the lake, the air still humid from yesterday&apos;s rain. The fifth week of a spiritual counseling course lands on death. About a culture that will not speak of the one thing it is certain of. About Bhutan, where death is met five times a day, and about the thought you carry through the last breath. About a Pixar writer who could not find his ending, so he started there and worked backwards. About a year spent waiting on a visa to Japan, and the Sunday it all turned around. About the mind as a battleground, and guarding what walks in. They start at the finish, and find the way back already drawn.
+
+Walk: https://plgr.im/ep13 — returns to the trail on September 12, 2027</itunes:summary>
+    </item>
     <item>
       <title>Episode 12: Honor The Path</title>
       <link>https://podcast.pilgrimapp.org/#ep-12</link>
